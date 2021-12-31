@@ -1,0 +1,128 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello IndexController!{% endblock %}
+
+{% block style %}
+    {{ encore_entry_link_tags('calendar') }}
+{% endblock %}
+
+{% block js %}
+    {{ encore_entry_script_tags('calendar') }}
+{% endblock %}
+
+{% block body %}
+    <div id="calendar"></div>
+
+    <!-- Modal-->
+    <div class="modal fade" id="modalEvent" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalToggleLabel">Добавить запись</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-lg-3">
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item">Общая информация</li>
+                                <v-menu v-for="item in menuItems" v-if="item.show" :item="item" :items="menuItems"
+                                        v-on:select="itemSelected"></v-menu>
+                            </ul>
+                        </div>
+
+                        {# Добавить запись #}
+                        <template v-if="showId === 1">
+                            <div class="col-lg-9 mb-3">
+                                <div class="btn-group mb-3 col-lg-12" style="padding: 2px" role="group" aria-label="Basic radio toggle button group">
+                                    <template v-for="eventStatus in sheduleStatus">
+                                        <input type="radio" @click="clickEventStatus(eventStatus.id)" class="btn-check" :disabled="object.client.phone === null || object.client.name === null" :value="eventStatus.id" v-model="object.status" name="userStatus" :id="'userStatus' + eventStatus.id" autocomplete="off">
+                                        <label style="width: 180px; border-radius: 0;" class="btn btn-outline-primary" :for="'userStatus' + eventStatus.id">${ eventStatus.label }$</label>
+                                    </template>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="clientPhone" class="form-label">Телефон клиента</label>
+                                    <v-client v-model="object.client" id="clientPhone"></v-client>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="clientName" class="form-label">Имя клиента</label>
+                                    <input type="text" v-model="object.client.name" class="form-control" id="clientName"
+                                           ref="clientName" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="operations" class="form-label">Выберите услуги</label>
+                                    <v-operation v-model="object.operations" @input="changeOperation"></v-operation>
+                                    <template v-if="object.operations.length > 0" v-for="operation in object.operations">
+                                        <div class="input-group mt-1">
+                                            <span style="width: 80%" class="input-group-text"
+                                                  id="basic-addon3">${ operation.title }$ (${ operation.price * operation.count }$ руб.)</span>
+                                                <input type="number" required class="form-control" v-model.number="operation.count"
+                                                       @change="changeOperation">
+                                        </div>
+                                    </template>
+                                </div>
+                                <div class="mb-3">
+                                    <div class="row">
+                                        <div class="col">
+                                            <label for="eventStart" class="form-label">Дата начала</label><br>
+                                            <date-picker aria-required="true" id="eventStart" style="width: 100%"
+                                                         v-model="object.start" type="datetime"></date-picker>
+                                        </div>
+                                        <div class="col">
+                                            <label for="eventEnd" class="form-label">Дата окончания</label><br>
+                                            <date-picker aria-required="true" id="eventEnd" style="width: 100%"
+                                                         v-model="object.end" type="datetime"></date-picker>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div v-if="object.status === 1 || object.status === 3" class="btn-group col-lg-12" style="padding: 2px" role="group" aria-label="Basic radio toggle button group">
+                                    <template v-for="paymentType in paymentTypes">
+                                        <input type="radio" @click="clickPaymentType(paymentType.id)" class="btn-check" :value="paymentType.id" v-model="object.paymentType" name="paymentType" :id="'paymentType' + paymentType.id" autocomplete="off">
+                                        <label style="border-radius: 0;" class="btn btn-outline-primary" :for="'paymentType' + paymentType.id"><i :class="paymentType.icon"></i> ${ paymentType.label }$ </label>
+                                    </template>
+                                </div>
+                                <template v-if="object.paymentType === 1 || object.paymentType === 2 || object.paymentType === 3">
+                                    <div class="mb-3">
+                                        <div class="row">
+                                            <div class="input-group mb-3">
+                                                <span class="input-group-text" title="Персональная скидка"><i class="fas fa-info-circle"></i>&nbsp; Скидка: 0%</span>
+                                                <span class="input-group-text" title="Баллы которые на счёту у клиента"><i class="fas fa-info-circle"></i> &nbsp; Баллы: 9999</span>
+                                                <input type="text" class="form-control" id="paymentCard" placeholder="Кол-во списанных баллов" required>
+                                                <span class="input-group-text" title="Итого к оплате"><i class="fas fa-cart-arrow-down"></i></span>
+                                                <input type="text" :value="totalPrice" class="form-control" id="paymentCard" required>
+                                                <span class="input-group-text">руб.</span>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div v-if="object.paymentType !== 2" class="col">
+                                                <label for="paymentCard" class="form-label">Сумма оплаты картой</label>
+                                                <div class="input-group mb-3">
+                                                    <span class="input-group-text"><i class="fas fa-credit-card"></i></span>
+                                                    <input type="text" v-model="object.paymentCard" class="form-control" id="paymentCard" required>
+                                                    <span class="input-group-text">руб.</span>
+                                                </div>
+                                            </div>
+                                            <div v-if="object.paymentType !== 1" class="col">
+                                                <label for="paymentCash" class="form-label">Сумма оплаты наличными</label>
+                                                <div class="input-group mb-3">
+                                                    <span class="input-group-text"><i class="far fa-money-bill-alt"></i></span>
+                                                    <input type="text" v-model="object.paymentCash" class="form-control" id="paymentCash" required>
+                                                    <span class="input-group-text">руб.</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </template>
+                            </div>
+                        </template>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button v-if="object.id !== null" class="btn btn-primary" @click="remove">Удалить</button>
+                    <button class="btn btn-primary" @click="send">Сохранить</button>
+                    <button class="btn btn-danger" data-bs-target="#modalEvent" data-bs-toggle="modal">Отмена</button>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

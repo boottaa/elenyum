@@ -1,0 +1,36 @@
+.fc .fc-button-primary {
+    color: #fff !important;
+    background-color: #2a84e1 !important;
+    border-color: #2a84e1 !important;
+    padding: 2px 10px 4px 10px;
+    border-radius: 3px;
+}
+.fc-license-message {
+    display: none;
+}
+.fc .fc-timegrid-col.fc-day-today {
+    background: #f6f7ff !important;
+}
+.fc .fc-scroller-harness {
+    font-size: 14px !important;
+    color: #373737;
+}
+
+.fc-scrollgrid-sync-inner, .fc-timegrid-axis-frame {
+    /*padding: 10px;*/
+    background: #f8f9fc;
+}
+
+.fc-scrollgrid {
+    border: none !important;
+}
+
+.fc-timegrid-event.fc-v-event {
+    border-radius: 0;
+    background: rgb(209 215 241);
+    border-color: rgb(206 216 255);
+
+    -webkit-box-shadow: 5px 5px 5px -5px rgba(71, 197, 192, 0.5);
+    -moz-box-shadow: 5px 5px 5px -5px rgba(71, 197, 192, 0.5);
+    box-shadow: 5px 5px 5px -5px rgba(71, 197, 192, 0.5);
+}

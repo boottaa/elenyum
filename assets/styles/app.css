@@ -1,0 +1,91 @@
+@import "../startbootstrap-sb-admin-2-gh-pages/css/sb-admin-2.css";
+@import "../startbootstrap-sb-admin-2-gh-pages/vendor/fontawesome-free/css/all.min.css";
+@import url('https://fonts.googleapis.com/css2?family=Jura:wght@300;400;500;600;700&display=swap');
+@import "/node_modules/vue-select/dist/vue-select.css";
+@import "/node_modules/vue2-datepicker/index.css";
+
+* {
+    font-family: 'Jura', sans-serif;
+    font-weight: 500;
+}
+
+.form-label {
+    color: #1f1f1f;
+}
+
+.modal-content {
+    border-radius: 3px;
+}
+
+.rotate-270 {
+    transform: rotate(270deg);
+}
+
+.main-title {
+    font-size: 30px;
+    font-weight: 100;
+}
+
+.main-brand-icon {
+    font-size: 28px;
+}
+
+.bg-primary {
+    background-color: #076dd6 !important;
+}
+
+.btn-primary {
+    color: #fff !important;
+    background-color: #2a84e1 !important;
+    border-color: #2a84e1 !important;
+    font-weight: 100 !important;
+}
+
+.el-gradient-primary {
+    background-color: #076dd6;
+    background-size: cover;
+}
+
+
+#baseCalendar .mx-btn {
+    color: #ffffff;
+}
+
+#baseCalendar .mx-datepicker-main {
+    color: #ffffff;
+    background-color: #076dd6;
+    border: none;
+}
+
+#baseCalendar .cell.active {
+    color: #ffffff;
+    background-color: rgb(252 252 253 / 22%);
+    border: none;
+
+    -webkit-box-shadow: 5px 5px 5px -5px rgba(0, 0, 0, 0.2);
+    -moz-box-shadow: 5px 5px 5px -5px rgba(0, 0, 0, 0.2);
+    box-shadow: 5px 5px 5px -5px rgba(0, 0, 0, 0.2);
+}
+
+#baseCalendar .cell.today {
+    color: #ffffff;
+    border-bottom: solid 1px #bbb5ff;
+}
+
+#baseCalendar .mx-datepicker.mx-datepicker-inline {
+    z-index: 99;
+}
+
+.collapse.show {
+    z-index: 99 !important;
+}
+
+.btn-check:checked + .btn-outline-primary {
+    background-color: #2a82df;
+    border-color: #2a82df;
+}
+
+.btn-check:hover + .btn-outline-primary {
+    background-color: #2a82df;
+    border-color: #2a82df;
+}
