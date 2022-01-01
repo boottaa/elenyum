@@ -64,7 +64,14 @@ class EmployeeRole
 
     public function getRoles(): array
     {
-        return explode('.', $this->roles);
+        if (isset($this->roles)) {
+            $roles = explode('.', $this->roles);
+            return array_map(function ($item) {
+                return 'ROLE_' . $item;
+            }, $roles);
+        }
+
+        return [];
     }
 
     public function addRole(int $roleId): self
@@ -72,7 +79,7 @@ class EmployeeRole
         $roles = $this->getRoles();
 
         if (!in_array($roleId, $roles, false)) {
-            $roles[] = $roles;
+            $roles[] = $roleId;
         }
 
         $this->roles = implode('.', $roles);

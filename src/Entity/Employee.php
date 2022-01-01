@@ -295,11 +295,7 @@ class Employee implements UserInterface, PasswordHasherAwareInterface, \Symfony\
 
     public function getRoles(): array
     {
-        $roles = [];
-
-//        $this->getEmployeeRoles()->
-
-        return $roles;
+        return $this->getEmployeeRole()->getRoles();
     }
 
     public function getSalt(): string

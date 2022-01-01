@@ -79,11 +79,8 @@ class RegistrationController extends AbstractController
             $employeeRole->setEmployee($employee);
 
             foreach ($roleRepository->findAll() as $role) {
-
                 $employeeRole->addRole($role->getId());
                 $em->persist($employeeRole);
-
-                $employee->addEmployeeRoles($employeeRole);
             }
 
             $employee->setPassword(

@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Employee;
+use App\Entity\Role;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -53,7 +54,7 @@ class SecurityController extends AbstractController
 
     #[Route('/api/ping', name: 'api_ping')]
 //    #[IsGranted('IS_AUTHENTICATED_FULLY')]
-    #[IsGranted('ROLE_ADMIN')]
+    #[IsGranted('ROLE_' . Role::CLIENT_GET)]
     public function ping(
         AuthenticationUtils $authenticationUtils
     ): Response {

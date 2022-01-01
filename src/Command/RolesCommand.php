@@ -16,9 +16,9 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 )]
 class RolesCommand extends Command
 {
-    public function __construct(string $name = null, private EntityManagerInterface $em)
+    public function __construct(private EntityManagerInterface $em)
     {
-        parent::__construct($name);
+        parent::__construct('app:roles');
     }
 
     protected function configure(): void
