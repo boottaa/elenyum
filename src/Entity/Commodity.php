@@ -97,6 +97,12 @@ class Commodity
      */
     private ?int $desiredBalance;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Branch::class)
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private Branch $branch;
+
     public function getId(): int
     {
         return $this->id;
@@ -268,5 +274,21 @@ class Commodity
         $this->desiredBalance = $desiredBalance;
 
         return $this;
+    }
+
+    /**
+     * @return Branch
+     */
+    public function getBranch(): Branch
+    {
+        return $this->branch;
+    }
+
+    /**
+     * @param Branch $branch
+     */
+    public function setBranch(Branch $branch): void
+    {
+        $this->branch = $branch;
     }
 }

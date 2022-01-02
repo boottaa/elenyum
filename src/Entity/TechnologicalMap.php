@@ -38,6 +38,12 @@ class TechnologicalMap
     
     private $consumables;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Company::class)
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private Company $company;
+
     public function __construct()
     {
         $this->consumables = new ArrayCollection();
@@ -94,5 +100,21 @@ class TechnologicalMap
         $this->consumables->removeElement($consumable);
 
         return $this;
+    }
+
+    /**
+     * @return Company
+     */
+    public function getCompany(): Company
+    {
+        return $this->company;
+    }
+
+    /**
+     * @param Company $company
+     */
+    public function setCompany(Company $company): void
+    {
+        $this->company = $company;
     }
 }

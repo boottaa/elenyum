@@ -30,12 +30,18 @@ class Branch
      * @ORM\ManyToOne(targetEntity=Company::class, inversedBy="branches")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $company;
+    private Company $company;
 
     /**
      * @ORM\OneToMany(targetEntity=Employee::class, mappedBy="branch", orphanRemoval=true)
      */
     private Collection $employees;
+
+    /**
+     * @ORM\OneToOne(targetEntity=Location::class, mappedBy="branch")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private Location $location;
 
     public function __construct()
     {
@@ -91,5 +97,21 @@ class Branch
         }
 
         return $this;
+    }
+
+    /**
+     * @return Location
+     */
+    public function getLocation(): Location
+    {
+        return $this->location;
+    }
+
+    /**
+     * @param Location $location
+     */
+    public function setLocation(Location $location): void
+    {
+        $this->location = $location;
     }
 }
