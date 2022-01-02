@@ -4,19 +4,18 @@ namespace App\Entity;
 
 use App\Repository\EmployeeRepository;
 use DateTimeImmutable;
-use Doctrine\Common\Collections\ArrayCollection;
+use \Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\PasswordHasher\Hasher\PasswordHasherAwareInterface;
-use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @ORM\Entity(repositoryClass=EmployeeRepository::class)
  * @UniqueEntity(fields={"email"}, message="There is already an account with this email")
  */
-class Employee implements UserInterface, PasswordHasherAwareInterface, \Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface
+class Employee implements UserInterface, PasswordHasherAwareInterface, PasswordAuthenticatedUserInterface
 {
     public const STATUS_NEW = 0;
     public const STATUS_CONFIRMED = 1;
@@ -110,6 +109,12 @@ class Employee implements UserInterface, PasswordHasherAwareInterface, \Symfony\
      * @ORM\OneToOne(targetEntity=EmployeeRole::class, mappedBy="employee")
      */
     private EmployeeRole $employeeRole;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Position::class, inversedBy="employee")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $pos;
 
     public function __construct()
     {
@@ -348,5 +353,17 @@ class Employee implements UserInterface, PasswordHasherAwareInterface, \Symfony\
     public function getUserIdentifier(): ?string
     {
         return base64_encode(md5($this->getName().$this->getId().time()));
+    }
+
+    public function getPos(): ?Position
+    {
+        return $this->pos;
+    }
+
+    public function setPos(?Position $pos): self
+    {
+        $this->pos = $pos;
+
+        return $this;
     }
 }

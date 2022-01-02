@@ -257,7 +257,7 @@ $(function () {
         },
     });
 
-    $.get(`/employee/list`, (data) => {
+    $.get(`/api/employee/list`, (data) => {
         if (data.total > 0) {
             data.items.forEach(function (item) {
                 calendar.addResource(item);
@@ -301,7 +301,7 @@ $(function () {
     }
 
     function loadEvents(start, end) {
-        $.get(`/shedule/list?start=${start}&end=${end}`, (data) => {
+        $.get(`/api/shedule/list?start=${start}&end=${end}`, (data) => {
             if (data.total > 0) {
                 data.items.forEach(function (item) {
                     calendar.addEvent(prepareCalendarEvent(item));
@@ -312,7 +312,7 @@ $(function () {
 
     function removeEvent(id) {
         calendar.getEventById(id).remove();
-        $.get(`/shedule/remove/${id}`);
+        $.get(`/api/shedule/remove/${id}`);
     }
 
     let start = calendar.view.currentStart.getTime()
@@ -338,7 +338,7 @@ $(function () {
     function postEvent(event) {
         $.ajax({
             type: "POST",
-            url: '/shedule/post',
+            url: '/api/shedule/post',
             data: JSON.stringify(event, (key, value) => {
                 return value
             }),

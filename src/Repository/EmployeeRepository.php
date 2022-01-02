@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Company;
 use App\Entity\Employee;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -19,11 +20,13 @@ class EmployeeRepository extends ServiceEntityRepository
         parent::__construct($registry, Employee::class);
     }
 
-    public function getList(): array
+    public function getList(Company $company): array
     {
         return $this->createQueryBuilder("e")
             ->select('PARTIAL e.{id, name}')
             ->orderBy('e.id', 'ASC')
+            ->where('e.company=:company')
+            ->setParameter('company', $company)
             ->getQuery()
             ->getArrayResult();
     }

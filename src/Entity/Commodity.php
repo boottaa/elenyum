@@ -74,7 +74,7 @@ class Commodity
      *
      * @ORM\Column(type="integer", nullable=true)
      */
-    private ?int $VAT;
+    private ?int $vat;
 
     /**
      * Количество
@@ -228,14 +228,14 @@ class Commodity
         return $this;
     }
 
-    public function getVAT(): ?int
+    public function getVat(): ?int
     {
-        return $this->VAT;
+        return $this->vat;
     }
 
-    public function setVAT(?int $VAT): self
+    public function setVat(?int $vat): self
     {
-        $this->VAT = $VAT;
+        $this->vat = $vat;
 
         return $this;
     }

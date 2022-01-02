@@ -24,7 +24,7 @@ class SheduleController extends AbstractController
     /**
      * @throws Exception
      */
-    #[Route('/shedule/list', name: 'sheduleList')]
+    #[Route('/api/shedule/list', name: 'sheduleList')]
     public function list(Request $request, SheduleRepository $sheduleRepository): Response
     {
         $start = $request->query->getInt('start');
@@ -51,7 +51,7 @@ class SheduleController extends AbstractController
     /**
      * @throws \JsonException
      */
-    #[Route('/shedule/post', name: 'shedulePost', methods: ['POST'])]
+    #[Route('/api/shedule/post', name: 'shedulePost', methods: ['POST'])]
     #[IsGranted('SHEDULE_POST')]
     public function post(
         Request $request,
@@ -131,7 +131,7 @@ class SheduleController extends AbstractController
     /**
      * @throws Exception
      */
-    #[Route('/shedule/remove/{id<\d+>}', name: 'sheduleRemove', methods: 'GET')]
+    #[Route('/api/shedule/remove/{id<\d+>}', name: 'sheduleRemove', methods: 'GET')]
     public function remove(Shedule $shedule, EntityManagerInterface $em): Response
     {
         foreach ($shedule->getSheduleOperations() as $sheduleOperation) {
