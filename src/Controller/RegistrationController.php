@@ -36,6 +36,7 @@ class RegistrationController extends AbstractController
      * @param UserPasswordHasherInterface $userPasswordHasher
      * @param EntityManagerInterface $em
      * @param EmployeeRepository $employeeRepository
+     * @param RoleRepository $roleRepository
      * @return Response
      * @throws \JsonException
      */

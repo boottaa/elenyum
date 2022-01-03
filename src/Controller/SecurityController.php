@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Employee;
 use App\Entity\Role;
+use App\Exception\ArrayException;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -13,16 +14,11 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class SecurityController extends AbstractController
 {
-    /**
-     * @Route("/api/login", name="api_login")
-     */
+    #[Route('/api/login', name: 'api_login', methods: 'POST')]
     public function login(EntityManagerInterface $em): Response
     {
         if ($this->getUser() === null) {
-            return $this->json([
-                'success' => false,
-                'error' => 'Авторизация не выполнена',
-            ]);
+            return $this->json((new ArrayException('Авторизация не выполнена'))->toArray());
         }
 
         $employee = $this->getUser();
@@ -61,9 +57,7 @@ class SecurityController extends AbstractController
         return $this->json(['response' => 'pong']);
     }
 
-    /**
-     * @Route("/logout", name="app_logout")
-     */
+    #[Route('/api/logout', name: 'app_logout')]
     public function logout(): void
     {
         throw new \LogicException(

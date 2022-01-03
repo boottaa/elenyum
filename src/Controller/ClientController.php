@@ -2,8 +2,10 @@
 
 namespace App\Controller;
 
+use App\Entity\Role;
 use App\Repository\ClientRepository;
 use Exception;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -17,6 +19,7 @@ class ClientController extends AbstractController
      * @return Response
      * @throws Exception
      */
+    #[IsGranted('ROLE_' . Role::CLIENT_GET)]
     #[Route('/client/list', name: 'client')]
     public function list(Request $request, ClientRepository $clientRepository): Response
     {

@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Client;
 use App\Entity\Employee;
 use App\Entity\Operation;
+use App\Entity\Role;
 use App\Entity\Shedule;
 use App\Entity\SheduleOperation;
 use App\Repository\SheduleRepository;
@@ -24,6 +25,7 @@ class SheduleController extends AbstractController
     /**
      * @throws Exception
      */
+    #[IsGranted('ROLE_' . Role::SHEDULE_GET)]
     #[Route('/api/shedule/list', name: 'sheduleList')]
     public function list(Request $request, SheduleRepository $sheduleRepository): Response
     {
@@ -51,8 +53,8 @@ class SheduleController extends AbstractController
     /**
      * @throws \JsonException
      */
+    #[IsGranted('ROLE_' . Role::SHEDULE_POST)]
     #[Route('/api/shedule/post', name: 'shedulePost', methods: ['POST'])]
-    #[IsGranted('SHEDULE_POST')]
     public function post(
         Request $request,
         EntityManagerInterface $em,
@@ -131,6 +133,7 @@ class SheduleController extends AbstractController
     /**
      * @throws Exception
      */
+    #[IsGranted('ROLE_' . Role::SHEDULE_DELETE)]
     #[Route('/api/shedule/remove/{id<\d+>}', name: 'sheduleRemove', methods: 'GET')]
     public function remove(Shedule $shedule, EntityManagerInterface $em): Response
     {

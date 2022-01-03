@@ -32,8 +32,11 @@ class EmployeeController extends AbstractController
     }
 
     /**
+     * @param Request $request
+     * @param EmployeeRepository $employeeRepository
+     * @param EntityManagerInterface $em
+     * @return Response
      * @throws \JsonException
-     * @throws ArrayException
      */
     #[IsGranted('ROLE_' . Role::EMPLOYEE_POST)]
     #[Route('/api/employee/post', name: 'employeePost', methods: 'POST')]

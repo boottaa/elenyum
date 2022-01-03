@@ -16,6 +16,7 @@ class ArrayException extends Exception
         $e = FlattenException::create($this);
 
         return [
+            'success' => false,
             'message' => $e->getMessage(),
             'code' => $e->getCode(),
 //            'file' => $e->getFile(),
