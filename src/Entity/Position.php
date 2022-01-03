@@ -36,9 +36,9 @@ class Position
     private $updatedAt;
 
     /**
-     * @ORM\OneToMany(targetEntity=Employee::class, mappedBy="pos")
+     * @ORM\OneToMany(targetEntity=Employee::class, mappedBy="position")
      */
-    private $employee;
+    private Collection $employee;
 
     /**
      * @ORM\OneToOne(targetEntity=PositionRole::class, mappedBy="employee")

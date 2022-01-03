@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Регистрация!</title>
+    <base href="/">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="msapplication-TileColor" content="#dd3d31">
+    <meta name="theme-color" content="#dd3d31">
+
+    {% block style %}
+        {{ encore_entry_link_tags('app') }}
+    {% endblock %}
+
+    {% block js %}
+        {{ encore_entry_script_tags('registration') }}
+    {% endblock %}
+
+<body style="background: #076dd6;">
+    <div id="registration" class="container">
+        <div class="card o-hidden border-0 shadow-lg my-5">
+            <div class="card-body p-0">
+                <!-- Nested Row within Card Body -->
+                <div class="row">
+                    <div class="col-lg-5 d-none d-lg-block bg-register-image"></div>
+                    <div class="col-lg-7">
+                        <div class="p-5">
+                            <div class="text-center">
+                                <h1 class="h4 text-gray-900 mb-4">Регистрация!</h1>
+                            </div>
+                            <form class="user">
+                                <div class="form-group">
+                                    <input type="email" class="form-control form-control-user" v-model="object.companyName"
+                                           placeholder="Название компании">
+                                </div>
+                                <div class="form-group">
+                                    <input type="email" class="form-control form-control-user" v-model="object.address"
+                                           placeholder="Адрес компании">
+                                </div>
+                                <div class="form-group">
+                                    <input type="text" class="form-control form-control-user" v-model="object.userName"
+                                           placeholder="ФИО">
+                                </div>
+                                <div class="form-group">
+                                    <input type="text" class="form-control form-control-user" v-model="object.position"
+                                           placeholder="Должность">
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-sm-6 mb-3 mb-sm-0">
+                                        <input type="text" class="form-control form-control-user" v-model="object.phone"
+                                               placeholder="Телефон">
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <input type="email" class="form-control form-control-user" v-model="object.email"
+                                               placeholder="Email">
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <div class="col-sm-6 mb-3 mb-sm-0">
+                                        <input type="password" class="form-control form-control-user" v-model="object.password"
+                                               placeholder="Пароль">
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <input type="password" class="form-control form-control-user" v-model="object.repeatPassword"
+                                              placeholder="Повторите пароль">
+                                    </div>
+                                </div>
+                                <input type="button" v-on:click="send" class="btn btn-primary btn-user btn-block" value="Зарегистрироваться">
+                            </form>
+                            <hr>
+                            <div class="text-center">
+                                <a class="small" href="forgot-password.html">Забыли пароль?</a> &nbsp;&nbsp;&nbsp;
+                                <a class="small" href="login.html">Войти!</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body><!-- This page was prerendered with Angular Universal --></html>

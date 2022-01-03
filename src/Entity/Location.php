@@ -24,12 +24,6 @@ class Location
      */
     private string $address;
 
-    /**
-     * @ORM\OneToOne(targetEntity=Branch::class, mappedBy="location")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private Branch $branch;
-
     public function getId(): ?int
     {
         return $this->id;
@@ -43,25 +37,6 @@ class Location
     public function setAddress(string $address): self
     {
         $this->address = $address;
-
-        return $this;
-    }
-
-    /**
-     * @return Branch
-     */
-    public function getBranch(): Branch
-    {
-        return $this->branch;
-    }
-
-    /**
-     * @param Branch $branch
-     * @return $this
-     */
-    public function setBranch(Branch $branch): self
-    {
-        $this->branch = $branch;
 
         return $this;
     }

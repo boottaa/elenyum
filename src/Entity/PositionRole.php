@@ -68,7 +68,7 @@ class PositionRole
             $roles = explode('.', $this->roles);
             return array_map(function ($item) {
                 // For is granted
-                return 'ROLE_' . $item;
+                return $item;
             }, $roles);
         }
 

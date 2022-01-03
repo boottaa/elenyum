@@ -26,4 +26,10 @@ class IndexController extends AbstractController
             'controller_name' => 'IndexController',
         ]);
     }
+
+    #[Route('/registration', name: 'registration')]
+    public function registration(): Response
+    {
+        return $this->render('index/registration.html.twig', []);
+    }
 }

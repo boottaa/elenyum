@@ -5,7 +5,7 @@ import '../src/vueClientSelect';
 import '../src/vueOperationSelect';
 //https://www.npmjs.com/package/vue2-datepicker
 import DatePicker from 'vue2-datepicker';
-import {isValid} from "../Validator/Validator";
+import {isValid} from "../validator/validator";
 import {menuItems, paymentTypes, sheduleStatus, sheduleObject} from "./objects";
 
 //https://vue-select.org/guide/values.html#getting-and-setting

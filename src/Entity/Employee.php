@@ -276,7 +276,12 @@ class Employee implements UserInterface, PasswordHasherAwareInterface, PasswordA
 
     public function getRoles(): array
     {
-        return $this->getEmployeeRole()->getRoles();
+        $roles = $this->getPosition()->getPositionRole()->getRoles();
+
+        return array_map(static function ($item) {
+            // For is granted
+            return 'ROLE_' . $item;
+        }, $roles);
     }
 
     public function getSalt(): string
@@ -311,14 +316,6 @@ class Employee implements UserInterface, PasswordHasherAwareInterface, PasswordA
         $this->apiToken = $apiToken;
 
         return $this;
-    }
-
-    /**
-     * @return Collection|EmployeeRole
-     */
-    public function getEmployeeRole(): EmployeeRole
-    {
-        return $this->employeeRole;
     }
 
     public function getPasswordHasherName(): ?string
