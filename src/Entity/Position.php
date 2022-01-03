@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\PositionRepository;
+use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -40,6 +41,11 @@ class Position
     private $employee;
 
     /**
+     * @ORM\OneToOne(targetEntity=PositionRole::class, mappedBy="employee")
+     */
+    private PositionRole $positionRole;
+
+    /**
      * @ORM\Column(type="boolean")
      */
     private $inCalendar;
@@ -47,6 +53,7 @@ class Position
     public function __construct()
     {
         $this->employee = new ArrayCollection();
+        $this->setCreatedAt(new DateTimeImmutable());
     }
 
     public function getId(): ?int
@@ -102,7 +109,7 @@ class Position
     {
         if (!$this->employee->contains($employee)) {
             $this->employee[] = $employee;
-            $employee->setPos($this);
+            $employee->setPosition($this);
         }
 
         return $this;
@@ -112,8 +119,8 @@ class Position
     {
         if ($this->employee->removeElement($employee)) {
             // set the owning side to null (unless already changed)
-            if ($employee->getPos() === $this) {
-                $employee->setPos(null);
+            if ($employee->getPosition() === $this) {
+                $employee->setPosition(null);
             }
         }
 
@@ -128,6 +135,26 @@ class Position
     public function setInCalendar(bool $inCalendar): self
     {
         $this->inCalendar = $inCalendar;
+
+        return $this;
+    }
+
+    /**
+     * @return PositionRole
+     */
+    public function getPositionRole(): PositionRole
+    {
+        return $this->positionRole;
+    }
+
+    /**
+     * @param PositionRole $positionRole
+     * @return Position
+     */
+    public function setPositionRole(PositionRole $positionRole): Position
+    {
+        $positionRole->setPosition($this);
+        $this->positionRole = $positionRole;
 
         return $this;
     }

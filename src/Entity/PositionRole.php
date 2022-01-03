@@ -8,9 +8,9 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\EmployeeRoleRepository", repositoryClass=EmployeeRoleRepository::class)
+ * @ORM\Entity(repositoryClass="App\Repository\PositionRoleRepository", repositoryClass=EmployeeRoleRepository::class)
  */
-class EmployeeRole
+class PositionRole
 {
     /**
      * @ORM\Id
@@ -20,10 +20,10 @@ class EmployeeRole
     private int $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Employee::class)
+     * @ORM\ManyToOne(targetEntity=Position::class)
      * @ORM\JoinColumn(nullable=false)
      */
-    private Employee $employee;
+    private Position $position;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -50,14 +50,14 @@ class EmployeeRole
         return $this->id;
     }
 
-    public function getEmployee(): Employee
+    public function getPosition(): Position
     {
-        return $this->employee;
+        return $this->position;
     }
 
-    public function setEmployee(Employee $employee): self
+    public function setPosition(Position $position): self
     {
-        $this->employee = $employee;
+        $this->position = $position;
 
         return $this;
     }

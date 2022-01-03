@@ -112,6 +112,7 @@ class Branch
      */
     public function setLocation(Location $location): void
     {
+        $location->setBranch($this);
         $this->location = $location;
     }
 }

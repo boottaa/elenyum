@@ -5,8 +5,9 @@ namespace App\Controller;
 use App\Entity\Branch;
 use App\Entity\Company;
 use App\Entity\Employee;
-use App\Entity\EmployeeRole;
-use App\Entity\Role;
+use App\Entity\Location;
+use App\Entity\Position;
+use App\Entity\PositionRole;
 use App\Exception\ArrayException;
 use App\Repository\EmployeeRepository;
 use App\Repository\RoleRepository;
@@ -68,21 +69,31 @@ class RegistrationController extends AbstractController
             $company = new Company();
             $company->setName($data['company_name']);
             $em->persist($company);
+
             $employee->setCompany($company);
 
             $branch = new Branch();
             $branch->setCompany($company);
             $branch->setName($data['company_name'].' - 1');
             $employee->setBranch($branch);
+            $location = new Location();
+            $location->setAddress($data['address']);
+            $em->persist($location);
+            $branch->setLocation($location);
             $em->persist($branch);
 
-            $employeeRole = new EmployeeRole();
-            $employeeRole->setEmployee($employee);
-
+            $positionRole = new PositionRole();
             foreach ($roleRepository->findAll() as $role) {
-                $employeeRole->addRole($role->getId());
-                $em->persist($employeeRole);
+                $positionRole->addRole($role->getId());
             }
+            $em->persist($positionRole);
+
+            $position = new Position();
+            $position->setTitle($data['position']);
+            $position->setPositionRole($positionRole);
+            $position->addEmployee($employee);
+            $position->setInCalendar(false);
+            $em->persist($position);
 
             $employee->setPassword(
                 $userPasswordHasher->hashPassword(

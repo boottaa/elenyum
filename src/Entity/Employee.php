@@ -58,13 +58,6 @@ class Employee implements UserInterface, PasswordHasherAwareInterface, PasswordA
     private ?\DateTimeImmutable $dateBrith;
 
     /**
-     * Должность сотрудника
-     *
-     * @ORM\Column(type="string", length=50, nullable=true)
-     */
-    private string $position;
-
-    /**
      * У каждого сотрудника свой пароль и свой уровень доступа (доступ по ролям, роли в отдельной таблице)
      *
      * @ORM\Column(type="string", length=255)
@@ -106,15 +99,10 @@ class Employee implements UserInterface, PasswordHasherAwareInterface, PasswordA
     private Branch $branch;
 
     /**
-     * @ORM\OneToOne(targetEntity=EmployeeRole::class, mappedBy="employee")
-     */
-    private EmployeeRole $employeeRole;
-
-    /**
      * @ORM\ManyToOne(targetEntity=Position::class, inversedBy="employee")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $pos;
+    private Position $position;
 
     public function __construct()
     {
@@ -182,18 +170,6 @@ class Employee implements UserInterface, PasswordHasherAwareInterface, PasswordA
     public function setDateBrith(?DateTimeImmutable $dateBrith): self
     {
         $this->dateBrith = $dateBrith;
-
-        return $this;
-    }
-
-    public function getPosition(): string
-    {
-        return $this->position;
-    }
-
-    public function setPosition(string $position): self
-    {
-        $this->position = $position;
 
         return $this;
     }
@@ -355,14 +331,14 @@ class Employee implements UserInterface, PasswordHasherAwareInterface, PasswordA
         return base64_encode(md5($this->getName().$this->getId().time()));
     }
 
-    public function getPos(): ?Position
+    public function getPosition(): ?Position
     {
-        return $this->pos;
+        return $this->position;
     }
 
-    public function setPos(?Position $pos): self
+    public function setPosition(?Position $position): self
     {
-        $this->pos = $pos;
+        $this->position = $position;
 
         return $this;
     }
