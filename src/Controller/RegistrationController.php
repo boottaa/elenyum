@@ -41,7 +41,7 @@ class RegistrationController extends AbstractController
      * @return Response
      * @throws \JsonException
      */
-    #[Route('/api/register', name: 'api_register')]
+    #[Route('/api/register', name: 'api_register', methods: ['POST'])]
     public function register(
         Request $request,
         UserPasswordHasherInterface $userPasswordHasher,
@@ -62,19 +62,19 @@ class RegistrationController extends AbstractController
             $employee = new Employee();
             $employee->setStatus(0);
             $employee->setPhone($data['phone']);
-            $employee->setName($data['user_name']);
+            $employee->setName($data['userName']);
             $employee->setEmail($data['email']);
             $em->persist($employee);
 
             $company = new Company();
-            $company->setName($data['company_name']);
+            $company->setName($data['companyName']);
             $em->persist($company);
 
             $employee->setCompany($company);
 
             $branch = new Branch();
             $branch->setCompany($company);
-            $branch->setName($data['company_name'].' - 1');
+            $branch->setName($data['companyName'].' - 1');
             $employee->setBranch($branch);
             $location = new Location();
             $location->setAddress($data['address']);

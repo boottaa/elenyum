@@ -30,28 +30,28 @@
                             </div>
                             <form class="user">
                                 <div class="form-group">
-                                    <input type="email" class="form-control form-control-user" v-model="object.companyName"
+                                    <input type="email" class="form-control form-control-user" v-model="object.companyName" id="companyName"
                                            placeholder="Название компании">
                                 </div>
                                 <div class="form-group">
-                                    <input type="email" class="form-control form-control-user" v-model="object.address"
+                                    <input type="email" class="form-control form-control-user" v-model="object.address" id="address"
                                            placeholder="Адрес компании">
                                 </div>
                                 <div class="form-group">
-                                    <input type="text" class="form-control form-control-user" v-model="object.userName"
+                                    <input type="text" class="form-control form-control-user" v-model="object.userName" id="userName"
                                            placeholder="ФИО">
                                 </div>
                                 <div class="form-group">
-                                    <input type="text" class="form-control form-control-user" v-model="object.position"
+                                    <input type="text" class="form-control form-control-user" v-model="object.position" id="position"
                                            placeholder="Должность">
                                 </div>
                                 <div class="form-group row">
                                     <div class="col-sm-6 mb-3 mb-sm-0">
-                                        <input type="text" class="form-control form-control-user" v-model="object.phone"
+                                        <input type="text" class="form-control form-control-user" v-model="object.phone" id="phone"
                                                placeholder="Телефон">
                                     </div>
                                     <div class="col-sm-6">
-                                        <input type="email" class="form-control form-control-user" v-model="object.email"
+                                        <input type="email" class="form-control form-control-user" v-model="object.email" id="email"
                                                placeholder="Email">
                                     </div>
                                 </div>
@@ -70,8 +70,8 @@
                             </form>
                             <hr>
                             <div class="text-center">
-                                <a class="small" href="forgot-password.html">Забыли пароль?</a> &nbsp;&nbsp;&nbsp;
-                                <a class="small" href="login.html">Войти!</a>
+                                <a class="small" href="{{ path('appForgotPassword') }}">Забыли пароль?</a>&nbsp;&nbsp;&nbsp;&nbsp;
+                                <a class="small" href="{{ path('appLogin') }}">Войти!</a>
                             </div>
                         </div>
                     </div>

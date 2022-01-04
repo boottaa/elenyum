@@ -10,7 +10,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class IndexController extends AbstractController
 {
     #[IsGranted('IS_AUTHENTICATED_FULLY')]
-    #[Route('/', name: 'index')]
+    #[Route('/', name: 'appIndex')]
     public function index(): Response
     {
         return $this->render('index/index.html.twig', [
@@ -19,7 +19,7 @@ class IndexController extends AbstractController
     }
 
     #[IsGranted('IS_AUTHENTICATED_FULLY')]
-    #[Route('/calendar', name: 'calendar')]
+    #[Route('/calendar', name: 'appCalendar')]
     public function calendar(): Response
     {
         return $this->render('index/calendar.html.twig', [
@@ -27,9 +27,21 @@ class IndexController extends AbstractController
         ]);
     }
 
-    #[Route('/registration', name: 'registration')]
+    #[Route('/registration', name: 'appRegistration')]
     public function registration(): Response
     {
         return $this->render('index/registration.html.twig', []);
+    }
+
+    #[Route('/login', name: 'appLogin')]
+    public function login(): Response
+    {
+        return $this->render('index/login.html.twig', []);
+    }
+
+    #[Route('/forgotPassword', name: 'appForgotPassword')]
+    public function forgotPassword(): Response
+    {
+        return $this->render('index/forgotPassword.html.twig', []);
     }
 }

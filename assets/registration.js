@@ -1,6 +1,7 @@
 import './bootstrap';
 import Vue from 'vue';
 import {isValid} from "./validator/validator";
+import {post} from "./baseQuery";
 
 let object = {
     phone: null,
@@ -13,7 +14,7 @@ let object = {
     address: null
 };
 
-export let registrationVue = new Vue({
+new Vue({
     el: '#registration',
     data() {
         return {
@@ -69,7 +70,12 @@ export let registrationVue = new Vue({
         send() {
             if (this.validation()) {
 
-                console.log(this.object)
+                let data = JSON.parse(JSON.stringify(this.object, (key, value) => {
+                    return value
+                }));
+                post('/api/register', data, function (r) {
+                    console.log(r);
+                });
                 this.resetObject();
             }
         },
