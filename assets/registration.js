@@ -14,10 +14,18 @@ let object = {
     address: null
 };
 
+let elModalSuccess = document.getElementById('modalSuccess'),
+    modalSuccess = new bootstrap.Modal(elModalSuccess);
+
+elModalSuccess.addEventListener('hidden.bs.modal', function () {
+    window.location.href = '/login';
+});
+
 new Vue({
     el: '#registration',
     data() {
         return {
+            message: null,
             object: {
                 phone: null,
                 userName: null,
@@ -73,8 +81,10 @@ new Vue({
                 let data = JSON.parse(JSON.stringify(this.object, (key, value) => {
                     return value
                 }));
-                post('/api/register', data, function (r) {
-                    console.log(r);
+                post('/api/register', data, (result) => {
+                    if (result.success === true) {
+                        modalSuccess.show();
+                    }
                 });
                 this.resetObject();
             }
