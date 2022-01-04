@@ -15,7 +15,7 @@ let object = {
 };
 
 let vueModal = new Vue({
-    el: '#modal',
+    el: '#modalAlert',
     data() {
         return {
             elModal: null,

@@ -14,7 +14,7 @@ import resourceTimeGridPlugin from '@fullcalendar/resource-timegrid';
 import scrollGridPlugin from '@fullcalendar/scrollgrid';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import {modalVue} from "./calendar/modalEvent";
-import {baseCalendar} from "./bootstrap";
+import {baseCalendar} from "./src/baseCalendar";
 
 $(function () {
     let elModalEvent = document.getElementById('modalEvent'),

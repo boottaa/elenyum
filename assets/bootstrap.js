@@ -22,23 +22,5 @@ Date.prototype.addMinutes = function(m) {
     return this;
 }
 
-export let baseCalendar = new Vue({
-    components: {DatePicker},
-    el: '#baseCalendar',
-
-    data() {
-        return {
-            pickDate: new Date(),
-        }
-    },
-    methods: {
-        dateClick(date) {
-            // console.log(date);
-            this.pickDate = date;
-            this.$emit('dateChange', date);
-        },
-    }
-});
-
 // register any custom, 3rd party controllers here
 // app.register('some_controller_name', SomeImportedController);
