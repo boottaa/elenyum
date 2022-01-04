@@ -14,18 +14,38 @@ let object = {
     address: null
 };
 
-let elModalSuccess = document.getElementById('modalSuccess'),
-    modalSuccess = new bootstrap.Modal(elModalSuccess);
+let vueModal = new Vue({
+    el: '#modal',
+    data() {
+        return {
+            elModal: null,
+            modal: null,
+            message: '',
+        }
+    },
+    mounted(){
+        this.$root.$on('show', function(){
+            this.show()
+        });
+    },
+    methods: {
+        show() {
+            this.elModal = document.getElementById('modal');
+            this.modal = new bootstrap.Modal(this.elModal);
+            this.modal.show();
 
-elModalSuccess.addEventListener('hidden.bs.modal', function () {
-    window.location.href = '/login';
+            this.elModal.addEventListener('hidden.bs.modal', function (e) {
+                this.$emit('hidden', e)
+            });
+        }
+    },
+    delimiters: ['${', '}$'],
 });
 
 new Vue({
     el: '#registration',
     data() {
         return {
-            message: null,
             object: {
                 phone: null,
                 userName: null,
@@ -83,10 +103,17 @@ new Vue({
                 }));
                 post('/api/register', data, (result) => {
                     if (result.success === true) {
-                        modalSuccess.show();
+                        vueModal.message = result.message;
+                        vueModal.$root.$emit('show');
+                        vueModal.$once('hidden', () => {
+                            this.resetObject();
+                            window.location.href = '/login';
+                        });
+                    } else {
+                        vueModal.message = result.message;
+                        vueModal.$root.$emit('show');
                     }
                 });
-                this.resetObject();
             }
         },
 
