@@ -1,6 +1,7 @@
 import './bootstrap';
 import Vue from 'vue';
 import {isValid} from "./validator/validator";
+import {post, setToken} from "./src/baseQuery";
 
 let object = {
     email: null,
@@ -12,7 +13,7 @@ new Vue({
     data() {
         return {
             object: {
-                email: null,
+                username: null,
                 password: null
             },
         }
@@ -24,7 +25,7 @@ new Vue({
         validation() {
             let items = {
                 '#email': {
-                    value: this.object.email,
+                    value: this.object.username,
                     validators: ['notEmpty'],
                 },
                 '#password': {
@@ -36,9 +37,13 @@ new Vue({
         },
         send() {
             if (this.validation()) {
+                post('/api/login', this.object, (result) => {
+                    if (result.success === true) {
+                        setToken(result.token);
 
-                console.log(this.object)
-                this.resetObject();
+                        window.location.href = '/';
+                    }
+                });
             }
         },
 

@@ -41,7 +41,7 @@ class Position
     private Collection $employee;
 
     /**
-     * @ORM\OneToOne(targetEntity=PositionRole::class, mappedBy="employee")
+     * @ORM\OneToOne(targetEntity=PositionRole::class, mappedBy="position")
      */
     private PositionRole $positionRole;
 

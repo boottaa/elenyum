@@ -1,7 +1,8 @@
 import './bootstrap';
+import 'jquery.cookie';
 import Vue from 'vue';
 import {isValid} from "./validator/validator";
-import {post} from "./baseQuery";
+import {post} from "./src/baseQuery";
 
 let object = {
     phone: null,
@@ -30,7 +31,7 @@ let vueModal = new Vue({
     },
     methods: {
         show() {
-            this.elModal = document.getElementById('modal');
+            this.elModal = document.getElementById('modalAlert');
             this.modal = new bootstrap.Modal(this.elModal);
             this.modal.show();
 

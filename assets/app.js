@@ -13,3 +13,4 @@ import './bootstrap';
 import './startbootstrap-sb-admin-2-gh-pages/vendor/bootstrap/js/bootstrap.bundle.min';
 import './startbootstrap-sb-admin-2-gh-pages/vendor/jquery-easing/jquery.easing.min';
 import './startbootstrap-sb-admin-2-gh-pages/js/sb-admin-2.min';
+import "./src/baseCalendar";

@@ -34,6 +34,7 @@
         "@fullcalendar/timegrid": "^5.10.1",
         "bootstrap": "^5.1.3",
         "fuse.js": "^6.4.6",
+        "jquery.cookie": "^1.4.1",
         "vue-select": "^3.16.0",
         "vue2-datepicker": "^3.10.4"
     }

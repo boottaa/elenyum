@@ -352,6 +352,8 @@ $(function () {
         });
     }
 
+    // console.log($.cookie('currentDate'));
+    calendar.gotoDate(new Date($.cookie('currentDate')));
     calendar.render();
 
     baseCalendar.$on('dateChange', (date) => {

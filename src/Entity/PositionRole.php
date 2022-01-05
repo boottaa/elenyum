@@ -2,13 +2,11 @@
 
 namespace App\Entity;
 
-use App\Repository\EmployeeRoleRepository;
 use DateTimeImmutable;
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\PositionRoleRepository", repositoryClass=EmployeeRoleRepository::class)
+ * @ORM\Entity(repositoryClass="App\Repository\PositionRoleRepository")
  */
 class PositionRole
 {
@@ -20,7 +18,7 @@ class PositionRole
     private int $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Position::class)
+     * @ORM\ManyToOne(targetEntity=Position::class, inversedBy="positionRole")
      * @ORM\JoinColumn(nullable=false)
      */
     private Position $position;

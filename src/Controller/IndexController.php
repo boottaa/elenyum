@@ -9,22 +9,24 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class IndexController extends AbstractController
 {
-    #[IsGranted('IS_AUTHENTICATED_FULLY')]
     #[Route('/', name: 'appIndex')]
     public function index(): Response
     {
-        return $this->render('index/index.html.twig', [
-            'controller_name' => 'IndexController',
-        ]);
+        if (!$this->isGranted('IS_AUTHENTICATED_FULLY')) {
+            return $this->redirectToRoute('appLogin');
+        }
+
+        return $this->render('index/index.html.twig', []);
     }
 
-    #[IsGranted('IS_AUTHENTICATED_FULLY')]
     #[Route('/calendar', name: 'appCalendar')]
     public function calendar(): Response
     {
-        return $this->render('index/calendar.html.twig', [
-            'controller_name' => 'IndexController',
-        ]);
+        if (!$this->isGranted('IS_AUTHENTICATED_FULLY')) {
+            return $this->redirectToRoute('appLogin');
+        }
+
+        return $this->render('index/calendar.html.twig', []);
     }
 
     #[Route('/registration', name: 'appRegistration')]
