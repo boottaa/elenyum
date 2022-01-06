@@ -16,38 +16,39 @@
         {{ encore_entry_script_tags('login') }}
     {% endblock %}
 
-<body style="background: #076dd6;">
-    <div id="login" class="container">
-        <div class="card o-hidden border-0 shadow-lg my-5">
-            <div class="card-body p-0">
-                <!-- Nested Row within Card Body -->
-                <div class="row">
-                    <div class="col-lg-5 d-none d-lg-block bg-login-image"></div>
-                    <div class="col-lg-7">
-                        <div class="p-5">
-                            <div class="text-center">
-                                <h1 class="h4 text-gray-900 mb-4">Авторизация!</h1>
-                            </div>
-                            <form class="user">
-                                <div class="form-group">
-                                    <input id="email" type="email" class="form-control form-control-user" v-model="object.username"
-                                           placeholder="Email">
+    <body style="background: #076dd6;">
+        <div id="login" class="container">
+            <div class="card o-hidden border-0 shadow-lg my-5">
+                <div class="card-body p-0">
+                    <!-- Nested Row within Card Body -->
+                    <div class="row">
+                        <div class="col-lg-5 d-none d-lg-block bg-login-image"></div>
+                        <div class="col-lg-7">
+                            <div class="p-5">
+                                <div class="text-center">
+                                    <h1 class="h4 text-gray-900 mb-4">Авторизация!</h1>
                                 </div>
-                                <div class="form-group">
-                                    <input id="password" type="password" class="form-control form-control-user" v-model="object.password"
-                                           placeholder="Пароль">
+                                <form class="user">
+                                    <div class="form-group">
+                                        <input id="email" type="email" class="form-control form-control-user" v-model="object.username"
+                                               placeholder="Email">
+                                    </div>
+                                    <div class="form-group">
+                                        <input id="password" type="password" class="form-control form-control-user" v-model="object.password"
+                                               placeholder="Пароль">
+                                    </div>
+                                    <input type="button" v-on:click="send" class="btn btn-primary btn-user btn-block" value="Войти">
+                                </form>
+                                <hr>
+                                <div class="text-center">
+                                    <a class="small" href="{{ path('forgotPassword') }}">Забыли пароль?</a>&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <a class="small" href="{{ path('registration') }}">Регистрация!</a>
                                 </div>
-                                <input type="button" v-on:click="send" class="btn btn-primary btn-user btn-block" value="Войти">
-                            </form>
-                            <hr>
-                            <div class="text-center">
-                                <a class="small" href="{{ path('appForgotPassword') }}">Забыли пароль?</a>&nbsp;&nbsp;&nbsp;&nbsp;
-                                <a class="small" href="{{ path('appRegistration') }}">Регистрация!</a>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-</body><!-- This page was prerendered with Angular Universal --></html>
+    </body>
+</html>
