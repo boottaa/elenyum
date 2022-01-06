@@ -12,7 +12,7 @@ export let baseCalendar = new Vue({
 
     data() {
         return {
-            pickDate: $.cookie('currentDate'),
+            pickDate: null,
         }
     },
     mounted() {

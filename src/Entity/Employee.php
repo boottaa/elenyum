@@ -60,16 +60,16 @@ class Employee implements UserInterface, PasswordHasherAwareInterface, PasswordA
     /**
      * У каждого сотрудника свой пароль и свой уровень доступа (доступ по ролям, роли в отдельной таблице)
      *
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private string $password;
+    private ?string $password;
 
     /**
      * Токен пользователя
      *
      * @ORM\Column(type="string", unique=true, nullable=true)
      */
-    private string $apiToken;
+    private ?string $apiToken;
 
     /**
      * @ORM\Column(type="integer")
@@ -174,12 +174,12 @@ class Employee implements UserInterface, PasswordHasherAwareInterface, PasswordA
         return $this;
     }
 
-    public function getPassword(): string
+    public function getPassword(): ?string
     {
         return $this->password;
     }
 
-    public function setPassword(string $password): self
+    public function setPassword(?string $password): self
     {
         $this->password = $password;
 
@@ -294,24 +294,27 @@ class Employee implements UserInterface, PasswordHasherAwareInterface, PasswordA
         return;
     }
 
+    /**
+     * @return string
+     */
     public function getUsername(): string
     {
         return $this->getName();
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getApiToken(): string
+    public function getApiToken(): ?string
     {
         return $this->apiToken;
     }
 
     /**
-     * @param string $apiToken
-     * @return Employee
+     * @param string|null $apiToken
+     * @return $this
      */
-    public function setApiToken(string $apiToken): Employee
+    public function setApiToken(?string $apiToken): Employee
     {
         $this->apiToken = $apiToken;
 
