@@ -35,7 +35,7 @@ class IndexController extends AbstractController
             return $this->redirectToRoute('appLogin');
         }
 
-        return $this->render('index/calendar.html.twig', []);
+        return $this->render('index/employeeAdd.html.twig', []);
     }
 
     #[Route('/registration', name: 'registration')]

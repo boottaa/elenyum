@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello IndexController!{% endblock %}
+
+{% block style %}
+    {{ encore_entry_link_tags('calendar') }}
+{% endblock %}
+
+{% block js %}
+    {{ encore_entry_script_tags('employeeAdd') }}
+{% endblock %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-lg-5">
+            <div class="mb-3">
+                <label for="clientName" class="form-label">Имя клиента</label>
+                <input type="text" v-model="object.userName" class="form-control" id="clientName"
+                       ref="clientName" required>
+            </div>
+        </div>
+    </div>
+{% endblock %}
