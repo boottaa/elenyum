@@ -7,11 +7,12 @@ use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use JsonSerializable;
 
 /**
  * @ORM\Entity(repositoryClass=PositionRepository::class)
  */
-class Position
+class Position implements JsonSerializable
 {
     /**
      * @ORM\Id
@@ -44,6 +45,12 @@ class Position
      * @ORM\OneToOne(targetEntity=PositionRole::class, mappedBy="position")
      */
     private PositionRole $positionRole;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Company::class)
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private Company $company;
 
     /**
      * @ORM\Column(type="boolean")
@@ -157,5 +164,32 @@ class Position
         $this->positionRole = $positionRole;
 
         return $this;
+    }
+
+    /**
+     * @return Company
+     */
+    public function getCompany(): Company
+    {
+        return $this->company;
+    }
+
+    /**
+     * @param Company $company
+     * @return Position
+     */
+    public function setCompany(Company $company): Position
+    {
+        $this->company = $company;
+
+        return $this;
+    }
+
+    public function jsonSerialize(): array
+    {
+        return [
+            'id' => $this->getId(),
+            'title' => $this->getTitle(),
+        ];
     }
 }

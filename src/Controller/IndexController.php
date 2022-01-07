@@ -12,7 +12,7 @@ class IndexController extends AbstractController
     public function index(): Response
     {
         if (!$this->isGranted('IS_AUTHENTICATED_FULLY')) {
-            return $this->redirectToRoute('appLogin');
+            return $this->redirectToRoute('login');
         }
 
         return $this->render('index/index.html.twig', []);
@@ -22,7 +22,7 @@ class IndexController extends AbstractController
     public function calendar(): Response
     {
         if (!$this->isGranted('IS_AUTHENTICATED_FULLY')) {
-            return $this->redirectToRoute('appLogin');
+            return $this->redirectToRoute('login');
         }
 
         return $this->render('index/calendar.html.twig', []);
@@ -32,7 +32,7 @@ class IndexController extends AbstractController
     public function employeeAdd(): Response
     {
         if (!$this->isGranted('IS_AUTHENTICATED_FULLY')) {
-            return $this->redirectToRoute('appLogin');
+            return $this->redirectToRoute('login');
         }
 
         return $this->render('index/employeeAdd.html.twig', []);

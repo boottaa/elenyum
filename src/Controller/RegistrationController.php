@@ -92,6 +92,7 @@ class RegistrationController extends AbstractController
             $position->setTitle($data['position']);
             $position->setPositionRole($positionRole);
             $position->addEmployee($employee);
+            $position->setCompany($company);
             $position->setInCalendar(false);
             $em->persist($position);
 

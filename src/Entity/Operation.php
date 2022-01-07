@@ -33,10 +33,10 @@ class Operation
     private int $duration;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Branch::class)
+     * @ORM\ManyToOne(targetEntity=Company::class)
      * @ORM\JoinColumn(nullable=false)
      */
-    private Branch $branch;
+    private Company $company;
 
     public function getId(): int
     {
@@ -80,18 +80,18 @@ class Operation
     }
 
     /**
-     * @return Branch
+     * @return Company
      */
-    public function getBranch(): Branch
+    public function getCompany(): Company
     {
-        return $this->branch;
+        return $this->company;
     }
 
     /**
-     * @param Branch $branch
+     * @param Company $company
      */
-    public function setBranch(Branch $branch): void
+    public function setCompany(Company $company): void
     {
-        $this->branch = $branch;
+        $this->company = $company;
     }
 }

@@ -11,13 +11,53 @@
 {% endblock %}
 
 {% block body %}
-    <div class="row">
-        <div class="col-lg-5">
+    <div id="employeeAdd" class="row">
+
+ {#        positionId: null,#}
+{#        userName: null,#}
+{#        phone: null,#}
+{#        email: null,#}
+{#        additionalPhone: null,#}
+{#        password: null,#}
+{#        dateBrith: null,#}
+
+        <h3 class="mb-4" style="border-bottom: solid 1px #a8a8a8">Добавление сотрудника</h3>
+        <div class="col-lg-4">
             <div class="mb-3">
-                <label for="clientName" class="form-label">Имя клиента</label>
-                <input type="text" v-model="object.userName" class="form-control" id="clientName"
-                       ref="clientName" required>
+                <label for="positionId" class="form-label">Должность</label>
+                <v-position v-model="object.positionId" id="positionId"></v-position>
             </div>
+            <div class="mb-3">
+                <label for="userName" class="form-label">ФИО</label>
+                <input type="text" v-model="object.userName" class="form-control" id="userName"
+                       required>
+            </div>
+            <div class="mb-3">
+                <label for="phone" class="form-label">Телефон</label>
+                <input type="text" v-model="object.phone" class="form-control" id="phone"
+                       required>
+            </div>
+            <div class="mb-3">
+                <label for="additionalPhone" class="form-label">Доп. телефон</label>
+                <input type="text" v-model="object.additionalPhone" class="form-control" id="additionalPhone"
+                       required>
+            </div>
+            <div class="mb-3">
+                <label for="email" class="form-label">Email</label>
+                <input type="email" v-model="object.email" class="form-control" id="email"
+                       required>
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">Пароль</label>
+                <input type="password" v-model="object.password" class="form-control" id="password"
+                       required>
+            </div>
+            <div class="mb-5">
+                <label for="dateBrith" class="form-label">День рождения</label>
+                <date-picker aria-required="true" id="dateBrith" style="width: 100%"
+                             v-model="object.dateBrith" type="date"></date-picker>
+            </div>
+            <input type="button" v-on:click="send" class="btn btn-primary btn-user btn-block" value="Добавить">
         </div>
     </div>
 {% endblock %}
