@@ -48,15 +48,6 @@ class SecurityController extends AbstractController
         ]);
     }
 
-    #[Route('/api/ping', name: 'api_ping')]
-//    #[IsGranted('IS_AUTHENTICATED_FULLY')]
-    #[IsGranted('ROLE_' . Role::CLIENT_GET)]
-    public function ping(
-        AuthenticationUtils $authenticationUtils
-    ): Response {
-        return $this->json(['response' => 'pong']);
-    }
-
     #[Route('/api/logout', name: 'app_logout')]
     public function logout(): void
     {

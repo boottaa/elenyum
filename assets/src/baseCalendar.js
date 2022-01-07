@@ -3,7 +3,9 @@ import DatePicker from "vue2-datepicker";
 import 'jquery.cookie';
 
 if ($.cookie('currentDate') === undefined) {
-    $.cookie('currentDate', new Date());
+    $.cookie('currentDate', new Date(), {
+        path: '/',
+    });
 }
 
 export let baseCalendar = new Vue({
@@ -26,7 +28,9 @@ export let baseCalendar = new Vue({
                 window.location.href = '/calendar';
             }
 
-            $.cookie('currentDate', date);
+            $.cookie('currentDate', date, {
+                path: '/',
+            });
             this.pickDate = date;
             this.$emit('dateChange', date);
         },

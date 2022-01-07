@@ -109,7 +109,7 @@ $(function () {
             let divEl = document.createElement('div'),
                 resourceImg = typeof renderInfo.resource.extendedProps.img === "undefined" ? '/img/defaultEmployee.png' : renderInfo.resource.extendedProps.img;
 
-            divEl.innerHTML += `<div style="font-size: 20px" class="resourceName mr-2 d-none d-lg-inline text-gray-600">${renderInfo.resource.extendedProps.name}&nbsp;&nbsp;&nbsp;
+            divEl.innerHTML += `<div style="font-size: 20px" class="resourceName mr-2 d-lg-inline text-gray-600">${renderInfo.resource.extendedProps.name}&nbsp;&nbsp;&nbsp;
                                     <img style="width: 30px; vertical-align: -3px;" src="${resourceImg}" class="img-profile rounded-circle" alt="${renderInfo.resource.extendedProps.name}">
                                 </div>`;
             let arrayOfDomNodes = [divEl];
@@ -139,7 +139,6 @@ $(function () {
 
             modalVue.$once('send', (data) => {
                 if (data !== null) {
-                    console.log(calendar.getEventById(data.id));
                     calendar.getEventById(data.id)?.remove();
                     postEvent(data);
                     //Потом добавляем событие в календарь

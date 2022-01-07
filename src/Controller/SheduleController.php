@@ -51,6 +51,12 @@ class SheduleController extends AbstractController
     }
 
     /**
+     * @param Request $request
+     * @param EntityManagerInterface $em
+     * @param SheduleValidator $validator
+     * @param SheduleRepository $sheduleRepository
+     * @return Response
+     * @throws \Doctrine\ORM\NonUniqueResultException
      * @throws \JsonException
      */
     #[IsGranted('ROLE_' . Role::SHEDULE_POST)]

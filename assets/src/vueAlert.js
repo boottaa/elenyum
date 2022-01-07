@@ -1,6 +1,6 @@
 import Vue from 'vue';
 
-export let vueAlert = Vue.component('v-alert', {
+export let vueAlert = Vue.component('vue-alert', {
     props: ['message', 'type'],
     template: `<div id="liveAlertPlaceholder"></div>`,
     methods: {

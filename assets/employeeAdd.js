@@ -1,9 +1,12 @@
 import './app';
+import "./src/baseCalendar";
 import Vue from 'vue';
 import {isValid} from "./validator/validator";
 import './src/vuePositionSelect';
 //https://www.npmjs.com/package/vue2-datepicker
 import DatePicker from 'vue2-datepicker';
+import {vueAlert} from "./src/vueAlert";
+import {post} from "./src/baseQuery";
 
 let object = {
     positionId: null,
@@ -15,8 +18,8 @@ let object = {
     dateBrith: null,
 };
 
-new Vue({
-    components: { DatePicker },
+let addEmployee = new Vue({
+    components: { DatePicker, vueAlert },
     el: '#employeeAdd',
     data() {
         return {
@@ -72,7 +75,8 @@ new Vue({
             if (this.validation()) {
                 post('/api/employee/post', this.object, (result) => {
                     if (result.success === true) {
-
+                        addEmployee.$refs.alert.addAlert('Сотрудник добавлен', 'success');
+                        this.resetObject();
                     }
                 });
             }

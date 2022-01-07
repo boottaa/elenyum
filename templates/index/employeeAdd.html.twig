@@ -12,7 +12,6 @@
 
 {% block body %}
     <div id="employeeAdd" class="row">
-
  {#        positionId: null,#}
 {#        userName: null,#}
 {#        phone: null,#}
@@ -22,6 +21,7 @@
 {#        dateBrith: null,#}
 
         <h3 class="mb-4" style="border-bottom: solid 1px #a8a8a8">Добавление сотрудника</h3>
+        <vue-alert ref="alert"></vue-alert>
         <div class="col-lg-4">
             <div class="mb-3">
                 <label for="positionId" class="form-label">Должность</label>

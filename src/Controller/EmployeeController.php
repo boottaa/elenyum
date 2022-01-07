@@ -8,6 +8,8 @@ use App\Entity\Role;
 use App\Exception\ArrayException;
 use App\Repository\EmployeeRepository;
 use App\Repository\PositionRepository;
+use DateTimeImmutable;
+use DateTimeZone;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -66,9 +68,12 @@ class EmployeeController extends AbstractController
         $employee->setEmail($data['email']);
         $employee->setApiToken(null);
 
+        $dateBrith = DateTimeImmutable::createFromFormat('U', strtotime($data['dateBrith']))->setTimezone(
+            new DateTimeZone('Europe/Moscow')
+        );
         $employee->setAdditionalPhone($data['additionalPhone'] ?? null);
         $employee->setPassword($data['password'] ?? null);
-        $employee->setDateBrith($data['dateBrith'] ?? null);
+        $employee->setDateBrith($dateBrith ?? null);
 
         $em->persist($employee);
         $em->flush();
