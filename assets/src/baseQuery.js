@@ -15,7 +15,7 @@ export function removeToken() {
     $.removeCookie('token');
 }
 
-export function post(url = '', data = {}, successFunc = (result) => {}, withToken = true) {
+export function post(url = '', data = {}, successFunc = (result) => {}) {
     let params = {
         type: "POST",
         url: url,
@@ -26,8 +26,17 @@ export function post(url = '', data = {}, successFunc = (result) => {}, withToke
         dataType: 'json',
         success: (result) => successFunc(result)
     };
-    if (withToken) {
-        params.headers = {"X-AUTH-TOKEN": getToken()};
-    }
+    $.ajax(params);
+}
+
+export function get(url = '', successFunc = (result) => {}) {
+    let params = {
+        type: "GET",
+        url: url,
+        contentType: "application/json",
+        dataType: 'json',
+        success: (result) => successFunc(result)
+    };
+
     $.ajax(params);
 }

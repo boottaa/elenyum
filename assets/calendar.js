@@ -107,7 +107,7 @@ $(function () {
 
         resourceLabelContent: function (renderInfo) {
             let divEl = document.createElement('div'),
-                resourceImg = typeof renderInfo.resource.extendedProps.img === "undefined" ? '/img/defaultEmployee.png' : renderInfo.resource.extendedProps.img;
+                resourceImg = renderInfo.resource.extendedProps.img === null ? '/img/defaultEmployee.png' : renderInfo.resource.extendedProps.img;
 
             divEl.innerHTML += `<div style="font-size: 20px" class="resourceName mr-2 d-lg-inline text-gray-600">${renderInfo.resource.extendedProps.name}&nbsp;&nbsp;&nbsp;
                                     <img style="width: 30px; vertical-align: -3px;" src="${resourceImg}" class="img-profile rounded-circle" alt="${renderInfo.resource.extendedProps.name}">

@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\EmployeeRepository;
 use DateTimeImmutable;
+use JsonSerializable;
 use \Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -15,7 +16,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
  * @ORM\Entity(repositoryClass=EmployeeRepository::class)
  * @UniqueEntity(fields={"email"}, message="There is already an account with this email")
  */
-class Employee implements UserInterface, PasswordHasherAwareInterface, PasswordAuthenticatedUserInterface
+class Employee implements UserInterface, PasswordHasherAwareInterface, PasswordAuthenticatedUserInterface, JsonSerializable
 {
     public const STATUS_NEW = 0;
     public const STATUS_CONFIRMED = 1;
@@ -280,7 +281,7 @@ class Employee implements UserInterface, PasswordHasherAwareInterface, PasswordA
 
         return array_map(static function ($item) {
             // For is granted
-            return 'ROLE_' . $item;
+            return 'ROLE_'.$item;
         }, $roles);
     }
 
@@ -341,5 +342,38 @@ class Employee implements UserInterface, PasswordHasherAwareInterface, PasswordA
         $this->position = $position;
 
         return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getImg(): ?string
+    {
+        return $this->img;
+    }
+
+    /**
+     * @param string|null $img
+     * @return Employee
+     */
+    public function setImg(?string $img): Employee
+    {
+        $this->img = $img;
+
+        return $this;
+    }
+
+    public function jsonSerialize(): array
+    {
+        return [
+            'id' => $this->getId(),
+            'img' => $this->getImg(),
+            'name' => $this->getName(),
+            'position' => $this->getPosition()->getTitle(),
+            'email' => $this->getEmail(),
+            'phone' => $this->getPhone(),
+            'additionalPhone' => $this->getAdditionalPhone(),
+            'dateBrith' => $this->getDateBrith(),
+        ];
     }
 }

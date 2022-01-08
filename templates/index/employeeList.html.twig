@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Список сотрудников{% endblock %}
+
+{% block style %}
+    {{ encore_entry_link_tags('calendar') }}
+{% endblock %}
+
+{% block js %}
+    {{ encore_entry_script_tags('employeeList') }}
+{% endblock %}
+
+{% block body %}
+    <div id="employeeList" class="row">
+        <h3 class="mb-4" style="border-bottom: solid 1px #a8a8a8">Список сотрудников</h3>
+        <vue-list-table :headers="headers" :items="items"></vue-list-table>
+    </div>
+{% endblock %}

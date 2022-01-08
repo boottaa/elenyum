@@ -39,6 +39,16 @@ class IndexController extends AbstractController
         return $this->render('index/employeePost.html.twig', []);
     }
 
+    #[Route('/employee/list', name: 'employeeList')]
+    public function employeeList(): Response
+    {
+        if (!$this->isGranted('IS_AUTHENTICATED_FULLY')) {
+            return $this->redirectToRoute('login');
+        }
+
+        return $this->render('index/employeeList.html.twig', []);
+    }
+
     #[Route('/position/post', name: 'positionAdd')]
     public function positionAdd(): Response
     {

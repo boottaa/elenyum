@@ -20,14 +20,14 @@ use Symfony\Component\Routing\Annotation\Route;
 class EmployeeController extends AbstractController
 {
     #[IsGranted('ROLE_'.Role::EMPLOYEE_GET)]
-    #[Route('/api/employee/list', name: 'employeeList')]
+    #[Route('/api/employee/list', name: 'apiEmployeeList')]
     public function list(EmployeeRepository $employeeRepository): Response
     {
         $user = $this->getUser();
         if (!$user instanceof Employee) {
             return $this->json((new ArrayException('User undefined', 202))->toArray());
         }
-        $list = $employeeRepository->getList($user->getCompany());
+        $list = $employeeRepository->findBy(['company' => $user->getCompany()]);
 
         return $this->json([
             'success' => true,
@@ -44,7 +44,7 @@ class EmployeeController extends AbstractController
      * @throws \JsonException
      */
     #[IsGranted('ROLE_'.Role::EMPLOYEE_POST)]
-    #[Route('/api/employee/post', name: 'employeePost', methods: 'POST')]
+    #[Route('/api/employee/post', name: 'apiEmployeePost', methods: 'POST')]
     public function post(Request $request, PositionRepository $positionRepository, EntityManagerInterface $em): Response
     {
         $user = $this->getUser();
