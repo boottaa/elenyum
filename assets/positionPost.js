@@ -13,9 +13,9 @@ let object = {
     roles: null,
 };
 
-let positionAdd = new Vue({
+let positionPost = new Vue({
     components: { vueAlert },
-    el: '#employeeAdd',
+    el: '#positionPost',
     data() {
         return {
             object: {
@@ -50,7 +50,7 @@ let positionAdd = new Vue({
             if (this.validation()) {
                 post('/api/position/post', this.object, (result) => {
                     if (result.success === true) {
-                        positionAdd.$refs.alert.addAlert('Должность добавлена', 'success');
+                        positionPost.$refs.alert.addAlert('Должность добавлена', 'success');
                         this.resetObject();
                     }
                 });

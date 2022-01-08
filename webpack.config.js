@@ -33,7 +33,8 @@ Encore
     .addEntry('registration', './assets/registration.js')
     .addEntry('login', './assets/login.js')
     .addEntry('forgotPassword', './assets/forgotPassword.js')
-    .addEntry('employeeAdd', './assets/employeeAdd.js')
+    .addEntry('employeePost', './assets/employeePost.js')
+    .addEntry('positionPost', './assets/positionPost.js')
 
     // enables the Symfony UX Stimulus bridge (used in assets/bootstrap.js)
     .enableStimulusBridge('./assets/controllers.json')

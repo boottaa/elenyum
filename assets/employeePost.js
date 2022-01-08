@@ -18,9 +18,9 @@ let object = {
     dateBrith: null,
 };
 
-let employeeAdd = new Vue({
+let employeePost = new Vue({
     components: { DatePicker, vueAlert },
-    el: '#employeeAdd',
+    el: '#employeePost',
     data() {
         return {
             object: {
@@ -75,7 +75,7 @@ let employeeAdd = new Vue({
             if (this.validation()) {
                 post('/api/employee/post', this.object, (result) => {
                     if (result.success === true) {
-                        employeeAdd.$refs.alert.addAlert('Сотрудник добавлен', 'success');
+                        employeePost.$refs.alert.addAlert('Сотрудник добавлен', 'success');
                         this.resetObject();
                     }
                 });

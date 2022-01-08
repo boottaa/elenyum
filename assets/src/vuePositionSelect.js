@@ -29,7 +29,7 @@ export let menu = Vue.component('v-position', {
                 label="title"
                 :get-option-label="(position) => position.title">
           <template #no-options>
-              Позиция не найдена
+              Должность не найдена
           </template>
       </v-select>
     `,

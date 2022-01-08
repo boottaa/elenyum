@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Добавление должности{% endblock %}
+
+{% block style %}
+    {{ encore_entry_link_tags('calendar') }}
+{% endblock %}
+
+{% block js %}
+    {{ encore_entry_script_tags('positionPost') }}
+{% endblock %}
+
+{% block body %}
+    <div id="positionPost" class="row">
+        <h3 class="mb-4" style="border-bottom: solid 1px #a8a8a8">Добавление должности</h3>
+        <vue-alert ref="alert"></vue-alert>
+        <div class="col-lg-4">
+            <div class="mb-3">
+                <label for="title" class="form-label">Название должности</label>
+                <input type="text" v-model="object.title" class="form-control" id="title"
+                       required>
+            </div>
+            <div class="mb-3">
+                <label for="roles" class="form-label">Права <span title="Выберете права для должности"><i class="fas fa-info-circle"></i></span></label>
+                <v-roles v-model="object.roles" id="roles"></v-roles>
+            </div>
+            <div class="mb-3">
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" v-model="object.inCalendar" type="checkbox" id="inCalendar" value="1">
+                    <label class="form-check-label" for="inCalendar">Отображать в календаре? <span title="Ели на данную должность могут быть добавлены записи то поставьте чекбокс"><i class="fas fa-info-circle"></i></span></label>
+                </div>
+            </div>
+            <input type="button" v-on:click="send" class="btn btn-primary btn-user btn-block" value="Добавить">
+        </div>
+    </div>
+{% endblock %}

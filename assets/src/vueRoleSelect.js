@@ -11,7 +11,7 @@ export let menu = Vue.component('v-roles', {
         }
     },
     mounted() {
-        $.get("/api/roles/list", (data) => {
+        $.get("/api/role/list", (data) => {
             this.roles = data.items;
         });
     },
@@ -30,7 +30,7 @@ export let menu = Vue.component('v-roles', {
                 label="description"
                 :get-option-label="(operation) => operation.description">
       <template #no-options>
-        Услуга не найдена
+        Роли не найдены
       </template>
       </v-select>
     `,

@@ -53,9 +53,11 @@ class PositionController extends AbstractController
         $em->persist($position);
         $positionRole = new PositionRole();
         $positionRole->setPosition($position);
-        foreach ($data['roles'] as $roleId) {
-            $positionRole->addRole($roleId);
+        foreach ($data['roles'] as $role) {
+            $positionRole->addRole($role['id']);
         }
+        $em->persist($positionRole);
+        $em->flush();
 
         return $this->json([
             'success' => true,
