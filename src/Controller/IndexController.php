@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Role;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -36,6 +37,16 @@ class IndexController extends AbstractController
         }
 
         return $this->render('index/employeeAdd.html.twig', []);
+    }
+
+    #[Route('/position/add', name: 'positionAdd')]
+    public function positionAdd(): Response
+    {
+        if (!$this->isGranted('ROLE_'.Role::EMPLOYEE_POST)) {
+            return $this->redirectToRoute('login');
+        }
+
+        return $this->render('index/positionAdd.html.twig', []);
     }
 
     #[Route('/registration', name: 'registration')]

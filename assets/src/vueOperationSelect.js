@@ -21,7 +21,7 @@ export let menu = Vue.component('v-operation', {
         },
     },
     template: `
-      <v-select id="operations"
+      <v-select id="selectOperations"
                 @input="setSelected"
                 multiple
                 aria-required="true"

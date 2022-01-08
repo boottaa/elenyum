@@ -30,6 +30,7 @@ class EmployeeController extends AbstractController
         $list = $employeeRepository->getList($user->getCompany());
 
         return $this->json([
+            'success' => true,
             'items' => $list,
             'total' => count($list),
         ]);

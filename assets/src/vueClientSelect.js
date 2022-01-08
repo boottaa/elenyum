@@ -52,7 +52,7 @@ export let menu = Vue.component('v-client', {
         },
     },
     template: `
-      <v-select ref="clientPhone"
+      <v-select ref="selectClientPhone"
                 @input="setSelected"
                 @open="onOpen"
                 @search="(query) => {clientSearch = query}"

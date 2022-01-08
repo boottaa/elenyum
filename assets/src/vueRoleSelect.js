@@ -1,18 +1,18 @@
 import vSelect from 'vue-select';
 import Vue from "vue";
 
-export let menu = Vue.component('v-position', {
+export let menu = Vue.component('v-roles', {
     components: {vSelect},
     props: ['value'],
     data() {
         return {
             select: null,
-            positions: [],
+            roles: [],
         }
     },
     mounted() {
-        $.get("/api/position/list", (data) => {
-            this.positions = data.items;
+        $.get("/api/roles/list", (data) => {
+            this.roles = data.items;
         });
     },
     watch: {
@@ -21,16 +21,17 @@ export let menu = Vue.component('v-position', {
         },
     },
     template: `
-      <v-select id="selectPositions"
+      <v-select id="selectRoles"
                 @input="setSelected"
+                multiple
                 aria-required="true"
                 v-model="select"
-                :options="positions"
-                label="title"
-                :get-option-label="(position) => position.title">
-          <template #no-options>
-              Позиция не найдена
-          </template>
+                :options="roles"
+                label="description"
+                :get-option-label="(operation) => operation.description">
+      <template #no-options>
+        Услуга не найдена
+      </template>
       </v-select>
     `,
     methods: {

@@ -5,11 +5,12 @@ namespace App\Entity;
 use App\Repository\RoleRepository;
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
+use JsonSerializable;
 
 /**
  * @ORM\Entity(repositoryClass=RoleRepository::class)
  */
-class Role
+class Role implements JsonSerializable
 {
     public const SHEDULE_POST = 1;
     public const SHEDULE_DELETE = 2;
@@ -23,9 +24,6 @@ class Role
     public const EMPLOYEE_POST = 10;
     public const EMPLOYEE_DELETE = 11;
     public const EMPLOYEE_GET = 12;
-    public const EMPLOYEE_ROLE_POST = 13;
-    public const EMPLOYEE_ROLE_DELETE = 14;
-    public const EMPLOYEE_ROLE_GET = 15;
     public const BRANCH_POST = 16;
     public const BRANCH_DELETE = 17;
     public const BRANCH_GET = 18;
@@ -135,5 +133,14 @@ class Role
         $this->updatedAt = $updatedAt;
 
         return $this;
+    }
+
+    public function jsonSerialize(): array
+    {
+        return [
+            'id' => $this->getId(),
+            'title' => $this->getTitle(),
+            'description' => $this->getDescription(),
+        ];
     }
 }
