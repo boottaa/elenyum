@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Employee;
 use App\Entity\Role;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -29,14 +30,14 @@ class IndexController extends AbstractController
         return $this->render('index/calendar.html.twig', []);
     }
 
-    #[Route('/employee/post', name: 'employeePost')]
-    public function employeeAdd(): Response
+    #[Route('/employee/post/{id<\d+>?}', name: 'employeePost')]
+    public function employeePost(): Response
     {
         if (!$this->isGranted('IS_AUTHENTICATED_FULLY')) {
             return $this->redirectToRoute('login');
         }
 
-        return $this->render('index/employeePost.html.twig', []);
+        return $this->render('index/employeePost.html.twig');
     }
 
     #[Route('/employee/list', name: 'employeeList')]
@@ -49,7 +50,7 @@ class IndexController extends AbstractController
         return $this->render('index/employeeList.html.twig', []);
     }
 
-    #[Route('/position/post', name: 'positionAdd')]
+    #[Route('/position/post/{id<\d+>?}', name: 'positionPost')]
     public function positionAdd(): Response
     {
         if (!$this->isGranted('ROLE_'.Role::EMPLOYEE_POST)) {

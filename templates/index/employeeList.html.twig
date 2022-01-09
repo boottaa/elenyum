@@ -13,6 +13,7 @@
 {% block body %}
     <div id="employeeList" class="row">
         <h3 class="mb-4" style="border-bottom: solid 1px #a8a8a8">Список сотрудников</h3>
-        <vue-list-table :headers="headers" :items="items"></vue-list-table>
+        <vue-alert ref="alert"></vue-alert>
+        <vue-list-table :headers="headers" :items="items" :actions="actions"></vue-list-table>
     </div>
 {% endblock %}

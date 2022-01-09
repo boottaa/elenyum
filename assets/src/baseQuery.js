@@ -40,3 +40,16 @@ export function get(url = '', successFunc = (result) => {}) {
 
     $.ajax(params);
 }
+
+export function del(url = '', successFunc = (result) => {}, error = (result) => {}) {
+    let params = {
+        type: "DELETE",
+        url: url,
+        contentType: "application/json",
+        dataType: 'json',
+        success: (result) => successFunc(result),
+        error: (result) => error(result),
+    };
+
+    $.ajax(params);
+}

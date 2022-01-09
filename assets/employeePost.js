@@ -6,15 +6,15 @@ import './src/vuePositionSelect';
 //https://www.npmjs.com/package/vue2-datepicker
 import DatePicker from 'vue2-datepicker';
 import {vueAlert} from "./src/vueAlert";
-import {post} from "./src/baseQuery";
+import {post, get} from "./src/baseQuery";
 
 let object = {
-    positionId: null,
+    id: null,
+    position: null,
     userName: null,
     phone: null,
     email: null,
     additionalPhone: null,
-    password: null,
     dateBrith: null,
 };
 
@@ -24,28 +24,42 @@ let employeePost = new Vue({
     data() {
         return {
             object: {
-                positionId: null,
-                userName: null,
+                id: null,
+                position: null,
+                name: null,
                 phone: null,
                 email: null,
                 additionalPhone: null,
-                password: null,
                 dateBrith: null,
             },
         }
     },
     created() {
         this.resetObject();
+
+        let array = location.href.split('/', 6);
+        let id = array[5];
+
+        if (id !== undefined) {
+            get('/api/employee/get/' + id, (r) => {
+                if(r.success === true) {
+                    this.object = r.item;
+                    let st = r.item.dateBrith;
+                    let pattern = /(\d{2})\.(\d{2})\.(\d{4})/;
+                    this.object.dateBrith = new Date(st.replace(pattern,'$3-$2-$1'));
+                }
+            });
+        }
     },
     methods: {
         validation() {
             let items = {
                 '#positionId': {
-                    value: this.object.positionId,
+                    value: this.object.position,
                     validators: ['notEmpty'],
                 },
                 '#userName': {
-                    value: this.object.userName,
+                    value: this.object.name,
                     validators: ['notEmpty'],
                 },
                 '#phone': {
@@ -60,10 +74,6 @@ let employeePost = new Vue({
                     value: this.object.additionalPhone,
                     validators: ['notEmpty'],
                 },
-                '#password': {
-                    value: this.object.password,
-                    validators: ['notEmpty'],
-                },
                 '#dateBrith': {
                     value: this.object.dateBrith,
                     validators: ['notEmpty'],
@@ -72,8 +82,10 @@ let employeePost = new Vue({
             return isValid(items);
         },
         send() {
+            console.log(this.object);
             if (this.validation()) {
-                post('/api/employee/post', this.object, (result) => {
+                let id = this.object.id === null ? '' : '/' + this.object.id;
+                post('/api/employee/post' + id, this.object, (result) => {
                     if (result.success === true) {
                         employeePost.$refs.alert.addAlert('Сотрудник добавлен', 'success');
                         this.resetObject();

@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello IndexController!{% endblock %}
+{% block title %}Добавление сотрудника{% endblock %}
 
 {% block style %}
     {{ encore_entry_link_tags('calendar') }}
@@ -17,11 +17,11 @@
         <div class="col-lg-4">
             <div class="mb-3">
                 <label for="positionId" class="form-label">Должность</label>
-                <v-position v-model="object.positionId" id="positionId"></v-position>
+                <v-position v-model="object.position" id="positionId"></v-position>
             </div>
             <div class="mb-3">
                 <label for="userName" class="form-label">ФИО</label>
-                <input type="text" v-model="object.userName" class="form-control" id="userName"
+                <input type="text" v-model="object.name" class="form-control" id="userName"
                        required>
             </div>
             <div class="mb-3">
@@ -39,17 +39,12 @@
                 <input type="email" v-model="object.email" class="form-control" id="email"
                        required>
             </div>
-            <div class="mb-3">
-                <label for="password" class="form-label">Пароль</label>
-                <input type="password" v-model="object.password" class="form-control" id="password"
-                       required>
-            </div>
             <div class="mb-5">
                 <label for="dateBrith" class="form-label">День рождения</label>
-                <date-picker aria-required="true" id="dateBrith" style="width: 100%"
+                <date-picker aria-required="true" id="dateBrith" style="width: 100%" format="DD.MM.YYYY"
                              v-model="object.dateBrith" type="date"></date-picker>
             </div>
-            <input type="button" v-on:click="send" class="btn btn-primary btn-user btn-block" value="Добавить">
+            <input type="button" v-on:click="send" class="btn btn-primary btn-user btn-block" value="Сохранить">
         </div>
     </div>
 {% endblock %}

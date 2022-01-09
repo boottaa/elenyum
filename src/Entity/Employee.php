@@ -369,11 +369,14 @@ class Employee implements UserInterface, PasswordHasherAwareInterface, PasswordA
             'id' => $this->getId(),
             'img' => $this->getImg(),
             'name' => $this->getName(),
-            'position' => $this->getPosition()->getTitle(),
+            'position' => [
+                'id' => $this->getPosition()->getId(),
+                'title' => $this->getPosition()->getTitle(),
+            ],
             'email' => $this->getEmail(),
             'phone' => $this->getPhone(),
             'additionalPhone' => $this->getAdditionalPhone(),
-            'dateBrith' => $this->getDateBrith(),
+            'dateBrith' => $this->getDateBrith()?->format('d.m.Y') ?? '-',
         ];
     }
 }
