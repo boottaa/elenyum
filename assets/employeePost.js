@@ -82,7 +82,6 @@ let employeePost = new Vue({
             return isValid(items);
         },
         send() {
-            console.log(this.object);
             if (this.validation()) {
                 let id = this.object.id === null ? '' : '/' + this.object.id;
                 post('/api/employee/post' + id, this.object, (result) => {

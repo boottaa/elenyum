@@ -1,10 +1,10 @@
 import './bootstrap';
 import Vue from 'vue';
-import {isValid} from "./validator/validator";
-import {post, setToken} from "./src/baseQuery";
+import { isValid } from "./validator/validator";
+import { post, setToken } from "./src/baseQuery";
 
 let object = {
-    email: null,
+    username: null,
     password: null
 };
 
