@@ -16,7 +16,6 @@ export let vueAlert = Vue.component('vue-alert', {
             let alertPlaceholder = document.getElementById('liveAlertPlaceholder');
             alertPlaceholder.append(alert);
 
-
             let timeout = this.timeout || 5000;
             setTimeout(() => {
                 let al = new bootstrap.Alert(alert);
