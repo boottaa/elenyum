@@ -51,13 +51,23 @@ class IndexController extends AbstractController
     }
 
     #[Route('/position/post/{id<\d+>?}', name: 'positionPost')]
-    public function positionAdd(): Response
+    public function positionPost(): Response
     {
         if (!$this->isGranted('ROLE_'.Role::EMPLOYEE_POST)) {
             return $this->redirectToRoute('login');
         }
 
         return $this->render('index/positionPost.html.twig', []);
+    }
+
+    #[Route('/position/list', name: 'positionList')]
+    public function positionList(): Response
+    {
+        if (!$this->isGranted('ROLE_'.Role::EMPLOYEE_POST)) {
+            return $this->redirectToRoute('login');
+        }
+
+        return $this->render('index/positionList.html.twig', []);
     }
 
     #[Route('/registration', name: 'registration')]

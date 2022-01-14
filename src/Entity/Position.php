@@ -190,6 +190,7 @@ class Position implements JsonSerializable
         return [
             'id' => $this->getId(),
             'title' => $this->getTitle(),
+            'inCalendar' => $this->getInCalendar(),
         ];
     }
 }

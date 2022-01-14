@@ -18,8 +18,8 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class PositionController extends AbstractController
 {
-    #[IsGranted('ROLE_' . Role::EMPLOYEE_POST)]
-    #[Route('/api/position/list', name: 'positionList')]
+    #[IsGranted('ROLE_'.Role::EMPLOYEE_POST)]
+    #[Route('/api/position/list', name: 'apiPositionList')]
     public function index(PositionRepository $positionRepository): Response
     {
         $user = $this->getUser();
@@ -29,14 +29,16 @@ class PositionController extends AbstractController
 
         $positions = $positionRepository->findBy(['company' => $user->getCompany()]);
         $total = count($positions);
+
         return $this->json([
+            'success' => true,
             'total' => $total,
             'items' => $positions,
         ]);
     }
 
-    #[IsGranted('ROLE_' . Role::EMPLOYEE_POST)]
-    #[Route('/api/position/post', name: 'positionPost')]
+    #[IsGranted('ROLE_'.Role::EMPLOYEE_POST)]
+    #[Route('/api/position/post', name: 'apiPositionPost')]
     public function post(Request $request, EntityManagerInterface $em): Response
     {
         $user = $this->getUser();

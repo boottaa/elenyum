@@ -7,17 +7,12 @@ import {vueAlert} from "./src/vueAlert";
 
 let employeeList = new Vue({
     components: {vueListTable, vueAlert},
-    el: '#employeeList',
+    el: '#positionList',
     data() {
         return {
             headers: [
-                // {text: 'Картинка', system: 'img'},
-                {text: 'ФИО', system: 'name'},
-                {text: 'Должность', system: 'position'},
-                {text: 'Email', system: 'email'},
-                {text: 'Телефон', system: 'phone'},
-                {text: 'Дополнительный номер телефона', system: 'additionalPhone'},
-                {text: 'Дата рождения', system: 'dateBrith'},
+                {text: 'Название', system: 'title'},
+                {text: 'Отображать в календаре', system: 'inCalendar'},
             ],
             items: [],
             actions: [
@@ -27,7 +22,7 @@ let employeeList = new Vue({
                         let id = button.attr('data-id');
 
                         del(
-                            `/api/employee/delete/${id}`,
+                            `/api/position/delete/${id}`,
                             (r) => {
                                 if (r.success === true) {
                                     button.parents('tr').remove();
@@ -46,7 +41,7 @@ let employeeList = new Vue({
                         let button = $(e.target);
                         let id = button.attr('data-id');
 
-                        location.href = '/employee/post/' + id;
+                        location.href = '/position/post/' + id;
                     }
                 },
             ],
@@ -57,11 +52,12 @@ let employeeList = new Vue({
     },
     methods: {
         send() {
-            get('/api/employee/list', (result) => {
+            get('/api/position/list', (result) => {
                 if (result.success === true) {
                     result.items.map((i) => {
-                        i.position = i.position.title;
+                        i.inCalendar = i.inCalendar === true ? 'Да' : 'Нет';
                     });
+
                     this.items = result.items;
                 }
             });
