@@ -187,10 +187,13 @@ class Position implements JsonSerializable
 
     public function jsonSerialize(): array
     {
+        $roles = [];
+
         return [
             'id' => $this->getId(),
             'title' => $this->getTitle(),
             'inCalendar' => $this->getInCalendar(),
+            'roles' => $this->getPositionRole()->getRoles(),
         ];
     }
 }

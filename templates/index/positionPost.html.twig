@@ -22,7 +22,7 @@
             </div>
             <div class="mb-3">
                 <label for="roles" class="form-label">Права <span title="Выберете права для должности"><i class="fas fa-info-circle"></i></span></label>
-                <v-roles v-model="object.roles" id="roles"></v-roles>
+                <v-roles v-model="object.roles" id="roles" @loaded="loadedRoles"></v-roles>
             </div>
             <div class="mb-3">
                 <div class="form-check form-check-inline">

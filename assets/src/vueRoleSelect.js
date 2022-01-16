@@ -13,6 +13,8 @@ export let menu = Vue.component('v-roles', {
     mounted() {
         $.get("/api/role/list", (data) => {
             this.roles = data.items;
+
+            this.$emit('loaded', this.roles);
         });
     },
     watch: {

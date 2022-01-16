@@ -20,7 +20,7 @@ class PositionController extends AbstractController
 {
     #[IsGranted('ROLE_'.Role::EMPLOYEE_POST)]
     #[Route('/api/position/list', name: 'apiPositionList')]
-    public function index(PositionRepository $positionRepository): Response
+    public function list(PositionRepository $positionRepository): Response
     {
         $user = $this->getUser();
         if (!$user instanceof Employee) {
@@ -34,6 +34,43 @@ class PositionController extends AbstractController
             'success' => true,
             'total' => $total,
             'items' => $positions,
+        ]);
+    }
+
+    #[IsGranted('ROLE_'.Role::EMPLOYEE_DELETE)]
+    #[Route('/api/position/delete/{id<\d+>}', name: 'apiPositionDelete', methods: 'DELETE')]
+    public function delete(Position $position, EntityManagerInterface $em): Response
+    {
+        $user = $this->getUser();
+        if (!$user instanceof Employee) {
+            return $this->json((new ArrayException('User undefined', 202))->toArray());
+        }
+
+        if ($user->getPosition()->getId() === $position->getId()) {
+            return $this->json((new ArrayException('Вы не можете свою роль', 202))->toArray());
+        }
+
+        $em->remove($position->getPositionRole());
+        $em->remove($position);
+        $em->flush();
+
+        return $this->json([
+            'success' => true,
+        ]);
+    }
+
+    #[IsGranted('ROLE_'.Role::EMPLOYEE_POST)]
+    #[Route('/api/position/get/{id<\d+>}', name: 'apiPositionGet', methods: 'GET')]
+    public function getPosition(Position $position): Response
+    {
+        $user = $this->getUser();
+        if (!$user instanceof Employee) {
+            return $this->json((new ArrayException('User undefined', 202))->toArray());
+        }
+
+        return $this->json([
+            'success' => true,
+            'item' => $position,
         ]);
     }
 
