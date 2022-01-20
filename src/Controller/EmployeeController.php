@@ -25,7 +25,7 @@ class EmployeeController extends AbstractController
     {
         $user = $this->getUser();
         if (!$user instanceof Employee) {
-            return $this->json((new ArrayException('User undefined', 202))->toArray());
+            return $this->json((new ArrayException('Пользователь не найден', 202))->toArray());
         }
         $list = $employeeRepository->findBy(['company' => $user->getCompany()]);
 
@@ -42,7 +42,7 @@ class EmployeeController extends AbstractController
     {
         $user = $this->getUser();
         if (!$user instanceof Employee) {
-            return $this->json((new ArrayException('User undefined', 202))->toArray());
+            return $this->json((new ArrayException('Пользователь не найден', 202))->toArray());
         }
 
         return $this->json([
@@ -57,7 +57,7 @@ class EmployeeController extends AbstractController
     {
         $user = $this->getUser();
         if (!$user instanceof Employee) {
-            return $this->json((new ArrayException('User undefined', 202))->toArray());
+            return $this->json((new ArrayException('Пользователь не найден', 202))->toArray());
         }
         if ($user->getId() === $employee->getId()) {
             return $this->json((new ArrayException('Вы не можете удалить сами себя', 202))->toArray());
@@ -85,7 +85,7 @@ class EmployeeController extends AbstractController
     {
         $user = $this->getUser();
         if (!$user instanceof Employee) {
-            return $this->json((new ArrayException('User undefined', 202))->toArray());
+            return $this->json((new ArrayException('Пользователь не найден', 202))->toArray());
         }
         $data = json_decode($request->getContent(), true, 512, JSON_THROW_ON_ERROR);
 

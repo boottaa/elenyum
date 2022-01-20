@@ -8,7 +8,6 @@ use App\Entity\PositionRole;
 use App\Entity\Role;
 use App\Exception\ArrayException;
 use App\Repository\PositionRepository;
-use App\Repository\RoleRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -24,7 +23,7 @@ class PositionController extends AbstractController
     {
         $user = $this->getUser();
         if (!$user instanceof Employee) {
-            return $this->json((new ArrayException('User undefined', 202))->toArray());
+            return $this->json((new ArrayException('Пользователь не найден', 202))->toArray());
         }
 
         $positions = $positionRepository->findBy(['company' => $user->getCompany()]);
@@ -43,11 +42,11 @@ class PositionController extends AbstractController
     {
         $user = $this->getUser();
         if (!$user instanceof Employee) {
-            return $this->json((new ArrayException('User undefined', 202))->toArray());
+            return $this->json((new ArrayException('Пользователь не найден', 202))->toArray());
         }
 
         if ($user->getPosition()->getId() === $position->getId()) {
-            return $this->json((new ArrayException('Вы не можете свою роль', 202))->toArray());
+            return $this->json((new ArrayException('Вы не можете удалить свою роль', 202))->toArray());
         }
 
         $em->remove($position->getPositionRole());
@@ -65,7 +64,7 @@ class PositionController extends AbstractController
     {
         $user = $this->getUser();
         if (!$user instanceof Employee) {
-            return $this->json((new ArrayException('User undefined', 202))->toArray());
+            return $this->json((new ArrayException('Пользователь не найден', 202))->toArray());
         }
 
         return $this->json([
@@ -80,7 +79,7 @@ class PositionController extends AbstractController
     {
         $user = $this->getUser();
         if (!$user instanceof Employee) {
-            return $this->json((new ArrayException('User undefined', 202))->toArray());
+            return $this->json((new ArrayException('Пользователь не найден', 202))->toArray());
         }
 
         $data = json_decode($request->getContent(), true, 512, JSON_THROW_ON_ERROR);
