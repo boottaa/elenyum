@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Company;
 use App\Entity\Employee;
+use App\Exception\ArrayException;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -13,50 +14,29 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method Employee[]    findAll()
  * @method Employee[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class EmployeeRepository extends ServiceEntityRepository
+class EmployeeRepository extends ServiceEntityRepository implements ListRepositoryInterface
 {
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Employee::class);
     }
 
-    public function getList(Company $company): array
+    /**
+     * @throws ArrayException
+     */
+    public function list(?array $params): array
     {
-        return $this->createQueryBuilder("e")
-            ->select('PARTIAL e.{id, name}')
-            ->orderBy('e.id', 'ASC')
-            ->where('e.company=:company')
-            ->setParameter('company', $company)
-            ->getQuery()
-            ->getArrayResult();
-    }
+        $company = $params['company'];
+        if ($company instanceof Company) {
+            return $this->createQueryBuilder("e")
+                ->select('PARTIAL e.{id, name}')
+                ->orderBy('e.id', 'ASC')
+                ->where('e.company=:company')
+                ->setParameter('company', $company)
+                ->getQuery()
+                ->getArrayResult();
+        }
 
-    // /**
-    //  * @return Employee[] Returns an array of Employee objects
-    //  */
-    /*
-    public function findByExampleField($value)
-    {
-        return $this->createQueryBuilder('e')
-            ->andWhere('e.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('e.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
+        throw new ArrayException('Company undefined', '422');
     }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?Employee
-    {
-        return $this->createQueryBuilder('e')
-            ->andWhere('e.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }

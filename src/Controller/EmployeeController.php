@@ -3,14 +3,10 @@
 namespace App\Controller;
 
 use App\Entity\Employee;
-use App\Entity\Position;
 use App\Entity\Role;
 use App\Exception\ArrayException;
 use App\Repository\EmployeeRepository;
-use App\Repository\PositionRepository;
-use DateTimeImmutable;
-use DateTimeZone;
-use Doctrine\ORM\EntityManagerInterface;
+use App\Service\EmployeeService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -51,20 +47,25 @@ class EmployeeController extends AbstractController
         ]);
     }
 
+    /**
+     * @param int $employeeId
+     * @param EmployeeService $service
+     * @return Response
+     * @throws ArrayException
+     */
     #[IsGranted('ROLE_'.Role::EMPLOYEE_DELETE)]
-    #[Route('/api/employee/delete/{id<\d+>}', name: 'apiEmployeeDelete', methods: 'DELETE')]
-    public function delete(Employee $employee, EntityManagerInterface $em): Response
+    #[Route('/api/employee/delete/{employeeId<\d+>}', name: 'apiEmployeeDelete', methods: 'DELETE')]
+    public function delete(int $employeeId, EmployeeService $service): Response
     {
         $user = $this->getUser();
         if (!$user instanceof Employee) {
             return $this->json((new ArrayException('Пользователь не найден', 202))->toArray());
         }
-        if ($user->getId() === $employee->getId()) {
+        if ($user->getId() === $employeeId) {
             return $this->json((new ArrayException('Вы не можете удалить сами себя', 202))->toArray());
         }
 
-        $em->remove($employee);
-        $em->flush();
+        $service->del($employeeId);
 
         return $this->json([
             'success' => true,
@@ -74,47 +75,27 @@ class EmployeeController extends AbstractController
     /**
      * @param Employee|null $employee
      * @param Request $request
-     * @param PositionRepository $positionRepository
-     * @param EntityManagerInterface $em
+     * @param EmployeeService $service
      * @return Response
+     * @throws ArrayException
      * @throws \JsonException
      */
     #[IsGranted('ROLE_'.Role::EMPLOYEE_POST)]
     #[Route('/api/employee/post/{id<\d+>?}', name: 'apiEmployeePost', methods: 'POST')]
-    public function post(?Employee $employee, Request $request, PositionRepository $positionRepository, EntityManagerInterface $em): Response
+    public function post(?Employee $employee, Request $request, EmployeeService $service): Response
     {
         $user = $this->getUser();
         if (!$user instanceof Employee) {
             return $this->json((new ArrayException('Пользователь не найден', 202))->toArray());
         }
-        $data = json_decode($request->getContent(), true, 512, JSON_THROW_ON_ERROR);
+        $data['employee'] = json_decode($request->getContent(), true, 512, JSON_THROW_ON_ERROR);
 
-        $position = $positionRepository->findOneBy(['id' => $data['position']['id']]);
-        if (!$position instanceof Position) {
-            return $this->json(new ArrayException('Позиция с не найдена, попробуйте снова'));
+        if($employee === null) {
+            $data['user'] = $user;
+            $service->add($data);
+        } else {
+            $service->edit($data);
         }
-
-        if ($employee === null) {
-            $employee = new Employee();
-            $employee->setCompany($user->getCompany());
-            $employee->setBranch($user->getBranch());
-            $employee->setStatus(Employee::STATUS_CONFIRMED);
-            $employee->setApiToken(null);
-            $em->persist($employee);
-        }
-        $employee->setPosition($position);
-        $employee->setName($data['name']);
-        $employee->setPhone($data['phone']);
-        $employee->setEmail($data['email']);
-
-        $dateBrith = DateTimeImmutable::createFromFormat('U', strtotime($data['dateBrith']))->setTimezone(
-            new DateTimeZone('Europe/Moscow')
-        );
-        $employee->setAdditionalPhone($data['additionalPhone'] ?? null);
-        $employee->setPassword($data['password'] ?? null);
-        $employee->setDateBrith($dateBrith ?? null);
-
-        $em->flush();
 
         return $this->json([
             'success' => true,

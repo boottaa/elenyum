@@ -7,27 +7,26 @@ namespace App\Service;
 interface BaseInterface
 {
     /**
+     * @param array|null $params
      * @return array
      */
-    public function list(): array;
+    public function list(?array $params): array;
 
     /**
-     * @return void
-     */
-    public function hydrate(): void;
-
-    /**
+     * @param array $data
      * @return bool
      */
-    public function edit(): bool;
+    public function edit(array $data): bool;
 
     /**
+     * @param array $data
      * @return bool
      */
-    public function add(): bool;
+    public function add(array $data): bool;
 
     /**
+     * @param int $id
      * @return bool
      */
-    public function del(): bool;
+    public function del(int $id): bool;
 }

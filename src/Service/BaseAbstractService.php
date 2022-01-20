@@ -13,10 +13,10 @@ abstract class BaseAbstractService implements BaseInterface
     /**
      * @throws ArrayException
      */
-    public function list(): array
+    public function list(?array $params): array
     {
         if ($this->repository instanceof ListRepositoryInterface) {
-            return $this->repository->list();
+            return $this->repository->list($params);
         }
 
         throw new ArrayException('Not Implemented interface ' . ListRepositoryInterface::class, '501');

@@ -4,5 +4,5 @@ namespace App\Repository;
 
 interface ListRepositoryInterface
 {
-    public function list(): array;
+    public function list(?array $params): array;
 }
