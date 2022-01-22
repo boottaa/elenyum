@@ -16,16 +16,20 @@ interface BaseInterface
     public function list(?array $params, int $page): Paginator;
 
     /**
+     * Update data
+     *
      * @param array $data
      * @return bool
      */
-    public function edit(array $data): bool;
+    public function put(array $data): bool;
 
     /**
+     * Add data
+     *
      * @param array $data
      * @return bool
      */
-    public function add(array $data): bool;
+    public function post(array $data): bool;
 
     /**
      * @param int $id

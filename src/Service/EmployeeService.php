@@ -51,7 +51,7 @@ class EmployeeService extends BaseAbstractService
      * @return bool
      * @throws ArrayException
      */
-    public function edit(
+    public function put(
         array $data
     ): bool {
         $employeeData = $data['employee'];
@@ -71,7 +71,7 @@ class EmployeeService extends BaseAbstractService
      * @return bool
      * @throws ArrayException
      */
-    public function add(array $data): bool
+    public function post(array $data): bool
     {
         $user = $data['user'];
         $employeeData = $data['employee'];

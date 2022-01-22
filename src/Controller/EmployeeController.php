@@ -82,6 +82,8 @@ class EmployeeController extends AbstractController
     }
 
     /**
+     * Create resource
+     *
      * @param Employee|null $employee
      * @param Request $request
      * @param EmployeeService $service
@@ -90,7 +92,7 @@ class EmployeeController extends AbstractController
      * @throws \JsonException
      */
     #[IsGranted('ROLE_'.Role::EMPLOYEE_POST)]
-    #[Route('/api/employee/post/{id<\d+>?}', name: 'apiEmployeePost', methods: 'POST')]
+    #[Route('/api/employee/post', name: 'apiEmployeePost', methods: 'POST')]
     public function post(?Employee $employee, Request $request, EmployeeService $service): Response
     {
         $user = $this->getUser();
@@ -98,13 +100,36 @@ class EmployeeController extends AbstractController
             return $this->json((new ArrayException('Пользователь не найден', 202))->toArray());
         }
         $data['employee'] = json_decode($request->getContent(), true, 512, JSON_THROW_ON_ERROR);
+        $data['user'] = $user;
 
-        if ($employee === null) {
-            $data['user'] = $user;
-            $service->add($data);
-        } else {
-            $service->edit($data);
+        $service->post($data);
+
+        return $this->json([
+            'success' => true,
+        ]);
+    }
+
+    /**
+     * Update resource
+     *
+     * @param Employee|null $employee
+     * @param Request $request
+     * @param EmployeeService $service
+     * @return Response
+     * @throws ArrayException
+     * @throws \JsonException
+     */
+    #[IsGranted('ROLE_'.Role::EMPLOYEE_POST)]
+    #[Route('/api/employee/put/{id<\d+>?}', name: 'apiEmployeePut', methods: 'PUT')]
+    public function put(?Employee $employee, Request $request, EmployeeService $service): Response
+    {
+        $user = $this->getUser();
+        if (!$user instanceof Employee) {
+            return $this->json((new ArrayException('Пользователь не найден', 202))->toArray());
         }
+        $data['employee'] = json_decode($request->getContent(), true, 512, JSON_THROW_ON_ERROR);
+
+        $service->put($data);
 
         return $this->json([
             'success' => true,

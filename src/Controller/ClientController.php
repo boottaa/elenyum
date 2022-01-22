@@ -20,16 +20,19 @@ class ClientController extends AbstractController
      * @throws Exception
      */
     #[IsGranted('ROLE_' . Role::CLIENT_GET)]
-    #[Route('/client/list', name: 'client')]
-    public function list(Request $request, ClientRepository $clientRepository): Response
+    #[Route('/api/client/query', name: 'client')]
+    public function query(Request $request, ClientRepository $clientRepository): Response
     {
-        $page = $request->query->getInt('page', 1);
+        $page = $request->get('page', 1);
         $query = $request->query->getDigits('query', '');
-        $pagginator = $clientRepository->getList($page, $query);
+        $list = $clientRepository->list(['query' => $query], $page);
 
         return $this->json([
-            'total' => $pagginator->getNumResults(),
-            'items' => $pagginator->getResults(),
+            'success' => true,
+            'items' => $list->getResults(),
+            'total' => $list->getNumResults(),
+            'page' => $list->getCurrentPage(),
+            'size' => $list->getPageSize(),
         ]);
     }
 }

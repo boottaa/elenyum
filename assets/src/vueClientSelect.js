@@ -80,7 +80,7 @@ export let menu = Vue.component('v-client', {
     `,
     methods: {
         async onLoadClients(page = 1, query = '') {
-            $.get(`/client/list?page={{page}&query={{query}`, (data) => {
+            $.get(`/api/client/query?page=${page}&query=${query}`, (data) => {
                 this.clients = data.items.concat(this.clients);
                 this.clientTotal = data.total;
             });

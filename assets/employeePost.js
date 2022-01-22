@@ -6,7 +6,7 @@ import './src/vuePositionSelect';
 //https://www.npmjs.com/package/vue2-datepicker
 import DatePicker from 'vue2-datepicker';
 import {vueAlert} from "./src/vueAlert";
-import {post, get} from "./src/baseQuery";
+import {post, get, put} from "./src/baseQuery";
 
 let object = {
     id: null,
@@ -84,12 +84,22 @@ let employeePost = new Vue({
         send() {
             if (this.validation()) {
                 let id = this.object.id === null ? '' : '/' + this.object.id;
-                post('/api/employee/post' + id, this.object, (result) => {
-                    if (result.success === true) {
-                        employeePost.$refs.alert.addAlert('Сотрудник добавлен', 'success');
-                        this.resetObject();
-                    }
-                });
+                if(this.object.id === null) {
+                    post('/api/employee/post', this.object, (result) => {
+                        if (result.success === true) {
+                            employeePost.$refs.alert.addAlert('Сотрудник добавлен', 'success');
+                            setTimeout(() => {
+                                document.location = '/employee/list';
+                            }, 1000);
+                        }
+                    });
+                } else {
+                    put('/api/employee/put', this.object.id, this.object, (result) => {
+                        if (result.success === true) {
+                            employeePost.$refs.alert.addAlert('Данные сотрудника обновлены', 'success');
+                        }
+                    });
+                }
             }
         },
 

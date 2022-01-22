@@ -14,7 +14,7 @@ use Exception;
  * @method Client[]    findAll()
  * @method Client[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class ClientRepository extends ServiceEntityRepository
+class ClientRepository extends ServiceEntityRepository implements ListRepositoryInterface
 {
     public function __construct(ManagerRegistry $registry)
     {
@@ -22,13 +22,12 @@ class ClientRepository extends ServiceEntityRepository
     }
 
     /**
-     * @param int $page
-     * @param string $query
-     * @return Paginator
      * @throws Exception
      */
-    public function getList(int $page = 1, string $query = ''): Paginator
+    public function list(?array $params, int $page): Paginator
     {
+        $query = $params['query'];
+
         $qb = $this->createQueryBuilder('c')
             ->orderBy('c.id', 'DESC');
 
@@ -39,33 +38,4 @@ class ClientRepository extends ServiceEntityRepository
 
         return (new Paginator($qb))->paginate($page);
     }
-
-    // /**
-    //  * @return Employee[] Returns an array of Employee objects
-    //  */
-    /*
-    public function findByExampleField($value)
-    {
-        return $this->createQueryBuilder('e')
-            ->andWhere('e.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('e.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?Employee
-    {
-        return $this->createQueryBuilder('e')
-            ->andWhere('e.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }
