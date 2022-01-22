@@ -2,7 +2,10 @@
 
 namespace App\Repository;
 
+use App\Entity\Company;
 use App\Entity\Position;
+use App\Exception\ArrayException;
+use App\Utils\Paginator;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -12,39 +15,29 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method Position[]    findAll()
  * @method Position[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class PositionRepository extends ServiceEntityRepository
+class PositionRepository extends ServiceEntityRepository implements ListRepositoryInterface
 {
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Position::class);
     }
 
-    // /**
-    //  * @return Position[] Returns an array of Position objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    /**
+     * @throws ArrayException
+     * @throws \Exception
+     */
+    public function list(?array $params, int $page): Paginator
     {
-        return $this->createQueryBuilder('p')
-            ->andWhere('p.exampleField = :val')
-            ->setParameter('val', $value)
+        $company = $params['company'];
+        if (!$company instanceof Company) {
+            throw new ArrayException('Company undefined', '422');
+        }
+        $qb = $this->createQueryBuilder("p")
+            ->select('p')
             ->orderBy('p.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
+            ->where('p.company=:company')
+            ->setParameter('company', $company);
 
-    /*
-    public function findOneBySomeField($value): ?Position
-    {
-        return $this->createQueryBuilder('p')
-            ->andWhere('p.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
+        return (new Paginator($qb))->paginate($page);
     }
-    */
 }

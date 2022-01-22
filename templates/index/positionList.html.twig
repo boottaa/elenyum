@@ -14,6 +14,6 @@
     <div id="positionList" class="row">
         <h3 class="mb-4" style="border-bottom: solid 1px #a8a8a8">Список должностей</h3>
         <vue-alert ref="alert"></vue-alert>
-        <vue-list-table :headers="headers" :items="items" :actions="actions"></vue-list-table>
+        <vue-list :headers="headers" :actions="actions" :url="url" :onprepare="prepare"></vue-list>
     </div>
 {% endblock %}

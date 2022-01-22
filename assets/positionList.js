@@ -1,20 +1,20 @@
 import './app';
 import "./src/baseCalendar";
 import Vue from 'vue';
-import {del, get} from "./src/baseQuery";
-import {vueListTable} from "./src/vueListTable";
+import {del} from "./src/baseQuery";
+import {vueList} from "./src/vueList";
 import {vueAlert} from "./src/vueAlert";
 
 let employeeList = new Vue({
-    components: {vueListTable, vueAlert},
+    components: {vueList, vueAlert},
     el: '#positionList',
     data() {
         return {
+            url: '/api/position/list',
             headers: [
                 {text: 'Название', system: 'title'},
                 {text: 'Отображать в календаре', system: 'inCalendar'},
             ],
-            items: [],
             actions: [
                 {
                     value: 'Удалить', type: 'danger', onclick: (e) => {
@@ -47,21 +47,12 @@ let employeeList = new Vue({
             ],
         }
     },
-    created() {
-        this.send();
-    },
     methods: {
-        send() {
-            get('/api/position/list', (result) => {
-                if (result.success === true) {
-                    result.items.map((i) => {
-                        i.inCalendar = i.inCalendar === true ? 'Да' : 'Нет';
-                    });
-
-                    this.items = result.items;
-                }
+        prepare(data) {
+            data.items.map((i) => {
+                i.inCalendar = i.inCalendar === true ? 'Да' : 'Нет';
             });
-        },
+        }
     },
     delimiters: ['${', '}$'],
 });

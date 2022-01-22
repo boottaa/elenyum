@@ -2,19 +2,15 @@ import './app';
 import "./src/baseCalendar";
 import Vue from 'vue';
 import {del, get} from "./src/baseQuery";
-import {vueListTable} from "./src/vueListTable";
+import {vueList} from "./src/vueList";
 import {vueAlert} from "./src/vueAlert";
-import {vuePaginator} from "./src/vuePaginator";
 
 let employeeList = new Vue({
-    components: {vueListTable, vueAlert, vuePaginator},
+    components: {vueAlert, vueList},
     el: '#employeeList',
     data() {
         return {
             url: '/api/employee/list',
-            total: 0,
-            size: 0,
-            page: 1,
             headers: [
                 // {text: 'Картинка', system: 'img'},
                 {text: 'ФИО', system: 'name'},
@@ -24,7 +20,6 @@ let employeeList = new Vue({
                 {text: 'Дополнительный номер телефона', system: 'additionalPhone'},
                 {text: 'Дата рождения', system: 'dateBrith'},
             ],
-            items: [],
             actions: [
                 {
                     value: 'Удалить', type: 'danger', onclick: (e) => {
@@ -57,28 +52,10 @@ let employeeList = new Vue({
             ],
         }
     },
-    created() {
-        this.send();
-    },
     methods: {
-        send() {
-            this.onRequest(this.page);
-        },
-        onChangePage(page) {
-            this.page = page;
-            this.onRequest(page);
-        },
-        onRequest(page) {
-            get(this.url + '?page=' + page, (result) => {
-                if (result.success === true) {
-                    this.total = result.total;
-                    this.size = result.size;
-                    this.page = result.page;
-                    result.items.map((i) => {
-                        i.position = i.position.title;
-                    });
-                    this.items = result.items;
-                }
+        prepare(data) {
+            data.items.map((i) => {
+                i.position = i.position.title;
             });
         }
     },

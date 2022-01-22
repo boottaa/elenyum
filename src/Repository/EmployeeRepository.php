@@ -29,16 +29,15 @@ class EmployeeRepository extends ServiceEntityRepository implements ListReposito
     public function list(?array $params, int $page): Paginator
     {
         $company = $params['company'];
-        if ($company instanceof Company) {
-            $qb = $this->createQueryBuilder("e")
-                ->select('e')
-                ->orderBy('e.id', 'ASC')
-                ->where('e.company=:company')
-                ->setParameter('company', $company);
-
-            return (new Paginator($qb))->paginate($page);
+        if (!$company instanceof Company) {
+            throw new ArrayException('Company undefined', '422');
         }
+        $qb = $this->createQueryBuilder("e")
+            ->select('e')
+            ->orderBy('e.id', 'ASC')
+            ->where('e.company=:company')
+            ->setParameter('company', $company);
 
-        throw new ArrayException('Company undefined', '422');
+        return (new Paginator($qb))->paginate($page);
     }
 }

@@ -17,22 +17,27 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class PositionController extends AbstractController
 {
+    /**
+     * @throws ArrayException
+     */
     #[IsGranted('ROLE_'.Role::EMPLOYEE_POST)]
     #[Route('/api/position/list', name: 'apiPositionList')]
-    public function list(PositionRepository $positionRepository): Response
+    public function list(PositionRepository $positionRepository, Request $request): Response
     {
+        $page = $request->get('page', 1);
         $user = $this->getUser();
         if (!$user instanceof Employee) {
             return $this->json((new ArrayException('Пользователь не найден', 202))->toArray());
         }
 
-        $positions = $positionRepository->findBy(['company' => $user->getCompany()]);
-        $total = count($positions);
+        $list = $positionRepository->list(['company' => $user->getCompany()], $page);
 
         return $this->json([
             'success' => true,
-            'total' => $total,
-            'items' => $positions,
+            'items' => $list->getResults(),
+            'total' => $list->getNumResults(),
+            'page' => $list->getCurrentPage(),
+            'size' => $list->getPageSize(),
         ]);
     }
 

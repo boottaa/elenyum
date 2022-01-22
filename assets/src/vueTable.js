@@ -4,7 +4,7 @@ import {clear} from "core-js/internals/task";
 //items = [{'name': 'vasya', 'phone': '1234'}, {'name': 'vasya2', 'phone': '12346666'}];
 //headers = [{name: 'Имя', 'system': 'name'}, {'name': 'Телефон', 'system':'phone'}]
 //actions = [{'name': 'Удалить', 'onclick': () => {}, 'type': 'primary']
-export let vueListTable = Vue.component('vue-list-table', {
+export let vueTable = Vue.component('vue-table', {
     props: ['headers', 'items', 'actions'],
     template: `
       <div id="liveListTable"></div>`,
