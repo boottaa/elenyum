@@ -4,13 +4,16 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use App\Utils\Paginator;
+
 interface BaseInterface
 {
     /**
      * @param array|null $params
-     * @return array
+     * @param int $page
+     * @return Paginator
      */
-    public function list(?array $params): array;
+    public function list(?array $params, int $page): Paginator;
 
     /**
      * @param array $data

@@ -1,4 +1,5 @@
 import Vue from 'vue';
+import {clear} from "core-js/internals/task";
 
 //items = [{'name': 'vasya', 'phone': '1234'}, {'name': 'vasya2', 'phone': '12346666'}];
 //headers = [{name: 'Имя', 'system': 'name'}, {'name': 'Телефон', 'system':'phone'}]
@@ -7,6 +8,11 @@ export let vueListTable = Vue.component('vue-list-table', {
     props: ['headers', 'items', 'actions'],
     template: `
       <div id="liveListTable"></div>`,
+    data() {
+        return {
+            head: []
+        }
+    },
     watch: {
         items() {
             if (this.items.length > 0) {
@@ -15,22 +21,28 @@ export let vueListTable = Vue.component('vue-list-table', {
         },
     },
     methods: {
+        clear() {
+            let liveListTable = document.getElementById('liveListTable');
+            liveListTable.innerHTML = '';
+        },
         addTable() {
+            this.clear();
+            this.head = JSON.parse(JSON.stringify(this.headers));
             let table = document.createElement('table');
             table.className = 'table';
             let head = table.createTHead();
             let headRow = head.insertRow();
             if (this.actions !== undefined) {
-                this.headers.push({text: '#', system: 'vueListTableAction'});
+                this.head.push({text: '#', system: 'vueListTableAction'});
             }
-            this.headers.forEach((i, key) => {
+            this.head.forEach((i, key) => {
                 headRow.insertCell(key).outerHTML = `<th>${i.text}</th>`;
             });
 
             let body = table.createTBody();
             this.items.forEach((item) => {
                 let bodyRow = body.insertRow();
-                this.headers.forEach((i, k) => {
+                this.head.forEach((i, k) => {
                     if (i.system === 'vueListTableAction') {
                         let divActionButtons = document.createElement('div');
                         this.actions.forEach((i) => {

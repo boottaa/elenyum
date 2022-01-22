@@ -15,5 +15,6 @@
         <h3 class="mb-4" style="border-bottom: solid 1px #a8a8a8">Список сотрудников</h3>
         <vue-alert ref="alert"></vue-alert>
         <vue-list-table :headers="headers" :items="items" :actions="actions"></vue-list-table>
+        <vue-paginator :size="size" :total="total" :url="url" :page="page" @change="onChangePage"></vue-paginator>
     </div>
 {% endblock %}

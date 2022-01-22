@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Company;
 use App\Entity\Employee;
 use App\Exception\ArrayException;
+use App\Utils\Paginator;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -23,18 +24,19 @@ class EmployeeRepository extends ServiceEntityRepository implements ListReposito
 
     /**
      * @throws ArrayException
+     * @throws \Exception
      */
-    public function list(?array $params): array
+    public function list(?array $params, int $page): Paginator
     {
         $company = $params['company'];
         if ($company instanceof Company) {
-            return $this->createQueryBuilder("e")
-                ->select('PARTIAL e.{id, name}')
+            $qb = $this->createQueryBuilder("e")
+                ->select('e')
                 ->orderBy('e.id', 'ASC')
                 ->where('e.company=:company')
-                ->setParameter('company', $company)
-                ->getQuery()
-                ->getArrayResult();
+                ->setParameter('company', $company);
+
+            return (new Paginator($qb))->paginate($page);
         }
 
         throw new ArrayException('Company undefined', '422');

@@ -15,20 +15,29 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class EmployeeController extends AbstractController
 {
+    /**
+     * @param EmployeeRepository $employeeRepository
+     * @param Request $request
+     * @return Response
+     * @throws ArrayException
+     */
     #[IsGranted('ROLE_'.Role::EMPLOYEE_GET)]
     #[Route('/api/employee/list', name: 'apiEmployeeList')]
-    public function list(EmployeeRepository $employeeRepository): Response
+    public function list(EmployeeRepository $employeeRepository, Request $request): Response
     {
+        $page = $request->get('page', 1);
         $user = $this->getUser();
         if (!$user instanceof Employee) {
             return $this->json((new ArrayException('Пользователь не найден', 202))->toArray());
         }
-        $list = $employeeRepository->findBy(['company' => $user->getCompany()]);
+        $list = $employeeRepository->list(['company' => $user->getCompany()], $page);
 
         return $this->json([
             'success' => true,
-            'items' => $list,
-            'total' => count($list),
+            'items' => $list->getResults(),
+            'total' => $list->getNumResults(),
+            'page' => $list->getCurrentPage(),
+            'size' => $list->getPageSize(),
         ]);
     }
 
@@ -90,7 +99,7 @@ class EmployeeController extends AbstractController
         }
         $data['employee'] = json_decode($request->getContent(), true, 512, JSON_THROW_ON_ERROR);
 
-        if($employee === null) {
+        if ($employee === null) {
             $data['user'] = $user;
             $service->add($data);
         } else {

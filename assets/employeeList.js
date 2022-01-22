@@ -4,12 +4,17 @@ import Vue from 'vue';
 import {del, get} from "./src/baseQuery";
 import {vueListTable} from "./src/vueListTable";
 import {vueAlert} from "./src/vueAlert";
+import {vuePaginator} from "./src/vuePaginator";
 
 let employeeList = new Vue({
-    components: {vueListTable, vueAlert},
+    components: {vueListTable, vueAlert, vuePaginator},
     el: '#employeeList',
     data() {
         return {
+            url: '/api/employee/list',
+            total: 0,
+            size: 0,
+            page: 1,
             headers: [
                 // {text: 'Картинка', system: 'img'},
                 {text: 'ФИО', system: 'name'},
@@ -57,15 +62,25 @@ let employeeList = new Vue({
     },
     methods: {
         send() {
-            get('/api/employee/list', (result) => {
+            this.onRequest(this.page);
+        },
+        onChangePage(page) {
+            this.page = page;
+            this.onRequest(page);
+        },
+        onRequest(page) {
+            get(this.url + '?page=' + page, (result) => {
                 if (result.success === true) {
+                    this.total = result.total;
+                    this.size = result.size;
+                    this.page = result.page;
                     result.items.map((i) => {
                         i.position = i.position.title;
                     });
                     this.items = result.items;
                 }
             });
-        },
+        }
     },
     delimiters: ['${', '}$'],
 });
