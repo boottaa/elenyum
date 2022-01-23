@@ -7,13 +7,14 @@ export let menu = Vue.component('v-operation', {
     data() {
         return {
             select: null,
-            operations: [],
+            items: [],
+            total: 0,
+            page: 1,
+            size: 0,
         }
     },
     mounted() {
-        $.get("/operation/list", (data) => {
-            this.operations = data.items;
-        });
+        this.getData();
     },
     watch: {
         value() {
@@ -26,7 +27,7 @@ export let menu = Vue.component('v-operation', {
                 multiple
                 aria-required="true"
                 v-model="select"
-                :options="operations"
+                :options="items"
                 label="title"
                 :get-option-label="(operation) => operation.title">
           <template #no-options>
@@ -37,9 +38,41 @@ export let menu = Vue.component('v-operation', {
               <br/>
               <i>{{ price }} руб.</i> <i style="color: #05885d;">({{ duration }} мин.)</i>
           </template>
+          <li slot="list-footer" class="pagination">
+            <nav aria-label="Page navigation example">
+              <ul class="pagination justify-content-center">
+                <li class="page-item"><button class="page-link" @click="prevPage">Назад</button></li>
+                <li class="page-item"><button class="page-link" @click="nextPage">Далее</button></li>
+              </ul>
+            </nav>
+          </li>
       </v-select>
     `,
     methods: {
+        getData() {
+            $.get("/api/operation/list?page=" + this.page , (data) => {
+                if (data.success === true) {
+                    this.items = data.items;
+                    this.total = data.total;
+                    this.page = data.page;
+                    this.size = data.size;
+                }
+            });
+        },
+        prevPage() {
+            this.page -= 1;
+            this.getData();
+        },
+        nextPage() {
+            this.page += 1;
+            this.getData();
+        },
+        hasPrevPage() {
+            return this.page > 1;
+        },
+        hasNextPage() {
+            return this.items.length * this.page < this.total
+        },
         setSelected(value) {
             if (value === null) {
                 this.select = null;

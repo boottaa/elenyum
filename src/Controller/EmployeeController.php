@@ -5,7 +5,6 @@ namespace App\Controller;
 use App\Entity\Employee;
 use App\Entity\Role;
 use App\Exception\ArrayException;
-use App\Repository\EmployeeRepository;
 use App\Service\EmployeeService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -16,21 +15,21 @@ use Symfony\Component\Routing\Annotation\Route;
 class EmployeeController extends AbstractController
 {
     /**
-     * @param EmployeeRepository $employeeRepository
+     * @param EmployeeService $service
      * @param Request $request
      * @return Response
      * @throws ArrayException
      */
     #[IsGranted('ROLE_'.Role::EMPLOYEE_GET)]
     #[Route('/api/employee/list', name: 'apiEmployeeList')]
-    public function list(EmployeeRepository $employeeRepository, Request $request): Response
+    public function list(EmployeeService $service, Request $request): Response
     {
         $page = $request->get('page', 1);
         $user = $this->getUser();
         if (!$user instanceof Employee) {
             return $this->json((new ArrayException('Пользователь не найден', 202))->toArray());
         }
-        $list = $employeeRepository->list(['company' => $user->getCompany()], $page);
+        $list = $service->list(['company' => $user->getCompany()], $page);
 
         return $this->json([
             'success' => true,

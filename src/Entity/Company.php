@@ -30,6 +30,11 @@ class Company
     private Collection $employees;
 
     /**
+     * @ORM\OneToMany(targetEntity=Operation::class, mappedBy="company", orphanRemoval=true)
+     */
+    private Collection $operations;
+
+    /**
      * @ORM\OneToMany(targetEntity=Branch::class, mappedBy="company", orphanRemoval=true)
      */
     private $branches;
@@ -38,6 +43,7 @@ class Company
     {
         $this->employees = new ArrayCollection();
         $this->branches = new ArrayCollection();
+        $this->operations = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -111,6 +117,36 @@ class Company
             // set the owning side to null (unless already changed)
             if ($branch->getCompany() === $this) {
                 $branch->setCompany(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Operation[]
+     */
+    public function getOperations(): Collection
+    {
+        return $this->operations;
+    }
+
+    public function addOperations(Operation $operation): self
+    {
+        if (!$this->operations->contains($operation)) {
+            $this->operations[] = $operation;
+            $operation->setCompany($this);
+        }
+
+        return $this;
+    }
+
+    public function removeOperations(Operation $operation): self
+    {
+        if ($this->operations->removeElement($operation)) {
+            // set the owning side to null (unless already changed)
+            if ($operation->getCompany() === $this) {
+                $operation->setCompany(null);
             }
         }
 

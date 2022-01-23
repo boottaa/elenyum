@@ -2,7 +2,10 @@
 
 namespace App\Repository;
 
+use App\Entity\Company;
 use App\Entity\Operation;
+use App\Exception\ArrayException;
+use App\Utils\Paginator;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -12,39 +15,31 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method Operation[]    findAll()
  * @method Operation[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class OperationRepository extends ServiceEntityRepository
+class OperationRepository extends ServiceEntityRepository implements ListRepositoryInterface
 {
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Operation::class);
     }
 
-    // /**
-    //  * @return Operation[] Returns an array of Operation objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    /**
+     * @param array|null $params
+     * @param int $page
+     * @return Paginator
+     * @throws \Exception
+     */
+    public function list(?array $params, int $page): Paginator
     {
-        return $this->createQueryBuilder('o')
-            ->andWhere('o.exampleField = :val')
-            ->setParameter('val', $value)
+        $company = $params['company'];
+        if (!$company instanceof Company) {
+            throw new ArrayException('Company undefined', '422');
+        }
+        $qb = $this->createQueryBuilder("o")
+            ->select('o')
             ->orderBy('o.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
+            ->where('o.company=:company')
+            ->setParameter('company', $company);
 
-    /*
-    public function findOneBySomeField($value): ?Operation
-    {
-        return $this->createQueryBuilder('o')
-            ->andWhere('o.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
+        return (new Paginator($qb))->paginate($page);
     }
-    */
 }

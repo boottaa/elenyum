@@ -4,11 +4,12 @@ namespace App\Entity;
 
 use App\Repository\OperationRepository;
 use Doctrine\ORM\Mapping as ORM;
+use JsonSerializable;
 
 /**
  * @ORM\Entity(repositoryClass=OperationRepository::class)
  */
-class Operation
+class Operation implements JsonSerializable
 {
     /**
      * @ORM\Id
@@ -33,7 +34,7 @@ class Operation
     private int $duration;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Company::class)
+     * @ORM\ManyToOne(targetEntity=Company::class, inversedBy="operations")
      * @ORM\JoinColumn(nullable=false)
      */
     private Company $company;
@@ -93,5 +94,15 @@ class Operation
     public function setCompany(Company $company): void
     {
         $this->company = $company;
+    }
+
+    public function jsonSerialize(): array
+    {
+        return [
+            'id' => $this->getId(),
+            'title' => $this->getTitle(),
+            'duration' => $this->getDuration(),
+            'price' => $this->getPrice(),
+        ];
     }
 }

@@ -22,4 +22,34 @@ abstract class BaseAbstractService implements BaseInterface
 
         throw new ArrayException('Not Implemented interface ' . ListRepositoryInterface::class, '501');
     }
+
+    /**
+     * @param array $data
+     * @return bool
+     * @throws ArrayException
+     */
+    public function put(array $data): bool
+    {
+        throw new ArrayException('Method: "' . __METHOD__ . '" is empty', '500');
+    }
+
+    /**
+     * @param array $data
+     * @return bool
+     * @throws ArrayException
+     */
+    public function post(array $data): bool
+    {
+        throw new ArrayException('Method: "' . __METHOD__ . '" is empty', '500');
+    }
+
+    /**
+     * @param int $id
+     * @return bool
+     * @throws ArrayException
+     */
+    public function del(int $id): bool
+    {
+        throw new ArrayException('Method: "' . __METHOD__ . '" is empty', '500');
+    }
 }

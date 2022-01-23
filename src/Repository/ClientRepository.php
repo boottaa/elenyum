@@ -22,6 +22,9 @@ class ClientRepository extends ServiceEntityRepository implements ListRepository
     }
 
     /**
+     * @param array|null $params
+     * @param int $page
+     * @return Paginator
      * @throws Exception
      */
     public function list(?array $params, int $page): Paginator
