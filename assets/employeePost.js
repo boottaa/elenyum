@@ -19,7 +19,7 @@ let object = {
 };
 
 let employeePost = new Vue({
-    components: { DatePicker, vueAlert },
+    components: {DatePicker, vueAlert},
     el: '#employeePost',
     data() {
         return {
@@ -42,11 +42,11 @@ let employeePost = new Vue({
 
         if (id !== undefined) {
             get('/api/employee/get/' + id, (r) => {
-                if(r.success === true) {
+                if (r.success === true) {
                     this.object = r.item;
                     let st = r.item.dateBrith;
                     let pattern = /(\d{2})\.(\d{2})\.(\d{4})/;
-                    this.object.dateBrith = new Date(st.replace(pattern,'$3-$2-$1'));
+                    this.object.dateBrith = new Date(st.replace(pattern, '$3-$2-$1'));
                 }
             });
         }
@@ -83,8 +83,7 @@ let employeePost = new Vue({
         },
         send() {
             if (this.validation()) {
-                let id = this.object.id === null ? '' : '/' + this.object.id;
-                if(this.object.id === null) {
+                if (this.object.id === null) {
                     post('/api/employee/post', this.object, (result) => {
                         if (result.success === true) {
                             employeePost.$refs.alert.addAlert('Сотрудник добавлен', 'success');
