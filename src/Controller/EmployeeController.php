@@ -11,7 +11,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Security;
 
 class EmployeeController extends AbstractController
 {
@@ -31,6 +30,31 @@ class EmployeeController extends AbstractController
             return $this->json((new ArrayException('Пользователь не найден', 202))->toArray());
         }
         $list = $service->list(['company' => $user->getCompany()], $page);
+
+        return $this->json([
+            'success' => true,
+            'items' => $list->getResults(),
+            'total' => $list->getNumResults(),
+            'page' => $list->getCurrentPage(),
+            'size' => $list->getPageSize(),
+        ]);
+    }
+
+    /**
+     * @param EmployeeService $service
+     * @param Request $request
+     * @return Response
+     * @throws ArrayException
+     */
+    #[IsGranted('ROLE_'.Role::EMPLOYEE_GET)]
+    #[Route('/api/employee/listForCalendar', name: 'apiEmployeeListForCalendar')]
+    public function listForCalendar(EmployeeService $service, Request $request): Response
+    {
+        $user = $this->getUser();
+        if (!$user instanceof Employee) {
+            return $this->json((new ArrayException('Пользователь не найден', 202))->toArray());
+        }
+        $list = $service->listForCalendar(['company' => $user->getCompany()]);
 
         return $this->json([
             'success' => true,

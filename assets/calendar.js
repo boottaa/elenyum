@@ -256,7 +256,7 @@ $(function () {
         },
     });
 
-    $.get(`/api/employee/list`, (data) => {
+    $.get(`/api/employee/listForCalendar`, (data) => {
         if (data.total > 0) {
             data.items.forEach(function (item) {
                 calendar.addResource(item);

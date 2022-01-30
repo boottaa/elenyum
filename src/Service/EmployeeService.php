@@ -6,6 +6,8 @@ use App\Entity\Employee;
 use App\Entity\Position;
 use App\Exception\ArrayException;
 use App\Repository\EmployeeRepository;
+use App\Repository\ListRepositoryInterface;
+use App\Utils\Paginator;
 use DateTimeImmutable;
 use DateTimeZone;
 use Doctrine\ORM\EntityManagerInterface;
@@ -17,6 +19,14 @@ class EmployeeService extends BaseAbstractService
         private EntityManagerInterface $em
     ) {
         $this->repository = $repository;
+    }
+
+    /**
+     * @throws ArrayException
+     */
+    public function listForCalendar(?array $params): Paginator
+    {
+        return $this->repository->listForCalendar($params);
     }
 
     /**

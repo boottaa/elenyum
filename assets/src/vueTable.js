@@ -45,12 +45,13 @@ export let vueTable = Vue.component('vue-table', {
                 this.head.forEach((i, k) => {
                     if (i.system === 'vueListTableAction') {
                         let divActionButtons = document.createElement('div');
+                        divActionButtons.className = 'btn-group';
                         this.actions.forEach((i) => {
                             let button = document.createElement('button');
                             button.addEventListener('click', i.onclick);
                             let id = item['id'] !== undefined ? item['id'] : null;
                             button.setAttribute('data-id', id);
-                            button.className = `btn btn-${i.type} mr-2`;
+                            button.className = `btn btn-sm btn-${i.type}`;
                             button.innerText = i.value;
                             divActionButtons.appendChild(button);
                         });

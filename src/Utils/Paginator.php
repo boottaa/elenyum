@@ -12,7 +12,7 @@ use Traversable;
 
 class Paginator
 {
-    private const PAGE_SIZE = 2;
+    private const PAGE_SIZE = 50;
     private DoctrineQueryBuilder $queryBuilder;
     private int $currentPage;
     private int $pageSize;
@@ -42,8 +42,11 @@ class Paginator
 
         $query = $this->queryBuilder
             ->setFirstResult($firstResult)
-            ->setMaxResults($this->pageSize)
             ->getQuery();
+
+        if ($page !== 0) {
+            $this->queryBuilder->setMaxResults($this->pageSize);
+        }
 
         if (0 === \count($this->queryBuilder->getDQLPart('join'))) {
             $query->setHint(CountWalker::HINT_DISTINCT, false);
@@ -73,7 +76,7 @@ class Paginator
      */
     public function getLastPage(): int
     {
-        return (int) ceil($this->numResults / $this->pageSize);
+        return (int)ceil($this->numResults / $this->pageSize);
     }
 
     /**
