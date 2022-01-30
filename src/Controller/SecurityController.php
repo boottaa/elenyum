@@ -3,19 +3,16 @@
 namespace App\Controller;
 
 use App\Entity\Employee;
-use App\Entity\Role;
 use App\Exception\ArrayException;
-use Doctrine\ORM\EntityManagerInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class SecurityController extends AbstractController
 {
     #[Route('/api/login', name: 'api_login', methods: 'POST')]
-    public function login(EntityManagerInterface $em): Response
+    public function login(SessionInterface $session): Response
     {
         if ($this->getUser() === null) {
             return $this->json((new ArrayException('Авторизация не выполнена'))->toArray());
@@ -30,16 +27,13 @@ class SecurityController extends AbstractController
                 ]);
             }
 
-            $token = $employee->getUserIdentifier();
-            $employee->setApiToken($token);
-            $em->flush();
-
+            $session->start();
             return $this->json([
                 'success' => true,
                 'name' => $employee->getName(),
                 'status' => $employee->getStatus(),
                 'roles' => $employee->getRoles(),
-                'token' => $employee->getApiToken(),
+                'token' => $session->getId(),
             ]);
         }
 

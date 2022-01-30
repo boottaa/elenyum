@@ -11,6 +11,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Security;
 
 class EmployeeController extends AbstractController
 {
@@ -59,7 +60,6 @@ class EmployeeController extends AbstractController
      * @param int $employeeId
      * @param EmployeeService $service
      * @return Response
-     * @throws ArrayException
      */
     #[IsGranted('ROLE_'.Role::EMPLOYEE_DELETE)]
     #[Route('/api/employee/delete/{employeeId<\d+>}', name: 'apiEmployeeDelete', methods: 'DELETE')]
@@ -73,7 +73,11 @@ class EmployeeController extends AbstractController
             return $this->json((new ArrayException('Вы не можете удалить сами себя', 202))->toArray());
         }
 
-        $service->del($employeeId);
+        try {
+            $service->del($employeeId);
+        } catch (ArrayException $arrayException) {
+            return $this->json($arrayException);
+        }
 
         return $this->json([
             'success' => true,
@@ -83,7 +87,6 @@ class EmployeeController extends AbstractController
     /**
      * Create resource
      *
-     * @param Employee|null $employee
      * @param Request $request
      * @param EmployeeService $service
      * @return Response
@@ -92,7 +95,7 @@ class EmployeeController extends AbstractController
      */
     #[IsGranted('ROLE_'.Role::EMPLOYEE_POST)]
     #[Route('/api/employee/post', name: 'apiEmployeePost', methods: 'POST')]
-    public function post(?Employee $employee, Request $request, EmployeeService $service): Response
+    public function post(Request $request, EmployeeService $service): Response
     {
         $user = $this->getUser();
         if (!$user instanceof Employee) {
@@ -111,7 +114,6 @@ class EmployeeController extends AbstractController
     /**
      * Update resource
      *
-     * @param Employee|null $employee
      * @param Request $request
      * @param EmployeeService $service
      * @return Response
@@ -119,8 +121,8 @@ class EmployeeController extends AbstractController
      * @throws \JsonException
      */
     #[IsGranted('ROLE_'.Role::EMPLOYEE_POST)]
-    #[Route('/api/employee/put/{id<\d+>?}', name: 'apiEmployeePut', methods: 'PUT')]
-    public function put(?Employee $employee, Request $request, EmployeeService $service): Response
+    #[Route('/api/employee/put/{employeeId<\d+>?}', name: 'apiEmployeePut', methods: 'PUT')]
+    public function put(Request $request, EmployeeService $service): Response
     {
         $user = $this->getUser();
         if (!$user instanceof Employee) {

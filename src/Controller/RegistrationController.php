@@ -40,6 +40,7 @@ class RegistrationController extends AbstractController
      * @param RoleRepository $roleRepository
      * @return Response
      * @throws \JsonException
+     * @throws Exception
      */
     #[Route('/api/register', name: 'api_register', methods: ['POST'])]
     public function register(
@@ -111,7 +112,7 @@ class RegistrationController extends AbstractController
         }
 
         $this->emailVerifier->sendEmailConfirmation(
-            'app_verify_email',
+            'api_verify_email',
             $employee,
             (new TemplatedEmail())
                 ->from(new Address('noreplay@elenyum.com', 'Elenyum'))
@@ -126,7 +127,7 @@ class RegistrationController extends AbstractController
         ]);
     }
 
-    #[Route('/verify/email', name: 'app_verify_email')]
+    #[Route('/api/verify/email', name: 'api_verify_email')]
     public function verifyUserEmail(Request $request): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
@@ -137,7 +138,7 @@ class RegistrationController extends AbstractController
         } catch (VerifyEmailExceptionInterface $exception) {
             return $this->json([
                 'success' => false,
-                'message' => '',
+                'message' => $exception->getMessage(),
             ]);
         }
 

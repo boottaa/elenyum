@@ -8,6 +8,7 @@ use App\Entity\PositionRole;
 use App\Entity\Role;
 use App\Exception\ArrayException;
 use App\Repository\PositionRepository;
+use App\Service\PositionService;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -22,7 +23,7 @@ class PositionController extends AbstractController
      */
     #[IsGranted('ROLE_'.Role::EMPLOYEE_POST)]
     #[Route('/api/position/list', name: 'apiPositionList')]
-    public function list(PositionRepository $positionRepository, Request $request): Response
+    public function list(PositionService $service, Request $request): Response
     {
         $page = $request->get('page', 1);
         $user = $this->getUser();
@@ -30,7 +31,7 @@ class PositionController extends AbstractController
             return $this->json((new ArrayException('Пользователь не найден', 202))->toArray());
         }
 
-        $list = $positionRepository->list(['company' => $user->getCompany()], $page);
+        $list = $service->list(['company' => $user->getCompany()], $page);
 
         return $this->json([
             'success' => true,
@@ -41,22 +42,29 @@ class PositionController extends AbstractController
         ]);
     }
 
+    /**
+     * @param int $positionId
+     * @param PositionService $service
+     * @return Response
+     */
     #[IsGranted('ROLE_'.Role::EMPLOYEE_DELETE)]
-    #[Route('/api/position/delete/{id<\d+>}', name: 'apiPositionDelete', methods: 'DELETE')]
-    public function delete(Position $position, EntityManagerInterface $em): Response
+    #[Route('/api/position/delete/{positionId<\d+>}', name: 'apiPositionDelete', methods: 'DELETE')]
+    public function delete(int $positionId, PositionService $service): Response
     {
         $user = $this->getUser();
         if (!$user instanceof Employee) {
             return $this->json((new ArrayException('Пользователь не найден', 202))->toArray());
         }
 
-        if ($user->getPosition()->getId() === $position->getId()) {
+        if ($user->getPosition()->getId() === $positionId) {
             return $this->json((new ArrayException('Вы не можете удалить свою роль', 202))->toArray());
         }
 
-        $em->remove($position->getPositionRole());
-        $em->remove($position);
-        $em->flush();
+        try {
+            $service->del($positionId);
+        } catch (ArrayException $arrayException) {
+            return $this->json($arrayException);
+        }
 
         return $this->json([
             'success' => true,
@@ -78,9 +86,13 @@ class PositionController extends AbstractController
         ]);
     }
 
+    /**
+     * @throws ArrayException
+     * @throws \JsonException
+     */
     #[IsGranted('ROLE_'.Role::EMPLOYEE_POST)]
-    #[Route('/api/position/post', name: 'apiPositionPost')]
-    public function post(Request $request, EntityManagerInterface $em): Response
+    #[Route('/api/position/post', name: 'apiPositionPost', methods: 'POST')]
+    public function post(Request $request, PositionService $service): Response
     {
         $user = $this->getUser();
         if (!$user instanceof Employee) {
@@ -88,19 +100,33 @@ class PositionController extends AbstractController
         }
 
         $data = json_decode($request->getContent(), true, 512, JSON_THROW_ON_ERROR);
+        $data['position'] = $data;
+        $data['user'] = $user;
 
-        $position = new Position();
-        $position->setCompany($user->getCompany());
-        $position->setInCalendar($data['inCalendar']);
-        $position->setTitle($data['title']);
-        $em->persist($position);
-        $positionRole = new PositionRole();
-        $positionRole->setPosition($position);
-        foreach ($data['roles'] as $role) {
-            $positionRole->addRole($role['id']);
+        $service->post($data);
+
+        return $this->json([
+            'success' => true,
+        ]);
+    }
+
+    /**
+     * @throws ArrayException
+     * @throws \JsonException
+     */
+    #[IsGranted('ROLE_'.Role::EMPLOYEE_POST)]
+    #[Route('/api/position/put', name: 'apiPositionPut', methods: 'PUT')]
+    public function put(Request $request, PositionService $service): Response
+    {
+        $user = $this->getUser();
+        if (!$user instanceof Employee) {
+            return $this->json((new ArrayException('Пользователь не найден', 202))->toArray());
         }
-        $em->persist($positionRole);
-        $em->flush();
+
+        $data['position'] = json_decode($request->getContent(), true, 512, JSON_THROW_ON_ERROR);
+        $data['user'] = $user;
+
+        $service->put($data);
 
         return $this->json([
             'success' => true,

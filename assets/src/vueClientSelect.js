@@ -1,104 +1,113 @@
 import vSelect from 'vue-select';
 import Vue from "vue";
 
+vSelect.props.components.default = () => ({
+    Deselect: {
+        render: createElement => createElement('span', {
+            domProps: {
+                innerHTML: '&#10005;'
+            },
+        }),
+    },
+    OpenIndicator: {
+        render: createElement => createElement('span', {
+            domProps: {
+                innerHTML: '&#9661;'
+            },
+        }),
+    },
+});
+
 export let menu = Vue.component('v-client', {
-    name: 'InfiniteScroll',
     components: {vSelect},
     props: ['value'],
     data() {
         return {
-            //Нужен для сброса поисковика
             select: null,
-            isSearch: false,
-            limit: 20,
-            clientPage: 1,
-            clientTotal: null,
-            clientSearch: '',
-            clients: [],
+            items: [],
+            total: 0,
+            page: 1,
+            size: 0,
+            query: '',
         }
     },
 
     mounted() {
-        this.onLoadClients(1).then(r => {
-            this.observer = new IntersectionObserver(this.infiniteScroll);
-        });
+        this.getData();
     },
     watch: {
         value() {
             this.select = this.value;
         },
-        async clientSearch() {
-            // debugger;
-            if (typeof this.clientSearch === 'string') {
-                this.clients = [];
-                this.clientPage = 1;
-                this.clientTotal = 0;
+        async query() {
+            if (typeof this.query === 'string') {
+                this.items = [];
+                this.page = 1;
 
                 if (this.isSearch) {
                     clearTimeout(this.isSearch);
                 }
 
                 this.isSearch = setTimeout(() => {
-                    this.onLoadClients(this.clientPage, this.clientSearch).then(() => {
-                        this.isSearch = false;
-                    });
+                    this.getData();
                 }, 200);
             }
         },
     },
     computed: {
+        hasPrevPage() {
+            return Boolean(this.page > 1);
+        },
         hasNextPage() {
-            return this.clientTotal > 0 && (Math.ceil(this.clientTotal / this.limit) > this.clientPage);
+            return Boolean(this.size * this.page < this.total);
         },
     },
     template: `
       <v-select ref="selectClientPhone"
                 @input="setSelected"
-                @open="onOpen"
-                @search="(query) => {clientSearch = query}"
+                @search="(q) => {this.query = q}"
                 taggable
                 label="phone"
                 v-model="select"
-                :create-option="createClient"
                 :filterable="false"
-                :options="clients"
+                :options="items"
       >
-      <template #option="{ phone, name }">
-        {{ phone }}
-        <br/>
-        <i>{{ name }}</i>
-      </template>
-      <template #no-options="{ search, searching, loading }">
-        Нечего не найдено, будет добавлен новый клиент, {{search}}
-      </template>
-      <template #list-footer>
-        <li v-show="hasNextPage" ref="load" class="loader">
-          Загрузка клиентов...
-        </li>
-      </template>
+          <template #option="{ phone, name }">
+            {{ phone }}
+            <br/>
+            <i>{{ name }}</i>
+          </template>
+          <template #no-options="{ search, searching, loading }">
+            Нечего не найдено, будет добавлен новый клиент, {{search}}
+          </template>
+          <li slot="list-footer" class="pagination-sm">
+            <nav aria-label="Page navigation example">
+              <ul class="pagination justify-content-center">
+                <li class="page-item" :class="[{disabled: !hasPrevPage}]"><button class="page-link" @click="prevPage">Назад</button></li>
+                <li class="page-item" :class="[{disabled: !hasNextPage}]"><button class="page-link" @click="nextPage">Далее</button></li>
+              </ul>
+            </nav>
+          </li>
       </v-select>
     `,
     methods: {
-        async onLoadClients(page = 1, query = '') {
-            $.get(`/api/client/query?page=${page}&query=${query}`, (data) => {
-                this.clients = data.items.concat(this.clients);
-                this.clientTotal = data.total;
+        getData() {
+            $.get(`/api/client/query?page=${this.page}&query=${this.query}`, (data) => {
+                if (data.success === true) {
+                    this.items = data.items;
+                    this.total = data.total;
+                    this.page = data.page;
+                    this.size = data.size;
+                }
             });
         },
-        async onOpen() {
-            if (this.hasNextPage) {
-                await this.$nextTick();
-                this.observer.observe(this.$refs.load);
-            }
+        prevPage() {
+            this.page -= 1;
+            this.getData();
         },
-        async infiniteScroll([{isIntersecting, target}]) {
-            if (isIntersecting) {
-                const ul = target.offsetParent
-                const scrollTop = target.offsetParent.scrollTop
-                await this.onLoadClients(++this.clientPage, this.clientSearch);
-                await this.$nextTick();
-                ul.scrollTop = scrollTop
-            }
+        nextPage() {
+            this.page += 1;
+            this.getData();
         },
         setSelected(value) {
             if (value === null) {

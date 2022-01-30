@@ -65,13 +65,6 @@ class Employee implements UserInterface, PasswordHasherAwareInterface, PasswordA
     private ?string $password;
 
     /**
-     * Токен пользователя
-     *
-     * @ORM\Column(type="string", unique=true, nullable=true)
-     */
-    private ?string $apiToken;
-
-    /**
      * @ORM\Column(type="integer")
      */
     private int $status;
@@ -300,25 +293,6 @@ class Employee implements UserInterface, PasswordHasherAwareInterface, PasswordA
     public function getUsername(): string
     {
         return $this->getName();
-    }
-
-    /**
-     * @return string|null
-     */
-    public function getApiToken(): ?string
-    {
-        return $this->apiToken;
-    }
-
-    /**
-     * @param string|null $apiToken
-     * @return $this
-     */
-    public function setApiToken(?string $apiToken): Employee
-    {
-        $this->apiToken = $apiToken;
-
-        return $this;
     }
 
     public function getPasswordHasherName(): ?string

@@ -3,23 +3,35 @@
 namespace App\Controller;
 
 use App\Entity\Role;
-use App\Repository\RoleRepository;
+use App\Service\ClientService;
+use App\Service\RoleService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class RolesController extends AbstractController
 {
-    #[IsGranted('ROLE_' . Role::EMPLOYEE_POST)]
-    #[Route('/api/role/list', name: 'roleList')]
-    public function index(RoleRepository $roleRepository): Response
+    /**
+     * @param RoleService $service
+     * @param Request $request
+     * @return Response
+     * @throws \App\Exception\ArrayException
+     */
+    #[IsGranted('ROLE_' . Role::CLIENT_GET)]
+    #[Route('/api/role/list', name: 'apiRoleList')]
+    public function list(RoleService $service, Request $request): Response
     {
-        $roles = $roleRepository->findAll();
-        $total = count($roles);
+        $page = $request->get('page', 1);
+        $list = $service->list([], $page);
+
         return $this->json([
-            'total' => $total,
-            'items' => $roles,
+            'success' => true,
+            'items' => $list->getResults(),
+            'total' => $list->getNumResults(),
+            'page' => $list->getCurrentPage(),
+            'size' => $list->getPageSize(),
         ]);
     }
 }

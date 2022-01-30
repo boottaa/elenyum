@@ -77,14 +77,13 @@ class EmployeeService extends BaseAbstractService
         $employeeData = $data['employee'];
 
         if (!$user instanceof Employee) {
-            throw new ArrayException('Not defined'.Employee::class, '422');
+            throw new ArrayException('Not defined '.Employee::class, '422');
         }
 
         $employee = new Employee();
         $employee->setCompany($user->getCompany());
         $employee->setBranch($user->getBranch());
         $employee->setStatus(Employee::STATUS_CONFIRMED);
-        $employee->setApiToken(null);
         $this->em->persist($employee);
 
         $this->hydrate($employee, $employeeData);

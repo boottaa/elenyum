@@ -38,16 +38,24 @@ export let menu = Vue.component('v-operation', {
               <br/>
               <i>{{ price }} руб.</i> <i style="color: #05885d;">({{ duration }} мин.)</i>
           </template>
-          <li slot="list-footer" class="pagination">
+          <li slot="list-footer" class="pagination-sm">
             <nav aria-label="Page navigation example">
               <ul class="pagination justify-content-center">
-                <li class="page-item"><button class="page-link" @click="prevPage">Назад</button></li>
-                <li class="page-item"><button class="page-link" @click="nextPage">Далее</button></li>
+                <li class="page-item" :class="[{disabled: !hasPrevPage}]"><button class="page-link" @click="prevPage">Назад</button></li>
+                <li class="page-item" :class="[{disabled: !hasNextPage}]"><button class="page-link" @click="nextPage">Далее</button></li>
               </ul>
             </nav>
           </li>
       </v-select>
     `,
+    computed: {
+        hasPrevPage() {
+            return Boolean(this.page > 1);
+        },
+        hasNextPage() {
+            return Boolean(this.size * this.page < this.total);
+        },
+    },
     methods: {
         getData() {
             $.get("/api/operation/list?page=" + this.page , (data) => {
@@ -66,12 +74,6 @@ export let menu = Vue.component('v-operation', {
         nextPage() {
             this.page += 1;
             this.getData();
-        },
-        hasPrevPage() {
-            return this.page > 1;
-        },
-        hasNextPage() {
-            return this.items.length * this.page < this.total
         },
         setSelected(value) {
             if (value === null) {

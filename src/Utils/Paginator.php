@@ -10,12 +10,9 @@ use Doctrine\ORM\Tools\Pagination\Paginator as DoctrinePaginator;
 use Exception;
 use Traversable;
 
-/**
- * @author Javier Eguiluz <javier.eguiluz@gmail.com>
- */
 class Paginator
 {
-    private const PAGE_SIZE = 20;
+    private const PAGE_SIZE = 2;
     private DoctrineQueryBuilder $queryBuilder;
     private int $currentPage;
     private int $pageSize;
