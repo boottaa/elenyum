@@ -20,7 +20,6 @@
 }
 
 .fc-scrollgrid-sync-inner, .fc-timegrid-axis-frame {
-    /*padding: 10px;*/
     background: #f8f9fc;
 }
 
@@ -32,6 +31,7 @@
     border-radius: 0;
     background: rgb(209 215 241);
     border-color: rgb(206 216 255);
+    padding-left: 3px;
 
     -webkit-box-shadow: 5px 5px 5px -5px rgba(71, 197, 192, 0.5);
     -moz-box-shadow: 5px 5px 5px -5px rgba(71, 197, 192, 0.5);
