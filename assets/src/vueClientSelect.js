@@ -1,23 +1,6 @@
 import vSelect from 'vue-select';
 import Vue from "vue";
 
-vSelect.props.components.default = () => ({
-    Deselect: {
-        render: createElement => createElement('span', {
-            domProps: {
-                innerHTML: '&#10005;'
-            },
-        }),
-    },
-    OpenIndicator: {
-        render: createElement => createElement('span', {
-            domProps: {
-                innerHTML: '&#9661;'
-            },
-        }),
-    },
-});
-
 export let menu = Vue.component('v-client', {
     components: {vSelect},
     props: ['value'],

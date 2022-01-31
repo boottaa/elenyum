@@ -42,11 +42,8 @@ class Paginator
 
         $query = $this->queryBuilder
             ->setFirstResult($firstResult)
+            ->setMaxResults($this->pageSize)
             ->getQuery();
-
-        if ($page !== 0) {
-            $this->queryBuilder->setMaxResults($this->pageSize);
-        }
 
         if (0 === \count($this->queryBuilder->getDQLPart('join'))) {
             $query->setHint(CountWalker::HINT_DISTINCT, false);

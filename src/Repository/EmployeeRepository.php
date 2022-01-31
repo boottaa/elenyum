@@ -61,6 +61,6 @@ class EmployeeRepository extends ServiceEntityRepository implements ListReposito
             ->setParameter('company', $company)
             ->setParameter('inCalendar', true);
 
-        return (new Paginator($qb, 0))->paginate();
+        return (new Paginator($qb, 1000))->paginate();
     }
 }

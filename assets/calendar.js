@@ -218,12 +218,10 @@ $(function () {
                     ${e.event.extendedProps.client.name}
                     <span style="color: #2a84e1">${e.event.extendedProps.client.phone}</span>
                 </div>
-<!--                <div style="position: absolute; right: 1px; top: 1px; display: ${e.event.extendedProps.client.status === 1 ? 'block' : 'none'}" class="totalPrice badge rounded-pill bg-alert">new</div>-->
                 `;
             }
 
             let diffMins = parseInt((e.event.end.getTime() - e.event.start.getTime()) / 60000); // minutes
-
             if (e.event.extendedProps.operations) {
                 let invisible = '';
                 if (diffMins < (30 * e.event.extendedProps.operations.length) + 30) {

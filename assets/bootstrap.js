@@ -1,8 +1,24 @@
 import { startStimulusApp } from '@symfony/stimulus-bridge';
-import Vue from "vue";
-import DatePicker from "vue2-datepicker";
+import vSelect from 'vue-select';
 //https://www.npmjs.com/package/vue2-datepicker
 import 'vue2-datepicker/locale/ru';
+
+vSelect.props.components.default = () => ({
+    Deselect: {
+        render: createElement => createElement('span', {
+            domProps: {
+                innerHTML: '&#10005;'
+            },
+        }),
+    },
+    OpenIndicator: {
+        render: createElement => createElement('span', {
+            domProps: {
+                innerHTML: '&#9661;'
+            },
+        }),
+    },
+});
 
 window.bootstrap = require('bootstrap/dist/js/bootstrap.bundle.js');
 
