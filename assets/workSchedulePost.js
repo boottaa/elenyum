@@ -44,6 +44,10 @@ $(document).ready(function () {
         return date;
     }
 
+    function lastday(y, m){
+        return  new Date(y, m +1, 0).getDate();
+    }
+
     let calendar = new Calendar(calendarEl, {
         selectable: true,
         plugins: [dayGridPlugin, interactionPlugin],
@@ -147,7 +151,10 @@ $(document).ready(function () {
         },
     });
 
-    calendar.render();
+
+    workSchedulePost.$once('selectedTemplate', (data) => {
+        calendar.render();
+    });
 });
 
 let object = {
@@ -229,6 +236,8 @@ let workSchedulePost = new Vue({
     },
     methods: {
         send() {
+
+            console.log(this.object);
             return 1;
         },
         onEditedTime() {
@@ -241,7 +250,7 @@ let workSchedulePost = new Vue({
         },
 
         onSelected() {
-            this.editable = false;
+            this.$emit('selectedTemplate', this.object.template);
         },
     },
     delimiters: ['${', '}$'],

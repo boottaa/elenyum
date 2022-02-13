@@ -17,16 +17,14 @@
         <vue-alert ref="alert"></vue-alert>
         <div class="col-lg-12">
             <div class="mb-3">
+                <label for="roles" class="form-label">Шаблон <span title="Выберете шаблон графика работы"><i class="fas fa-info-circle"></i></span></label>
+                <v-select id="selectPositions" aria-required="true" @input="onSelected" v-model="object.template" :options="templates" label="title"></v-select>
+            </div>
+            <div class="mb-3">
                 <label for="roles" class="form-label">Выберете период</label>
                 <br>
                 <div id="workScheduleCalendar"></div>
             </div>
-
-            <div class="mb-3">
-                <label for="roles" class="form-label">Шаблон <span title="Выберете шаблон графика работы"><i class="fas fa-info-circle"></i></span></label>
-                <v-select id="selectPositions" aria-required="true" @change="onSelected" v-model="object.template" :options="templates" label="title"></v-select>
-            </div>
-
             <input type="button" v-on:click="send" class="btn btn-primary btn-user btn-block" value="Сохранить">
         </div>
         <div class="col-lg-4">
