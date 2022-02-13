@@ -1,0 +1,8 @@
+.fc-daygrid-event-harness {
+    position: absolute !important;
+    bottom: 0 !important;
+}
+
+.fc .fc-daygrid-body-natural .fc-daygrid-day-events {
+    margin-bottom: 0 !important;
+}

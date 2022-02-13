@@ -1,6 +1,7 @@
 import '/node_modules/bootstrap/dist/css/bootstrap.css';
 import '/node_modules/@fortawesome/fontawesome-free/css/all.css';
 import '/node_modules/@fullcalendar/common/main.css';
+import './styles/workSchedulePost.css';
 import {Calendar} from "@fullcalendar/core";
 
 import './app';
@@ -21,8 +22,10 @@ import interactionPlugin from "@fullcalendar/interaction";
  * Время для сотрудника
  * @todo https://fullcalendar.io/docs/businessHours-per-resource
  */
+$(document).ready(function () {
+    let elModalEvent = document.getElementById('modalEvent'),
+        modalEvent = new bootstrap.Modal(elModalEvent);
 
-document.addEventListener('DOMContentLoaded', function () {
     let calendarEl = document.getElementById('workScheduleCalendar');
 
     function getDate(date) {
@@ -54,6 +57,18 @@ document.addEventListener('DOMContentLoaded', function () {
         buttonText: {
             today: 'сегодня',
         },
+        eventClick: function(info) {
+            console.log(info);
+            console.log([
+                info.event.extendedProps.workSchedule.start,
+                info.event.extendedProps.workSchedule.end
+            ]);
+            workSchedulePost.selectedTime = [
+                info.event.extendedProps.workSchedule.start,
+                info.event.extendedProps.workSchedule.end
+            ]
+            modalEvent.show();
+        },
         select: function (info) {
             let counter = (info.end.getTime() - info.start.getTime()) / 86400000;
             for (let i = 0; i < counter; i++) {
@@ -64,7 +79,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 let isDelete = false;
 
                 calendar.getEvents().forEach((event) => {
-                    if (event.startStr === getStartDate || event.endStr === getEndDate) {
+                    if (event.extendedProps.workSchedule.startStr === getStartDate || event.extendedProps.workSchedule.endStr === getEndDate) {
                         isDelete = true;
 
                         event.remove();
@@ -77,24 +92,39 @@ document.addEventListener('DOMContentLoaded', function () {
                         start: getStartDate,
                         end: getEndDate,
                         workSchedule: {
-                            start: new Date(),
-                            end: new Date(),
+                            startStr: getStartDate,
+                            endStr: getEndDate,
                         },
                         overlap: true,
                         display: 'background',
                         color: 'rgba(0,90,255,0.4)'
                     });
+                    calendar.addEvent({
+                        id: i,
+                        start: getStartDate,
+                        end: getEndDate,
+                        workSchedule: {
+                            startStr: getStartDate,
+                            endStr: getEndDate,
+                            start: new Date(),
+                            end: new Date(),
+                        },
+                        display: 'block',
+                    });
                 }
             }
+            calendar.unselect();
         },
         eventContent: function (e) {
             let divEl = document.createElement('div');
-            divEl.className = 'eventBlock';
-            console.log(e);
-            divEl.innerHTML = `<div>${getHours(e.event.extendedProps.workSchedule.start)} - ${getHours(e.event.extendedProps.workSchedule.end)}</div>`;
-            let arrayOfDomNodes = [divEl];
+            divEl.className = 'eventBlockWorkShedule';
 
-            return {domNodes: arrayOfDomNodes};
+            if (e.event.display !== 'background') {
+                divEl.innerText = `${getHours(e.event.extendedProps.workSchedule.start)} - ${getHours(e.event.extendedProps.workSchedule.end)}`;
+                let arrayOfDomNodes = [divEl];
+
+                return {domNodes: arrayOfDomNodes};
+            }
         },
     });
 
@@ -133,7 +163,7 @@ let workSchedulePost = new Vue({
                     title: 'Выборочно',
                 },
             ],
-
+            selectedTime: [],
             object: {
                 dateRange: [],
 
@@ -165,7 +195,7 @@ let workSchedulePost = new Vue({
     },
     methods: {
         send() {
-            console.log(this.object);
+            console.log(this.selectedTime);
             return 1;
         },
 
