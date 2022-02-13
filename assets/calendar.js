@@ -3,10 +3,6 @@ import './app';
 import './styles/app.css';
 import './styles/calendar.css';
 
-import '/node_modules/bootstrap/dist/css/bootstrap.css';
-import '/node_modules/@fortawesome/fontawesome-free/css/all.css';
-import '/node_modules/@fullcalendar/common/main.css';
-
 import {Calendar} from '@fullcalendar/core';
 import interactionPlugin from "@fullcalendar/interaction";
 import bootstrapPlugin from '@fullcalendar/bootstrap';

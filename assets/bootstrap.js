@@ -29,6 +29,11 @@ export const app = startStimulusApp(require.context(
     /\.(j|t)sx?$/
 ));
 
+Date.prototype.addDay = function(d) {
+    this.setTime(this.getTime() + (d*24*60*60*1000));
+    return this;
+}
+
 Date.prototype.addHours = function(h) {
     this.setTime(this.getTime() + (h*60*60*1000));
     return this;

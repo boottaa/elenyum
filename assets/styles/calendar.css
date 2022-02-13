@@ -1,3 +1,7 @@
+@import '/node_modules/bootstrap/dist/css/bootstrap.css';
+@import '/node_modules/@fortawesome/fontawesome-free/css/all.css';
+@import '/node_modules/@fullcalendar/common/main.css';
+
 .fc .fc-button-primary {
     color: #fff !important;
     background-color: #2a84e1 !important;
@@ -44,4 +48,8 @@
 
 .fc-scrollgrid-section.fc-scrollgrid-section-header.fc-scrollgrid-section-sticky > th {
     background: #f6f7fb;
+}
+
+.fc .fc-bg-event {
+    opacity: 1!important;
 }

@@ -49,6 +49,14 @@ let employeeList = new Vue({
                         location.href = '/employee/post/' + id;
                     }
                 },
+                {
+                    value: 'График работы', type: 'success', onclick: (e) => {
+                        let button = $(e.target);
+                        let id = button.attr('data-id');
+
+                        location.href = '/workSchedule/post/' + id;
+                    }
+                },
             ],
         }
     },

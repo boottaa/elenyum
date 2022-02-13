@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Добавление должности{% endblock %}
+
+{% block style %}
+    {{ encore_entry_link_tags('calendar') }}
+{% endblock %}
+
+{% block js %}
+    {{ encore_entry_script_tags('workSchedulePost') }}
+{% endblock %}
+
+{% block body %}
+    <div id="workSchedulePost" class="row">
+        <h3 class="mb-4" style="border-bottom: solid 1px #a8a8a8">График работы</h3>
+        <vue-alert ref="alert"></vue-alert>
+        <div class="col-lg-12">
+            <div class="mb-3">
+                <label for="roles" class="form-label">Выберете период</label>
+                <br>
+                <div id="workScheduleCalendar"></div>
+            </div>
+
+            <div class="mb-3">
+                <label for="roles" class="form-label">Шаблон <span title="Выберете шаблон графика работы"><i class="fas fa-info-circle"></i></span></label>
+                <v-select id="selectPositions" aria-required="true" @change="onSelected" v-model="object.template" :options="templates" label="title"></v-select>
+            </div>
+            <div class="mb-3">
+                <vue-work-shedule v-model="object.monday" start="09:00" end="22:00" text="Понедельник"></vue-work-shedule>
+                <vue-work-shedule v-model="object.tuesday" start="09:00" end="22:00" text="Вторник"></vue-work-shedule>
+                <vue-work-shedule v-model="object.wednesday" start="09:00" end="22:00" text="Среда"></vue-work-shedule>
+                <vue-work-shedule v-model="object.thursday" start="09:00" end="22:00" text="Четверг"></vue-work-shedule>
+                <vue-work-shedule v-model="object.friday" start="09:00" end="22:00" text="Пятница"></vue-work-shedule>
+                <vue-work-shedule v-model="object.saturday" start="09:00" end="22:00" text="Суббота"></vue-work-shedule>
+                <vue-work-shedule v-model="object.sunday" start="09:00" end="22:00" text="Воскресенье"></vue-work-shedule>
+            </div>
+
+            <input type="button" v-on:click="send" class="btn btn-primary btn-user btn-block" value="Сохранить">
+        </div>
+        <div class="col-lg-4">
+            <div id=""></div>
+        </div>
+    </div>
+{% endblock %}
