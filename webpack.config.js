@@ -38,6 +38,7 @@ Encore
     .addEntry('positionPost', './assets/positionPost.js')
     .addEntry('positionList', './assets/positionList.js')
     .addEntry('workSchedulePost', './assets/workSchedulePost.js')
+    .addEntry('branchSetting', './assets/branchSetting.js')
 
     // enables the Symfony UX Stimulus bridge (used in assets/bootstrap.js)
     .enableStimulusBridge('./assets/controllers.json')

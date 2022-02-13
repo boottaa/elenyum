@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Добавление сотрудника{% endblock %}
+
+{% block style %}
+    {{ encore_entry_link_tags('calendar') }}
+{% endblock %}
+
+{% block js %}
+    {{ encore_entry_script_tags('branchSetting') }}
+{% endblock %}
+
+{% block body %}
+    <div id="branchSetting" class="row">
+        <h3 class="mb-4" style="border-bottom: solid 1px #a8a8a8">Настройки филиала</h3>
+        <vue-alert ref="alert"></vue-alert>
+        <div class="col-lg-4">
+            <div class="mb-3">
+                <label for="positionId" class="form-label">Названия филиала</label>
+                <input type="text" v-model="object.name" class="form-control" id="branchName" required>
+            </div>
+            <div class="mb-3">
+                <vue-work-shedule v-model="object.time" text="Выберите время" start="00:00" end="24:00"></vue-work-shedule>
+            </div>
+
+            <input type="button" v-on:click="send" class="btn btn-primary btn-user btn-block" value="Сохранить">
+        </div>
+    </div>
+{% endblock %}

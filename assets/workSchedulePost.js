@@ -57,16 +57,25 @@ $(document).ready(function () {
         buttonText: {
             today: 'сегодня',
         },
-        eventClick: function(info) {
-            console.log(info);
-            console.log([
+        eventClick: function (info) {
+            workSchedulePost.selected.time = [
                 info.event.extendedProps.workSchedule.start,
                 info.event.extendedProps.workSchedule.end
-            ]);
-            workSchedulePost.selectedTime = [
-                info.event.extendedProps.workSchedule.start,
-                info.event.extendedProps.workSchedule.end
-            ]
+            ];
+
+            info.event.extendedProps.workSchedule.start = new Date();
+
+            workSchedulePost.$once('editedEvent', (data) => {
+                if (data !== null) {
+
+                    info.event.extendedProps.workSchedule.start = data[0];
+                    info.event.extendedProps.workSchedule.end = data[1];
+                    modalEvent.hide();
+
+                    calendar.render();
+                }
+            });
+
             modalEvent.show();
         },
         select: function (info) {
@@ -106,8 +115,8 @@ $(document).ready(function () {
                         workSchedule: {
                             startStr: getStartDate,
                             endStr: getEndDate,
-                            start: new Date(),
-                            end: new Date(),
+                            start: dateStart.addHours(10),
+                            end: new Date(dateStart.getTime()).addHours(10),
                         },
                         display: 'block',
                     });
@@ -163,7 +172,10 @@ let workSchedulePost = new Vue({
                     title: 'Выборочно',
                 },
             ],
-            selectedTime: [],
+            selected: {
+                time: [],
+            },
+
             object: {
                 dateRange: [],
 
@@ -195,7 +207,10 @@ let workSchedulePost = new Vue({
     },
     methods: {
         send() {
-            console.log(this.selectedTime);
+            return 1;
+        },
+        onEditedTime() {
+            this.$emit('editedEvent', this.selected.time);
             return 1;
         },
 

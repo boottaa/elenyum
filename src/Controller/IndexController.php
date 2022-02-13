@@ -70,6 +70,16 @@ class IndexController extends AbstractController
         return $this->render('index/positionList.html.twig', []);
     }
 
+    #[Route('/branch/setting', name: 'branchSetting')]
+    public function branchSetting(): Response
+    {
+        if (!$this->isGranted('ROLE_'.Role::EMPLOYEE_POST)) {
+            return $this->redirectToRoute('login');
+        }
+
+        return $this->render('index/branchSetting.html.twig', []);
+    }
+
     #[Route('/workSchedule/post/{id<\d+>?}', name: 'workSchedulePost')]
     public function workSchedulePost(): Response
     {
