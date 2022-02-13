@@ -192,7 +192,9 @@ let workSchedulePost = new Vue({
             branch: {
                 item: null,
                 start: null,
-                end: null
+                end: null,
+                startTimeStr: null,
+                endTimeStr: null,
             }
         }
     },
@@ -202,8 +204,15 @@ let workSchedulePost = new Vue({
         get('/api/branch/get', (r) => {
             if (r.success === true) {
                 this.branch.item = r.item;
-                this.branch.start = new Date(r.item.start * 1000);
-                this.branch.end = new Date(r.item.end * 1000);
+                let start = new Date(r.item.start * 1000);
+                this.branch.start = start;
+                let end = new Date(r.item.end * 1000);
+                this.branch.end = end;
+
+                this.branch.startTimeStr = start.getHours().toString().padStart(2, '0') + ':' + start.getMinutes().toString().padStart(2, '0');
+                this.branch.endTimeStr = end.getHours().toString().padStart(2, '0') + ':' + end.getMinutes().toString().padStart(2, '0');
+
+                console.log(this.branch);
             }
         });
 

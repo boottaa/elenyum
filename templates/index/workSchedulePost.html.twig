@@ -44,7 +44,7 @@
                     <div class="modal-body">
                         <div class="row">
                             <div class="mb-3">
-                                <vue-work-shedule v-model="selected.time" text="Выберите время" start="09:00" end="22:00"></vue-work-shedule>
+                                <vue-work-shedule v-model="selected.time" text="Выберите время" :start="branch.startTimeStr" :end="branch.endTimeStr"></vue-work-shedule>
                             </div>
                         </div>
                     </div>

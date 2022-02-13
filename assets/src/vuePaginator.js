@@ -1,5 +1,4 @@
 import Vue from 'vue';
-import th from "vue2-datepicker/locale/es/th";
 
 export let vuePaginator = Vue.component('vue-paginator', {
     props: ['size', 'total', 'url', 'page'],
