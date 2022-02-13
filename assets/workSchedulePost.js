@@ -108,6 +108,16 @@ $(document).ready(function () {
                         display: 'background',
                         color: 'rgba(0,90,255,0.4)'
                     });
+                    let start = workSchedulePost.branch.start;
+                    let end = workSchedulePost.branch.end;
+                    let timeBranchWorkStart = (new Date(dateStart.getTime()));
+                    timeBranchWorkStart.setHours(start.getHours());
+                    timeBranchWorkStart.setMinutes(start.getMinutes());
+
+                    let timeBranchWorkEnd = (new Date(dateStart.getTime()));
+                    timeBranchWorkEnd.setHours(end.getHours());
+                    timeBranchWorkEnd.setMinutes(end.getMinutes());
+
                     calendar.addEvent({
                         id: i,
                         start: getStartDate,
@@ -115,8 +125,8 @@ $(document).ready(function () {
                         workSchedule: {
                             startStr: getStartDate,
                             endStr: getEndDate,
-                            start: dateStart.addHours(10),
-                            end: new Date(dateStart.getTime()).addHours(10),
+                            start: timeBranchWorkStart,
+                            end: timeBranchWorkEnd,
                         },
                         display: 'block',
                     });
@@ -179,10 +189,23 @@ let workSchedulePost = new Vue({
             object: {
                 template: null,
             },
+            branch: {
+                item: null,
+                start: null,
+                end: null
+            }
         }
     },
     created() {
         this.resetObject();
+
+        get('/api/branch/get', (r) => {
+            if (r.success === true) {
+                this.branch.item = r.item;
+                this.branch.start = new Date(r.item.start * 1000);
+                this.branch.end = new Date(r.item.end * 1000);
+            }
+        });
 
         let array = location.href.split('/', 6);
         let id = array[5];
