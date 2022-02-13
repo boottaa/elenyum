@@ -4,13 +4,15 @@ import Vue from 'vue';
 
 //https://www.npmjs.com/package/vue2-datepicker
 import {vueAlert} from "./src/vueAlert";
-import {get, post} from "./src/baseQuery";
+import {get, post, put} from "./src/baseQuery";
 import {vueWorkShedule} from "./src/vueWorkShedule";
 import DatePicker from "vue2-datepicker";
 
 let object = {
+    id: null,
     name: null,
-    time: [],
+    start: null,
+    end: null
 };
 
 let branchSetting = new Vue({
@@ -18,28 +20,35 @@ let branchSetting = new Vue({
     el: '#branchSetting',
     data() {
         return {
+            time: [],
             object: {
+                id: null,
                 name: null,
-                time: [],
+                start: null,
+                end: null
             },
         }
     },
     created() {
         this.resetObject();
 
-        let array = location.href.split('/', 6);
-        let id = array[5];
-
-        if (id !== undefined) {
-            // get('/api/workSchedule/get/' + id, (r) => {
-            //     if (r.success === true) {
-            //         this.object = r.item;
-            //     }
-            // });
-        }
+        get('/api/branch/get', (r) => {
+            if (r.success === true) {
+                this.object = r.item;
+                this.time.push(new Date(r.item.start * 1000));
+                this.time.push(new Date(r.item.end * 1000));
+            }
+        });
     },
     methods: {
         send() {
+            this.object.start = this.time[0];
+            this.object.end = this.time[1];
+            put('/api/branch/put', this.object.id, this.object, (result) => {
+                if (result.success === true) {
+                    branchSetting.$refs.alert.addAlert('Данные филиала обновлены', 'success');
+                }
+            });
             return 1;
         },
 

@@ -20,7 +20,7 @@
                 <input type="text" v-model="object.name" class="form-control" id="branchName" required>
             </div>
             <div class="mb-3">
-                <vue-work-shedule v-model="object.time" text="Выберите время" start="00:00" end="24:00"></vue-work-shedule>
+                <vue-work-shedule v-model="time" text="Выберите время" start="00:00" end="24:00"></vue-work-shedule>
             </div>
 
             <input type="button" v-on:click="send" class="btn btn-primary btn-user btn-block" value="Сохранить">

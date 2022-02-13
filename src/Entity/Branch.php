@@ -3,16 +3,18 @@
 namespace App\Entity;
 
 use App\Repository\BranchRepository;
+use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use JsonSerializable;
 
 /**
  * Филиалы компании
  *
  * @ORM\Entity(repositoryClass=BranchRepository::class)
  */
-class Branch
+class Branch implements JsonSerializable
 {
     /**
      * @ORM\Id
@@ -42,6 +44,16 @@ class Branch
      * @ORM\JoinColumn(nullable=false)
      */
     private Location $location;
+
+    /**
+     * @ORM\Column(type="datetime_immutable", nullable=true)
+     */
+    private ?DateTimeImmutable $start;
+
+    /**
+     * @ORM\Column(type="datetime_immutable", nullable=true)
+     */
+    private ?DateTimeImmutable $end;
 
     public function __construct()
     {
@@ -113,5 +125,53 @@ class Branch
     public function setLocation(Location $location): void
     {
         $this->location = $location;
+    }
+
+    /**
+     * @return DateTimeImmutable|null
+     */
+    public function getStart(): ?DateTimeImmutable
+    {
+        return $this->start;
+    }
+
+    /**
+     * @param DateTimeImmutable|null $start
+     * @return Branch
+     */
+    public function setStart(?DateTimeImmutable $start): Branch
+    {
+        $this->start = $start;
+
+        return $this;
+    }
+
+    /**
+     * @return DateTimeImmutable|null
+     */
+    public function getEnd(): ?DateTimeImmutable
+    {
+        return $this->end;
+    }
+
+    /**
+     * @param DateTimeImmutable|null $end
+     * @return Branch
+     */
+    public function setEnd(?DateTimeImmutable $end): Branch
+    {
+        $this->end = $end;
+
+        return $this;
+    }
+
+    public function jsonSerialize()
+    {
+        return [
+            'id' => $this->getId(),
+            'name' => $this->getName(),
+            'start' => $this->getStart()?->getTimestamp(),
+            'end' => $this->getEnd()?->getTimestamp(),
+        ];
     }
 }

@@ -177,17 +177,7 @@ let workSchedulePost = new Vue({
             },
 
             object: {
-                dateRange: [],
-
                 template: null,
-
-                monday: [],
-                tuesday: [],
-                wednesday: [],
-                thursday: [],
-                friday: [],
-                saturday: [],
-                sunday: []
             },
         }
     },

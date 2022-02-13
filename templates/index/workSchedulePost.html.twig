@@ -26,9 +26,6 @@
                 <label for="roles" class="form-label">Шаблон <span title="Выберете шаблон графика работы"><i class="fas fa-info-circle"></i></span></label>
                 <v-select id="selectPositions" aria-required="true" @change="onSelected" v-model="object.template" :options="templates" label="title"></v-select>
             </div>
-            <div class="mb-3">
-                <vue-work-shedule v-model="object.monday" start="09:00" end="22:00"></vue-work-shedule>
-            </div>
 
             <input type="button" v-on:click="send" class="btn btn-primary btn-user btn-block" value="Сохранить">
         </div>
