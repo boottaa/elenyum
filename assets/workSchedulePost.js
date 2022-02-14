@@ -98,6 +98,11 @@ $(document).ready(function () {
                         event.remove();
                     }
                 });
+                if (isDelete) {
+                    workSchedulePost.object.workSchedules = workSchedulePost.object.workSchedules.filter((event) => {
+                        return ! (event.startStr === getStartDate || event.endStr === getEndDate);
+                    });
+                }
 
                 if (isDelete === false) {
                     calendar.addEvent({
@@ -122,16 +127,18 @@ $(document).ready(function () {
                     timeBranchWorkEnd.setHours(end.getHours());
                     timeBranchWorkEnd.setMinutes(end.getMinutes());
 
+                    let workSchedule = {
+                        startStr: getStartDate,
+                        endStr: getEndDate,
+                        start: timeBranchWorkStart,
+                        end: timeBranchWorkEnd,
+                    };
+                    workSchedulePost.object.workSchedules.push(workSchedule);
                     calendar.addEvent({
                         id: i,
                         start: getStartDate,
                         end: getEndDate,
-                        workSchedule: {
-                            startStr: getStartDate,
-                            endStr: getEndDate,
-                            start: timeBranchWorkStart,
-                            end: timeBranchWorkEnd,
-                        },
+                        workSchedule: workSchedule,
                         display: 'block',
                     });
                 }
@@ -152,14 +159,14 @@ $(document).ready(function () {
     });
 
 
-    workSchedulePost.$once('selectedTemplate', (data) => {
-        calendar.render();
-    });
+    // workSchedulePost.$once('selectedTemplate', (data) => {
+    calendar.render();
+    // });
 });
 
 let object = {
-    title: null,
-    template: null,
+    employeeId: null,
+    workSchedules: [],
 };
 
 let workSchedulePost = new Vue({
@@ -194,7 +201,8 @@ let workSchedulePost = new Vue({
             },
 
             object: {
-                template: null,
+                employeeId: null,
+                workSchedules: [],
             },
             branch: {
                 item: null,
@@ -227,6 +235,7 @@ let workSchedulePost = new Vue({
         let id = array[5];
 
         if (id !== undefined) {
+            this.object.employeeId = id;
             // get('/api/workSchedule/get/' + id, (r) => {
             //     if (r.success === true) {
             //         this.object = r.item;
@@ -237,7 +246,11 @@ let workSchedulePost = new Vue({
     methods: {
         send() {
 
-            console.log(this.object);
+            post('/api/workShedule/post/collection', this.object, (result) => {
+                if (result.success === true) {
+                    console.log(result);
+                }
+            });
             return 1;
         },
         onEditedTime() {

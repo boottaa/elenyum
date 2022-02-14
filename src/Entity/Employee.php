@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use App\Repository\EmployeeRepository;
 use DateTimeImmutable;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use JsonSerializable;
 use \Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Doctrine\ORM\Mapping as ORM;
@@ -97,9 +99,15 @@ class Employee implements UserInterface, PasswordHasherAwareInterface, PasswordA
      */
     private Position $position;
 
+    /**
+     * @ORM\OneToMany(targetEntity=WorkSchedule::class, mappedBy="employeeId")
+     */
+    private $workSchedules;
+
     public function __construct()
     {
         $this->setCreatedAt(new DateTimeImmutable());
+        $this->workSchedules = new ArrayCollection();
     }
 
     public function getId(): int
@@ -351,5 +359,35 @@ class Employee implements UserInterface, PasswordHasherAwareInterface, PasswordA
             'additionalPhone' => $this->getAdditionalPhone(),
             'dateBrith' => $this->getDateBrith()?->format('d.m.Y') ?? '-',
         ];
+    }
+
+    /**
+     * @return Collection|WorkSchedule[]
+     */
+    public function getWorkSchedules(): Collection
+    {
+        return $this->workSchedules;
+    }
+
+    public function addWorkSchedule(WorkSchedule $workSchedule): self
+    {
+        if (!$this->workSchedules->contains($workSchedule)) {
+            $this->workSchedules[] = $workSchedule;
+            $workSchedule->setEmployee($this);
+        }
+
+        return $this;
+    }
+
+    public function removeWorkSchedule(WorkSchedule $workSchedule): self
+    {
+        if ($this->workSchedules->removeElement($workSchedule)) {
+            // set the owning side to null (unless already changed)
+            if ($workSchedule->getEmployee() === $this) {
+                $workSchedule->setEmployee(null);
+            }
+        }
+
+        return $this;
     }
 }
