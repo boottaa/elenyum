@@ -7,6 +7,7 @@ import '../src/vueOperationSelect';
 import DatePicker from 'vue2-datepicker';
 import {isValid} from "../validator/validator";
 import {menuItems, paymentTypes, sheduleStatus, sheduleObject} from "./objects";
+import {get} from "../src/baseQuery";
 
 //https://vue-select.org/guide/values.html#getting-and-setting
 Vue.component('v-select', vSelect);
@@ -21,7 +22,31 @@ export let modalVue = new Vue({
             paymentTypes: paymentTypes,
             object: Object.assign({}, sheduleObject),
             menuItems: menuItems,
+
+            branch: {
+                item: null,
+                start: null,
+                end: null,
+                startTimeStr: null,
+                endTimeStr: null,
+            }
         }
+    },
+    created() {
+        get('/api/branch/get', (r) => {
+            if (r.success === true) {
+                this.branch.item = r.item;
+                let start = new Date(r.item.start * 1000);
+                this.branch.start = start;
+                let end = new Date(r.item.end * 1000);
+                this.branch.end = end;
+
+                this.branch.startTimeStr = start.getHours().toString().padStart(2, '0') + ':' + start.getMinutes().toString().padStart(2, '0');
+                this.branch.endTimeStr = end.getHours().toString().padStart(2, '0') + ':' + end.getMinutes().toString().padStart(2, '0');
+
+                this.$emit('branchDataLoaded', this.branch);
+            }
+        });
     },
 
     computed: {

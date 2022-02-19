@@ -44,6 +44,7 @@ $(document).ready(function () {
         return date;
     }
 
+    // Для заполнения графика сотрудников по шаблону (Пока этого нет)
     function lastday(y, m){
         return  new Date(y, m +1, 0).getDate();
     }
@@ -100,11 +101,9 @@ $(document).ready(function () {
                     }
                 });
                 if (isDelete) {
-                    console.log(workSchedulePost.object.workSchedules);
                     workSchedulePost.object.workSchedules = workSchedulePost.object.workSchedules.filter((event) => {
                         return ! (event.startStr === getStartDate || event.endStr === getEndDate);
                     });
-                    console.log(workSchedulePost.object.workSchedules);
                 }
 
                 if (isDelete === false) {
@@ -270,10 +269,9 @@ let workSchedulePost = new Vue({
     },
     methods: {
         send() {
-
             post('/api/workSchedule/post/collection', this.object, (result) => {
                 if (result.success === true) {
-                    console.log(result);
+                    workSchedulePost.$refs.alert.addAlert('График сотрудника обновлён', 'success');
                 }
             });
             return 1;
