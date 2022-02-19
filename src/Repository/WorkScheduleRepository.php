@@ -14,7 +14,7 @@ use Exception;
  * @method WorkSchedule[]    findAll()
  * @method WorkSchedule[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class WorkScheduleRepository extends ServiceEntityRepository
+class WorkScheduleRepository extends ServiceEntityRepository implements ListRepositoryInterface
 {
     public function __construct(ManagerRegistry $registry)
     {
@@ -27,13 +27,14 @@ class WorkScheduleRepository extends ServiceEntityRepository
      * @return Paginator
      * @throws Exception
      */
-    public function listByUser(?array $params, int $page): Paginator
+    public function list(?array $params, int $page): Paginator
     {
         $userId = $params['userId'];
         $qb = $this->createQueryBuilder('ws')
             ->orderBy('ws.id', 'DESC');
 
         $qb->where('ws.employee=:userId');
+        $qb->setParameter('userId', $userId);
 
         return (new Paginator($qb))->paginate($page);
     }

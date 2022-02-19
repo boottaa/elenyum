@@ -5,7 +5,6 @@ namespace App\Controller;
 use App\Entity\Employee;
 use App\Entity\Role;
 use App\Exception\ArrayException;
-use App\Service\BranchService;
 use App\Service\WorkSheduleService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -18,20 +17,26 @@ class WorkSheduleController extends AbstractController
     /**
      * @param int $userId
      * @param Request $request
+     * @param WorkSheduleService $service
      * @return Response
+     * @throws ArrayException
      */
     #[IsGranted('ROLE_'.Role::EMPLOYEE_POST)]
-    #[Route('/api/workShedule/list/{userId<\d+>?}', name: 'apiWorkSheduleListByUser')]
-    public function list(int $userId, Request $request): Response
+    #[Route('/api/workSchedule/list/{userId<\d+>?}', name: 'apiWorkSheduleList', methods: 'GET')]
+    public function list(int $userId, Request $request, WorkSheduleService $service): Response
     {
-        $user = $this->getUser();
-        if (!$user instanceof Employee) {
-            return $this->json((new ArrayException('Пользователь не найден', 202))->toArray());
-        }
+        $params = [
+            'userId' => $userId
+        ];
+        $page = $request->get('page', 1);
+        $list = $service->list($params, $page);
 
         return $this->json([
             'success' => true,
-            'items' => $user,
+            'items' => $list->getResults(),
+            'total' => $list->getNumResults(),
+            'page' => $list->getCurrentPage(),
+            'size' => $list->getPageSize(),
         ]);
     }
 
@@ -39,11 +44,10 @@ class WorkSheduleController extends AbstractController
      * @param Request $request
      * @param WorkSheduleService $service
      * @return Response
-     * @throws ArrayException
      * @throws \JsonException
      */
     #[IsGranted('ROLE_'.Role::EMPLOYEE_POST)]
-    #[Route('/api/workShedule/post/collection', name: 'apiWorkShedulePostCollectionByUser', methods: 'POST')]
+    #[Route('/api/workSchedule/post/collection', name: 'apiWorkShedulePostCollection', methods: 'POST')]
     public function post(Request $request, WorkSheduleService $service): Response
     {
         $user = $this->getUser();

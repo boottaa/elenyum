@@ -2,7 +2,6 @@
 
 namespace App\Service;
 
-use App\Entity\Branch;
 use App\Entity\Employee;
 use App\Entity\WorkSchedule;
 use App\Repository\WorkScheduleRepository;
@@ -42,9 +41,12 @@ class WorkSheduleService extends BaseAbstractService
     /**
      * @param array $data
      * @return bool
+     * @throws \Doctrine\DBAL\Exception
      */
     public function postCollection(array $data): bool
     {
+        $this->em->getConnection()->executeQuery("DELETE FROM work_schedule WHERE employee_id={$data['employeeId']}");
+
         $employee = $this->em->getRepository(Employee::class)->find($data['employeeId']);
         $items = $data['data'];
 

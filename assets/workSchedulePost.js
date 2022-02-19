@@ -89,6 +89,7 @@ $(document).ready(function () {
                 let dateEnd = addDay(new Date(info.start.getTime()), i + 1);
                 let getStartDate = getDate(dateStart);
                 let getEndDate = getDate(dateEnd);
+
                 let isDelete = false;
 
                 calendar.getEvents().forEach((event) => {
@@ -99,24 +100,14 @@ $(document).ready(function () {
                     }
                 });
                 if (isDelete) {
+                    console.log(workSchedulePost.object.workSchedules);
                     workSchedulePost.object.workSchedules = workSchedulePost.object.workSchedules.filter((event) => {
                         return ! (event.startStr === getStartDate || event.endStr === getEndDate);
                     });
+                    console.log(workSchedulePost.object.workSchedules);
                 }
 
                 if (isDelete === false) {
-                    calendar.addEvent({
-                        id: i,
-                        start: getStartDate,
-                        end: getEndDate,
-                        workSchedule: {
-                            startStr: getStartDate,
-                            endStr: getEndDate,
-                        },
-                        overlap: true,
-                        display: 'background',
-                        color: 'rgba(0,90,255,0.4)'
-                    });
                     let start = workSchedulePost.branch.start;
                     let end = workSchedulePost.branch.end;
                     let timeBranchWorkStart = (new Date(dateStart.getTime()));
@@ -128,19 +119,15 @@ $(document).ready(function () {
                     timeBranchWorkEnd.setMinutes(end.getMinutes());
 
                     let workSchedule = {
+                        id: i,
                         startStr: getStartDate,
                         endStr: getEndDate,
                         start: timeBranchWorkStart,
                         end: timeBranchWorkEnd,
                     };
+
+                    addWorkSchedule(calendar, workSchedule);
                     workSchedulePost.object.workSchedules.push(workSchedule);
-                    calendar.addEvent({
-                        id: i,
-                        start: getStartDate,
-                        end: getEndDate,
-                        workSchedule: workSchedule,
-                        display: 'block',
-                    });
                 }
             }
             calendar.unselect();
@@ -158,9 +145,49 @@ $(document).ready(function () {
         },
     });
 
+     function addWorkSchedule (calendar, workSchedule) {
+        calendar.addEvent({
+            id: workSchedule.id,
+            start: workSchedule.startStr,
+            end: workSchedule.endStr,
+            workSchedule: workSchedule,
+            overlap: true,
+            display: 'background',
+            color: 'rgba(0,90,255,0.4)'
+        });
 
+        calendar.addEvent({
+            id: workSchedule.id,
+            start: workSchedule.start,
+            end: workSchedule.end,
+            workSchedule: workSchedule,
+            display: 'block',
+        });
+    }
+
+
+    //Если выбран шаблон то выводим календарь
     // workSchedulePost.$once('selectedTemplate', (data) => {
     calendar.render();
+
+    workSchedulePost.$once('workSchedulesLoaded', (data) => {
+        data.forEach(i => {
+            let start = new Date(i.start);
+            let end = new Date(i.end);
+            let endStr = getDate(addDay(new Date(i.end), 1));
+            let workSchedule = {
+                id: i.id,
+                startStr: getDate(start),
+                endStr: endStr,
+                start: start,
+                end: end,
+            };
+
+            addWorkSchedule(calendar, workSchedule);
+            workSchedulePost.object.workSchedules.push(workSchedule);
+            calendar.render();
+        })
+    });
     // });
 });
 
@@ -226,8 +253,6 @@ let workSchedulePost = new Vue({
 
                 this.branch.startTimeStr = start.getHours().toString().padStart(2, '0') + ':' + start.getMinutes().toString().padStart(2, '0');
                 this.branch.endTimeStr = end.getHours().toString().padStart(2, '0') + ':' + end.getMinutes().toString().padStart(2, '0');
-
-                console.log(this.branch);
             }
         });
 
@@ -236,17 +261,17 @@ let workSchedulePost = new Vue({
 
         if (id !== undefined) {
             this.object.employeeId = id;
-            // get('/api/workSchedule/get/' + id, (r) => {
-            //     if (r.success === true) {
-            //         this.object = r.item;
-            //     }
-            // });
+            get('/api/workSchedule/list/' + id, (r) => {
+                if (r.success === true) {
+                    this.$emit('workSchedulesLoaded', r.items);
+                }
+            });
         }
     },
     methods: {
         send() {
 
-            post('/api/workShedule/post/collection', this.object, (result) => {
+            post('/api/workSchedule/post/collection', this.object, (result) => {
                 if (result.success === true) {
                     console.log(result);
                 }
