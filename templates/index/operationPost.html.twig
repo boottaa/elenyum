@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Добавление должности{% endblock %}
+
+{% block style %}
+    {{ encore_entry_link_tags('calendar') }}
+{% endblock %}
+
+{% block js %}
+    {{ encore_entry_script_tags('operationPost') }}
+{% endblock %}
+
+{% block body %}
+    <div id="operationPost" class="row">
+        <h3 class="mb-4" style="border-bottom: solid 1px #a8a8a8">Добавление услуги</h3>
+        <vue-alert ref="alert"></vue-alert>
+        <div class="col-lg-4">
+            <div class="mb-3">
+                <label for="title" class="form-label">Название услуги</label>
+                <input type="text" v-model="object.title" class="form-control" id="title" required>
+            </div>
+            <div class="mb-3">
+                <label for="price" class="form-label">Цена</label>
+                <input type="text" v-model="object.price" class="form-control" id="price" required>
+            </div>
+            <div class="mb-3">
+                <label for="duration" class="form-label">Время <span title="Введите время которое занимает услуга в минутах"><i class="fas fa-info-circle"></i></span></label>
+                <input type="text" v-model="object.duration" class="form-control" id="duration" required>
+            </div>
+            <input type="button" v-on:click="send" class="btn btn-primary btn-user btn-block" value="Сохранить">
+        </div>
+    </div>
+{% endblock %}

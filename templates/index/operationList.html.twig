@@ -1,0 +1,19 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Список сотрудников{% endblock %}
+
+{% block style %}
+    {{ encore_entry_link_tags('calendar') }}
+{% endblock %}
+
+{% block js %}
+    {{ encore_entry_script_tags('operationList') }}
+{% endblock %}
+
+{% block body %}
+    <div id="operationList" class="row">
+        <h3 class="mb-4" style="border-bottom: solid 1px #a8a8a8">Список услуг</h3>
+        <vue-alert ref="alert"></vue-alert>
+        <vue-list :headers="headers" :actions="actions" :url="url" :onprepare="prepare"></vue-list>
+    </div>
+{% endblock %}

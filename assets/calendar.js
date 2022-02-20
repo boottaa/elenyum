@@ -221,8 +221,8 @@ $(function () {
                 let diffMins = parseInt((e.event.end.getTime() - e.event.start.getTime()) / 60000); // minutes
                 if (e.event.extendedProps.operations) {
                     let invisible = '';
-                    let minutes = 15;
-                    if (diffMins < (minutes * e.event.extendedProps.operations.length) + minutes) {
+                    let slotDurationMinutes = 15;
+                    if (diffMins < (slotDurationMinutes * e.event.extendedProps.operations.length) + slotDurationMinutes) {
                         invisible = 'display: none;';
                         divEl.innerHTML += `<span class="eventHoverShowOperations"
                                         style="padding: 2px 10px; position: absolute; top:0; right: 0;">
