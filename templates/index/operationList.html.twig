@@ -12,7 +12,10 @@
 
 {% block body %}
     <div id="operationList" class="row">
-        <h3 class="mb-4" style="border-bottom: solid 1px #a8a8a8">Список услуг</h3>
+        <h3 class="mb-4" style="border-bottom: solid 1px #a8a8a8">
+            Список услуг
+            <a class="btn btn-outline-dark btn-add-item-to-list" title="Добавить услугу" href="{{ path('operationPost') }}">+</a>
+        </h3>
         <vue-alert ref="alert"></vue-alert>
         <vue-list :headers="headers" :actions="actions" :url="url" :onprepare="prepare"></vue-list>
     </div>

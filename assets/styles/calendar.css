@@ -53,3 +53,14 @@
 .fc .fc-bg-event {
     opacity: 1!important;
 }
+
+.btn-add-item-to-list {
+    border-radius: 50%;
+    width: 1em;
+    height: 1em;
+    vertical-align: middle;
+    padding: 0;
+    font-size: 40px;
+    line-height: 34px;
+    margin-bottom: 10px;
+}
