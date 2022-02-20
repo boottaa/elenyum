@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>{% block title %}Welcome!{% endblock %}</title>
+    <title>{% block title %}ELENYUM!{% endblock %}</title>
     <link rel="icon"
           href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -25,7 +25,7 @@
     <ul class="navbar-nav el-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
         <!-- Sidebar - Brand -->
-        <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+        <a class="sidebar-brand d-flex align-items-center justify-content-center" href="/calendar">
             <div class="main-brand-icon rotate-270">
                 <i class="fas fa-dice-d20"></i>
             </div>
@@ -57,11 +57,6 @@
         <!-- Divider -->
         <hr class="sidebar-divider">
 
-        <!-- Heading -->
-        <div class="sidebar-heading">
-            Interface
-        </div>
-
         <!-- Nav Item - Pages Collapse Menu -->
 {#        <li class="nav-item">#}
 {#            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"#}
@@ -88,10 +83,10 @@
                  data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
                     <h6 class="collapse-header">Филиал:</h6>
-                    <a class="collapse-item" href="{{ path('branchSetting') }}">Настройки филиала</a>
-                    <a class="collapse-item" href="{{ path('operationList') }}">Услуг</a>
-                    <a class="collapse-item" href="{{ path('employeeList') }}">Cотрудники</a>
-                    <a class="collapse-item" href="{{ path('positionList') }}">Должности</a>
+                    <a class="collapse-item {{ app.request.get('_route') == 'branchSetting' ? 'active' }}"  href="{{ path('branchSetting') }}">Настройки филиала</a>
+                    <a class="collapse-item {{ app.request.get('_route') == 'operationList' ? 'active' }}" href="{{ path('operationList') }}">Услуг</a>
+                    <a class="collapse-item {{ app.request.get('_route') == 'employeeList' ? 'active' }}" href="{{ path('employeeList') }}">Cотрудники</a>
+                    <a class="collapse-item {{ app.request.get('_route') == 'positionList' ? 'active' }}" href="{{ path('positionList') }}">Должности</a>
                 </div>
             </div>
         </li>
