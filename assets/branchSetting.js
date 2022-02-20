@@ -12,7 +12,8 @@ let object = {
     id: null,
     name: null,
     start: null,
-    end: null
+    end: null,
+    address: null,
 };
 
 let branchSetting = new Vue({
@@ -24,6 +25,7 @@ let branchSetting = new Vue({
             object: {
                 id: null,
                 name: null,
+                address: null,
                 start: null,
                 end: null
             },

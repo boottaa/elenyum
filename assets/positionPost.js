@@ -5,9 +5,10 @@ import {isValid} from "./validator/validator";
 import './src/vueRoleSelect';
 //https://www.npmjs.com/package/vue2-datepicker
 import {vueAlert} from "./src/vueAlert";
-import {get, post} from "./src/baseQuery";
+import {get, post, put} from "./src/baseQuery";
 
 let object = {
+    id: null,
     inCalendar: null,
     title: null,
     roles: null,
@@ -20,6 +21,7 @@ let positionPost = new Vue({
         return {
             roles: null,
             object: {
+                id: null,
                 inCalendar: null,
                 title: null,
                 roles: null,
@@ -43,10 +45,6 @@ let positionPost = new Vue({
     methods: {
         validation() {
             let items = {
-                '#inCalendar': {
-                    value: this.object.inCalendar,
-                    validators: ['notEmpty'],
-                },
                 '#title': {
                     value: this.object.title,
                     validators: ['notEmpty'],
@@ -60,16 +58,26 @@ let positionPost = new Vue({
         },
         send() {
             if (this.validation()) {
-                post('/api/position/post', this.object, (result) => {
-                    if (result.success === true) {
-                        positionPost.$refs.alert.addAlert('Должность добавлена', 'success');
-                        this.resetObject();
-                    }
-                });
+                console.log(this.object.id);
+                if (this.object.id === null) {
+                    post('/api/position/post', this.object, (result) => {
+                        if (result.success === true) {
+                            positionPost.$refs.alert.addAlert('Должность добавлена', 'success');
+                            this.resetObject();
+                        }
+                    });
+                } else {
+                    put('/api/position/put', this.object.id, this.object, (result) => {
+                        if (result.success === true) {
+                            positionPost.$refs.alert.addAlert('Должность обновлена', 'success');
+                            this.resetObject();
+                        }
+                    });
+                }
             }
         },
-        loadedRoles(roles) {
-            this.roles = roles
+        loadedRoles(data) {
+            this.roles = data.items
 
             let r = [];
             this.object.roles.map((item, index) => {
@@ -83,6 +91,8 @@ let positionPost = new Vue({
                     }
                 });
             });
+
+            console.log(r);
 
             this.object.roles = r;
         },

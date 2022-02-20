@@ -75,7 +75,7 @@ class RegistrationController extends AbstractController
 
             $branch = new Branch();
             $branch->setCompany($company);
-            $branch->setName($data['companyName'].' - 1');
+            $branch->setName($data['companyName']);
             $employee->setBranch($branch);
             $location = new Location();
             $location->setAddress($data['address']);

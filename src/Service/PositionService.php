@@ -44,7 +44,7 @@ class PositionService extends BaseAbstractService
      * @throws ArrayException
      */
     public function put(array $data): bool {
-        $positionData = $data['position'];
+        $positionData = $data['data'];
         $position = $this->em->getRepository(Position::class)->find($positionData['id']);
         if (!$position instanceof Position) {
             throw new ArrayException('Not defined'.Position::class, '422');

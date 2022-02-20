@@ -20,6 +20,10 @@
                 <input type="text" v-model="object.name" class="form-control" id="branchName" required>
             </div>
             <div class="mb-3">
+                <label for="positionId" class="form-label">Адрес филиала</label>
+                <input type="text" v-model="object.address" class="form-control" id="branchAddress" required>
+            </div>
+            <div class="mb-3">
                 <vue-work-shedule v-model="time" text="Выберите время" start="00:00" end="24:00"></vue-work-shedule>
             </div>
 

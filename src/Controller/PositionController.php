@@ -115,7 +115,7 @@ class PositionController extends AbstractController
      * @throws \JsonException
      */
     #[IsGranted('ROLE_'.Role::EMPLOYEE_POST)]
-    #[Route('/api/position/put', name: 'apiPositionPut', methods: 'PUT')]
+    #[Route('/api/position/put/{positionId<\d+>?}', name: 'apiPositionPut', methods: 'PUT')]
     public function put(Request $request, PositionService $service): Response
     {
         $user = $this->getUser();
@@ -123,7 +123,7 @@ class PositionController extends AbstractController
             return $this->json((new ArrayException('Пользователь не найден', 202))->toArray());
         }
 
-        $data['position'] = json_decode($request->getContent(), true, 512, JSON_THROW_ON_ERROR);
+        $data['data'] = json_decode($request->getContent(), true, 512, JSON_THROW_ON_ERROR);
         $data['user'] = $user;
 
         $service->put($data);

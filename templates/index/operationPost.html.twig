@@ -21,11 +21,17 @@
             </div>
             <div class="mb-3">
                 <label for="price" class="form-label">Цена</label>
-                <input type="text" v-model="object.price" class="form-control" id="price" required>
+                <div class="input-group mb-3">
+                    <input type="number" v-model="object.price" class="form-control" id="price" required>
+                    <span class="input-group-text">руб.</span>
+                </div>
             </div>
             <div class="mb-3">
                 <label for="duration" class="form-label">Время <span title="Введите время которое занимает услуга в минутах"><i class="fas fa-info-circle"></i></span></label>
-                <input type="text" v-model="object.duration" class="form-control" id="duration" required>
+                <div class="input-group mb-3">
+                    <input type="number" v-model="object.duration" class="form-control" id="duration" required>
+                    <span class="input-group-text">мин</span>
+                </div>
             </div>
             <input type="button" v-on:click="send" class="btn btn-primary btn-user btn-block" value="Сохранить">
         </div>

@@ -26,6 +26,7 @@ class BranchService extends BaseAbstractService
     private function hydrate(Branch $branch, array $data): void
     {
         $branch->setName($data['name']);
+        $branch->getLocation()->setAddress($data['address']);
 
         $start = DateTimeImmutable::createFromFormat('U', strtotime($data['start']))->setTimezone(
             new DateTimeZone('Europe/Moscow')
