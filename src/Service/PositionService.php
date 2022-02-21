@@ -3,7 +3,9 @@
 namespace App\Service;
 
 use App\Entity\Employee;
+use App\Entity\Operation;
 use App\Entity\Position;
+use App\Entity\PositionOperation;
 use App\Entity\PositionRole;
 use App\Exception\ArrayException;
 use App\Repository\PositionRepository;
@@ -25,7 +27,7 @@ class PositionService extends BaseAbstractService
      */
     private function hydrate(Position $position, array $data): void
     {
-        $position->setInCalendar((bool) $data['inCalendar']);
+        $position->setInCalendar((bool)$data['inCalendar']);
         $position->setTitle($data['title']);
         $this->em->persist($position);
         $positionRole = new PositionRole();
@@ -33,6 +35,20 @@ class PositionService extends BaseAbstractService
 
         foreach ($data['roles'] as $role) {
             $positionRole->addRole($role['id']);
+        }
+
+        if ($id = $position->getId()) {
+            $this->em->getConnection()->executeQuery("DELETE FROM position_operation WHERE position_id={$id}");
+        }
+        $operations = $this->em->getRepository(Operation::class)->findBy(['id' => $data['operations']]);
+
+        foreach ($operations as $operation) {
+            if ($operation instanceof Operation) {
+                $positionOperation = new PositionOperation();
+                $positionOperation->setPosition($position);
+                $positionOperation->setOperation($operation);
+                $this->em->persist($positionOperation);
+            }
         }
 
         $this->em->persist($positionRole);
@@ -43,7 +59,8 @@ class PositionService extends BaseAbstractService
      * @return bool
      * @throws ArrayException
      */
-    public function put(array $data): bool {
+    public function put(array $data): bool
+    {
         $positionData = $data['data'];
         $position = $this->em->getRepository(Position::class)->find($positionData['id']);
         if (!$position instanceof Position) {
@@ -89,6 +106,7 @@ class PositionService extends BaseAbstractService
             throw new ArrayException('Not defined'.Position::class, '422');
         }
 
+        $this->em->getConnection()->executeQuery("DELETE FROM position_operation WHERE position_id={$id}");
         $this->em->remove($position->getPositionRole());
         $this->em->remove($position);
         $this->em->flush();

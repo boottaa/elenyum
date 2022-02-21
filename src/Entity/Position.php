@@ -47,6 +47,11 @@ class Position implements JsonSerializable
     private PositionRole $positionRole;
 
     /**
+     * @ORM\OneToOne(targetEntity=PositionOperation::class, mappedBy="position")
+     */
+    private PositionOperation $positionOperation;
+
+    /**
      * @ORM\ManyToOne(targetEntity=Company::class)
      * @ORM\JoinColumn(nullable=false)
      */
@@ -159,6 +164,26 @@ class Position implements JsonSerializable
      * @return Position
      */
     public function setPositionRole(PositionRole $positionRole): Position
+    {
+        $positionRole->setPosition($this);
+        $this->positionRole = $positionRole;
+
+        return $this;
+    }
+
+    /**
+     * @return PositionRole
+     */
+    public function getPositionOperation(): PositionRole
+    {
+        return $this->positionRole;
+    }
+
+    /**
+     * @param PositionRole $positionRole
+     * @return Position
+     */
+    public function setPositionOperation(PositionRole $positionRole): Position
     {
         $positionRole->setPosition($this);
         $this->positionRole = $positionRole;

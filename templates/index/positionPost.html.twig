@@ -25,6 +25,10 @@
                 <v-roles v-model="object.roles" id="roles" @loaded="loadedRoles"></v-roles>
             </div>
             <div class="mb-3">
+                <label for="operations" class="form-label">Услуги <span title="Выберете услуги для должности"><i class="fas fa-info-circle"></i></span></label>
+                <v-operation v-model="object.operations" id="operations"></v-operation>
+            </div>
+            <div class="mb-3">
                 <div class="form-check form-check-inline">
                     <input class="form-check-input" v-model="object.inCalendar" type="checkbox" id="inCalendar" value="1">
                     <label class="form-check-label" for="inCalendar">Отображать в календаре? <span title="Ели на данную должность могут быть добавлены записи то поставьте чекбокс"><i class="fas fa-info-circle"></i></span></label>

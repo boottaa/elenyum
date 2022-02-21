@@ -70,10 +70,6 @@ let employeePost = new Vue({
                     value: this.object.email,
                     validators: ['notEmpty'],
                 },
-                '#additionalPhone': {
-                    value: this.object.additionalPhone,
-                    validators: ['notEmpty'],
-                },
                 '#dateBrith': {
                     value: this.object.dateBrith,
                     validators: ['notEmpty'],

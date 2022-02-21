@@ -84,9 +84,9 @@
                 <div class="bg-white py-2 collapse-inner rounded">
                     <h6 class="collapse-header">Филиал:</h6>
                     <a class="collapse-item {{ app.request.get('_route') == 'branchSetting' ? 'active' }}"  href="{{ path('branchSetting') }}">Настройки филиала</a>
-                    <a class="collapse-item {{ app.request.get('_route') == 'operationList' ? 'active' }}" href="{{ path('operationList') }}">Услуг</a>
-                    <a class="collapse-item {{ app.request.get('_route') == 'employeeList' ? 'active' }}" href="{{ path('employeeList') }}">Cотрудники</a>
                     <a class="collapse-item {{ app.request.get('_route') == 'positionList' ? 'active' }}" href="{{ path('positionList') }}">Должности</a>
+                    <a class="collapse-item {{ app.request.get('_route') == 'employeeList' ? 'active' }}" href="{{ path('employeeList') }}">Cотрудники</a>
+                    <a class="collapse-item {{ app.request.get('_route') == 'operationList' ? 'active' }}" href="{{ path('operationList') }}">Услуг</a>
                 </div>
             </div>
         </li>
