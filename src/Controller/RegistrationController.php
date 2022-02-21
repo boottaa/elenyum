@@ -61,7 +61,7 @@ class RegistrationController extends AbstractController
             }
 
             $employee = new Employee();
-            $employee->setStatus(0);
+            $employee->setStatus(Employee::STATUS_NEW);
             $employee->setPhone($data['phone']);
             $employee->setName($data['userName']);
             $employee->setEmail($data['email']);

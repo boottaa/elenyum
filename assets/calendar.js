@@ -49,6 +49,7 @@ $(function () {
     };
 
     modalVue.$once('branchDataLoaded', (branchData) => {
+        console.log(branchData);
         let calendar = new Calendar(calendarEl, {
             plugins: [resourceTimeGridPlugin, bootstrapPlugin, scrollGridPlugin, dayGridPlugin, interactionPlugin],
             locale: 'ru',
@@ -106,7 +107,12 @@ $(function () {
                 let divEl = document.createElement('div'),
                     resourceImg = renderInfo.resource.extendedProps.img === null ? '/img/defaultEmployee.png' : renderInfo.resource.extendedProps.img;
 
-                divEl.innerHTML += `<div style="font-size: 20px" class="resourceName mr-2 d-lg-inline text-gray-600">${renderInfo.resource.extendedProps.name}&nbsp;&nbsp;&nbsp;
+                let name = renderInfo.resource.extendedProps.name,
+                    fio = name.split(' ');
+                if(fio.length > 1) {
+                    name = fio[0] + ' .' + fio[1].substr(0, 1);
+                }
+                divEl.innerHTML += `<div style="font-size: 20px" class="resourceName mr-2 d-lg-inline text-gray-600"><span title="${renderInfo.resource.extendedProps.name}">${name}<span> &nbsp;
                                     <img style="width: 30px; vertical-align: -3px;" src="${resourceImg}" class="img-profile rounded-circle" alt="${renderInfo.resource.extendedProps.name}">
                                 </div>`;
                 let arrayOfDomNodes = [divEl];

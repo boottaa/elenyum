@@ -170,8 +170,8 @@ class Branch implements JsonSerializable
         return [
             'id' => $this->getId(),
             'name' => $this->getName(),
-            'start' => $this->getStart()?->getTimestamp(),
-            'end' => $this->getEnd()?->getTimestamp(),
+            'start' => $this->getStart(),
+            'end' => $this->getEnd(),
             'address' => $this->getLocation()->getAddress(),
         ];
     }

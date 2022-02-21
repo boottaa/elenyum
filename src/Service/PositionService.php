@@ -25,7 +25,7 @@ class PositionService extends BaseAbstractService
      */
     private function hydrate(Position $position, array $data): void
     {
-        $position->setInCalendar($data['inCalendar']);
+        $position->setInCalendar((bool) $data['inCalendar']);
         $position->setTitle($data['title']);
         $this->em->persist($position);
         $positionRole = new PositionRole();

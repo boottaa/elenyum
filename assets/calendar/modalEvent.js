@@ -36,9 +36,9 @@ export let modalVue = new Vue({
         get('/api/branch/get', (r) => {
             if (r.success === true) {
                 this.branch.item = r.item;
-                let start = new Date(r.item.start * 1000);
+                let start = new Date(r.item.start);
                 this.branch.start = start;
-                let end = new Date(r.item.end * 1000);
+                let end = new Date(r.item.end);
                 this.branch.end = end;
 
                 this.branch.startTimeStr = start.getHours().toString().padStart(2, '0') + ':' + start.getMinutes().toString().padStart(2, '0');
