@@ -20,10 +20,36 @@ class PositionService extends BaseAbstractService
         $this->repository = $repository;
     }
 
+    public function get(int $id): array
+    {
+        $item = $this->repository->get($id);
+
+        $result = [];
+        if (!empty($item)) {
+            $result = [
+                'id' => $item['id'],
+                'title' => $item['title'],
+                'inCalendar' => $item['inCalendar'],
+                'roles' => array_map(
+                    static function ($item) {
+                        return (int) $item;
+                    },
+                    explode('.', $item['positionRole']['roles'] ?? [])
+                ),
+                'operations' => array_map(static function ($item) {
+                    return $item['operation']['id'];
+                }, $item['positionOperation'] ?? []),
+            ];
+        }
+
+        return $result;
+    }
+
     /**
      * @param Position $position
      * @param array $data
      * @return void
+     * @throws \Doctrine\DBAL\Exception
      */
     private function hydrate(Position $position, array $data): void
     {
@@ -33,6 +59,9 @@ class PositionService extends BaseAbstractService
         $positionRole = new PositionRole();
         $positionRole->setPosition($position);
 
+        if ($id = $position->getId()) {
+            $this->em->getConnection()->executeQuery("DELETE FROM position_role WHERE position_id={$id}");
+        }
         foreach ($data['roles'] as $role) {
             $positionRole->addRole($role['id']);
         }
@@ -103,7 +132,7 @@ class PositionService extends BaseAbstractService
     {
         $position = $this->em->find(Position::class, $id);
         if (!$position instanceof Position) {
-            throw new ArrayException('Not defined'.Position::class, '422');
+            throw new ArrayException('Not defined '.Position::class, '422');
         }
 
         $this->em->getConnection()->executeQuery("DELETE FROM position_operation WHERE position_id={$id}");

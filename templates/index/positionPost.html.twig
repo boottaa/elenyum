@@ -26,7 +26,7 @@
             </div>
             <div class="mb-3">
                 <label for="operations" class="form-label">Услуги <span title="Выберете услуги для должности"><i class="fas fa-info-circle"></i></span></label>
-                <v-operation v-model="object.operations" id="operations"></v-operation>
+                <v-operation v-model="object.operations" id="operations" @loaded="loadedOperations"></v-operation>
             </div>
             <div class="mb-3">
                 <div class="form-check form-check-inline">

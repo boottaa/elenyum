@@ -47,9 +47,9 @@ class Position implements JsonSerializable
     private PositionRole $positionRole;
 
     /**
-     * @ORM\OneToOne(targetEntity=PositionOperation::class, mappedBy="position")
+     * @ORM\OneToMany(targetEntity=PositionOperation::class, mappedBy="position")
      */
-    private PositionOperation $positionOperation;
+    private Collection $positionOperation;
 
     /**
      * @ORM\ManyToOne(targetEntity=Company::class)
@@ -65,6 +65,7 @@ class Position implements JsonSerializable
     public function __construct()
     {
         $this->employee = new ArrayCollection();
+        $this->positionOperation = new ArrayCollection();
         $this->setCreatedAt(new DateTimeImmutable());
     }
 
@@ -172,23 +173,11 @@ class Position implements JsonSerializable
     }
 
     /**
-     * @return PositionRole
+     * @return Collection|PositionOperation[]
      */
-    public function getPositionOperation(): PositionRole
+    public function getPositionOperation(): Collection|array
     {
-        return $this->positionRole;
-    }
-
-    /**
-     * @param PositionRole $positionRole
-     * @return Position
-     */
-    public function setPositionOperation(PositionRole $positionRole): Position
-    {
-        $positionRole->setPosition($this);
-        $this->positionRole = $positionRole;
-
-        return $this;
+        return $this->positionOperation;
     }
 
     /**
@@ -212,13 +201,12 @@ class Position implements JsonSerializable
 
     public function jsonSerialize(): array
     {
-        $roles = [];
-
         return [
             'id' => $this->getId(),
             'title' => $this->getTitle(),
             'inCalendar' => $this->getInCalendar(),
             'roles' => $this->getPositionRole()->getRoles(),
+            'operations' => $this->getPositionOperation()->getValues(),
         ];
     }
 }

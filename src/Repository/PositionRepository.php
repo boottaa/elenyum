@@ -7,6 +7,7 @@ use App\Entity\Position;
 use App\Exception\ArrayException;
 use App\Utils\Paginator;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\AbstractQuery;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -39,5 +40,23 @@ class PositionRepository extends ServiceEntityRepository implements ListReposito
             ->setParameter('company', $company);
 
         return (new Paginator($qb))->paginate($page);
+    }
+
+    /**
+     * @param int $id
+     * @return array
+     */
+    public function get(int $id): array
+    {
+        $qb = $this->createQueryBuilder("p")
+            ->select('p', 'po', 'r', 'o')
+            ->orderBy('p.id', 'ASC')
+            ->where('p.id=:id')
+            ->leftJoin('p.positionRole', 'r')
+            ->leftJoin('p.positionOperation', 'po')
+            ->leftJoin('po.operation', 'o')
+            ->setParameter('id', $id);
+
+        return $qb->getQuery()->getOneOrNullResult(AbstractQuery::HYDRATE_ARRAY);
     }
 }

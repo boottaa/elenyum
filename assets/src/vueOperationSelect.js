@@ -64,6 +64,8 @@ export let menu = Vue.component('v-operation', {
                     this.total = data.total;
                     this.page = data.page;
                     this.size = data.size;
+
+                    this.$emit('loaded', data);
                 }
             });
         },

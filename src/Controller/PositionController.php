@@ -72,8 +72,8 @@ class PositionController extends AbstractController
     }
 
     #[IsGranted('ROLE_'.Role::EMPLOYEE_POST)]
-    #[Route('/api/position/get/{id<\d+>}', name: 'apiPositionGet', methods: 'GET')]
-    public function getPosition(Position $position): Response
+    #[Route('/api/position/get/{positionId<\d+>}', name: 'apiPositionGet', methods: 'GET')]
+    public function getPosition(int $positionId, PositionService $service): Response
     {
         $user = $this->getUser();
         if (!$user instanceof Employee) {
@@ -82,7 +82,7 @@ class PositionController extends AbstractController
 
         return $this->json([
             'success' => true,
-            'item' => $position,
+            'item' => $service->get($positionId),
         ]);
     }
 

@@ -22,6 +22,7 @@ let positionPost = new Vue({
     data() {
         return {
             roles: null,
+            operations: null,
             object: {
                 id: null,
                 inCalendar: null,
@@ -79,7 +80,6 @@ let positionPost = new Vue({
                     put('/api/position/put', result.id, result, (result) => {
                         if (result.success === true) {
                             positionPost.$refs.alert.addAlert('Должность обновлена', 'success');
-                            this.resetObject();
                         }
                     });
                 }
@@ -91,7 +91,7 @@ let positionPost = new Vue({
             let r = [];
             this.object.roles.map((item, index) => {
                 this.roles.forEach(i => {
-                    if (i.id?.toString() === item) {
+                    if (i.id === item) {
                         r.push({
                             id: i.id,
                             title: i.title,
@@ -102,6 +102,25 @@ let positionPost = new Vue({
             });
 
             this.object.roles = r;
+        },
+
+
+        loadedOperations(data) {
+            this.operations = data.items
+
+            let r = [];
+            this.object.operations.map((item, index) => {
+                this.operations.forEach(i => {
+                    if (i.id === item) {
+                        r.push({
+                            id: i.id,
+                            title: i.title
+                        });
+                    }
+                });
+            });
+
+            this.object.operations = r;
         },
 
         resetObject() {
