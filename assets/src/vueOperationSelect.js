@@ -3,14 +3,14 @@ import Vue from "vue";
 
 export let menu = Vue.component('v-operation', {
     components: {vSelect},
-    props: ['value'],
+    props: ['value', 'employee'],
     data() {
         return {
             select: null,
             items: [],
             total: 0,
             page: 1,
-            size: 0,
+            size: 0
         }
     },
     mounted() {
@@ -20,6 +20,9 @@ export let menu = Vue.component('v-operation', {
         value() {
             this.select = this.value;
         },
+        employee() {
+            this.getData();
+        }
     },
     template: `
       <v-select id="selectOperations"
@@ -30,22 +33,26 @@ export let menu = Vue.component('v-operation', {
                 :options="items"
                 label="title"
                 :get-option-label="(operation) => operation.title">
-          <template #no-options>
-              Услуга не найдена
-          </template>
-          <template #option="{ title, price, duration }">
-              {{ title }}
-              <br/>
-              <i>{{ price }} руб.</i> <i style="color: #05885d;">({{ duration }} мин.)</i>
-          </template>
-          <li slot="list-footer" class="pagination-sm">
-            <nav aria-label="Page navigation example">
-              <ul class="pagination justify-content-center">
-                <li class="page-item" :class="[{disabled: !hasPrevPage}]"><button class="page-link" @click="prevPage">Назад</button></li>
-                <li class="page-item" :class="[{disabled: !hasNextPage}]"><button class="page-link" @click="nextPage">Далее</button></li>
-              </ul>
-            </nav>
-          </li>
+      <template #no-options>
+        Услуга не найдена
+      </template>
+      <template #option="{ title, price, duration }">
+        {{ title }}
+        <br/>
+        <i>{{ price }} руб.</i> <i style="color: #05885d;">({{ duration }} мин.)</i>
+      </template>
+      <li slot="list-footer" class="pagination-sm">
+        <nav aria-label="Page navigation example">
+          <ul class="pagination justify-content-center">
+            <li class="page-item" :class="[{disabled: !hasPrevPage}]">
+              <button class="page-link" @click="prevPage">Назад</button>
+            </li>
+            <li class="page-item" :class="[{disabled: !hasNextPage}]">
+              <button class="page-link" @click="nextPage">Далее</button>
+            </li>
+          </ul>
+        </nav>
+      </li>
       </v-select>
     `,
     computed: {
@@ -58,7 +65,11 @@ export let menu = Vue.component('v-operation', {
     },
     methods: {
         getData() {
-            $.get("/api/operation/list?page=" + this.page , (data) => {
+            let resource = '';
+            if (!!this.employee) {
+                resource = "&employee=" + this.employee;
+            }
+            $.get("/api/operation/list?page=" + this.page + resource, (data) => {
                 if (data.success === true) {
                     this.items = data.items;
                     this.total = data.total;

@@ -51,7 +51,7 @@
                                 </div>
                                 <div class="mb-3">
                                     <label for="operations" class="form-label">Выберите услуги</label>
-                                    <v-operation v-model="object.operations" @input="changeOperation"></v-operation>
+                                    <v-operation v-model="object.operations" :employee="object.resourceId" @input="changeOperation"></v-operation>
                                     <template v-if="object.operations.length > 0" v-for="operation in object.operations">
                                         <div class="input-group mt-1">
                                             <span style="width: 80%" class="input-group-text"

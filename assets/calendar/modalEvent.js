@@ -95,6 +95,7 @@ export let modalVue = new Vue({
             }
             return totalDuration;
         },
+
         validation() {
             let items = {
                 '#clientPhone': {
@@ -120,6 +121,7 @@ export let modalVue = new Vue({
             };
             return isValid(items);
         },
+
         send() {
             if (this.validation()) {
                 this.$emit('send', JSON.parse(JSON.stringify(this.object, (key, value) => {
@@ -128,6 +130,7 @@ export let modalVue = new Vue({
                 this.resetObject();
             }
         },
+
         remove() {
             this.$emit('remove', JSON.parse(JSON.stringify(this.object, (key, value) => {
                 return value

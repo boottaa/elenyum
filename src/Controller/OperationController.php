@@ -21,7 +21,7 @@ class OperationController extends AbstractController
      * @return Response
      * @throws ArrayException
      */
-    #[IsGranted('ROLE_' . Role::OPERATION_GET)]
+    #[IsGranted('ROLE_'.Role::OPERATION_GET)]
     #[Route('/api/operation/list', name: 'operation')]
     public function list(OperationService $service, Request $request): Response
     {
@@ -30,7 +30,10 @@ class OperationController extends AbstractController
         if (!$user instanceof Employee) {
             return $this->json((new ArrayException('Пользователь не найден', 202))->toArray());
         }
-        $list = $service->list(['company' => $user->getCompany()], $page);
+        $list = $service->list([
+            'company' => $user->getCompany(),
+            'employee' => $request->get('employee'),
+        ], $page);
 
         return $this->json([
             'success' => true,

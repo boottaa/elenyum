@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\OperationRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use JsonSerializable;
 
@@ -38,6 +40,16 @@ class Operation implements JsonSerializable
      * @ORM\JoinColumn(nullable=false)
      */
     private Company $company;
+
+    /**
+     * @ORM\OneToMany(targetEntity=PositionOperation::class, mappedBy="operation")
+     */
+    private Collection $positionOperation;
+
+    public function __construct()
+    {
+        $this->positionOperation = new ArrayCollection();
+    }
 
     public function getId(): int
     {

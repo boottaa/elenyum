@@ -49,7 +49,6 @@ $(function () {
     };
 
     modalVue.$once('branchDataLoaded', (branchData) => {
-        console.log(branchData);
         let calendar = new Calendar(calendarEl, {
             plugins: [resourceTimeGridPlugin, bootstrapPlugin, scrollGridPlugin, dayGridPlugin, interactionPlugin],
             locale: 'ru',

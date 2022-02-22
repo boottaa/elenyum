@@ -24,7 +24,7 @@ class PositionOperation
     private Position $position;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Operation::class)
+     * @ORM\ManyToOne(targetEntity=Operation::class, inversedBy="positionOperation")
      * @ORM\JoinColumn(nullable=false)
      */
     private Operation $operation;
