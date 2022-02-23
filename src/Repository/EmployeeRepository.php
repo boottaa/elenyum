@@ -33,9 +33,10 @@ class EmployeeRepository extends ServiceEntityRepository implements ListReposito
             throw new ArrayException('Company undefined', '422');
         }
         $qb = $this->createQueryBuilder("e")
-            ->select('e')
+            ->select('e', 'PARTIAL p.{id,title}')
             ->orderBy('e.id', 'ASC')
             ->where('e.company=:company')
+            ->leftJoin('e.position', 'p')
             ->setParameter('company', $company);
 
         return (new Paginator($qb))->paginate($page);

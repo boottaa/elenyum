@@ -45,6 +45,7 @@ class PositionRepository extends ServiceEntityRepository implements ListReposito
     /**
      * @param int $id
      * @return array
+     * @throws \Doctrine\ORM\NonUniqueResultException
      */
     public function get(int $id): array
     {

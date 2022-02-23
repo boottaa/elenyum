@@ -12,7 +12,7 @@ use JsonSerializable;
 /**
  * @ORM\Entity(repositoryClass=PositionRepository::class)
  */
-class Position implements JsonSerializable
+class Position
 {
     /**
      * @ORM\Id
@@ -197,16 +197,5 @@ class Position implements JsonSerializable
         $this->company = $company;
 
         return $this;
-    }
-
-    public function jsonSerialize(): array
-    {
-        return [
-            'id' => $this->getId(),
-            'title' => $this->getTitle(),
-            'inCalendar' => $this->getInCalendar(),
-            'roles' => $this->getPositionRole()->getRoles(),
-            'operations' => $this->getPositionOperation()->getValues(),
-        ];
     }
 }

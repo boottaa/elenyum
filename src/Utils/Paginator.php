@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Utils;
 
 use ArrayIterator;
+use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\QueryBuilder as DoctrineQueryBuilder;
 use Doctrine\ORM\Tools\Pagination\CountWalker;
 use Doctrine\ORM\Tools\Pagination\Paginator as DoctrinePaginator;
@@ -48,6 +49,8 @@ class Paginator
         if (0 === \count($this->queryBuilder->getDQLPart('join'))) {
             $query->setHint(CountWalker::HINT_DISTINCT, false);
         }
+
+        $query->setHydrationMode(AbstractQuery::HYDRATE_ARRAY);
 
         $paginator = new DoctrinePaginator($query, true);
 
