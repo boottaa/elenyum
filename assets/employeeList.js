@@ -64,7 +64,21 @@ let employeeList = new Vue({
         prepare(data) {
             data.items.map((i) => {
                 i.position = i.position.title;
+                if (!!i.dateBrith) {
+                    let st = i.dateBrith;
+                    if (!!st) {
+                        let pattern = /(\d{2})\.(\d{2})\.(\d{4})/;
+                        let date = new Date(st.replace(pattern, '$3-$2-$1'));
+                        i.dateBrith = this.getDate(date);
+                    }
+                    // console.log(i.dateBrith.replace(pattern, '$3-$2-$1'));
+                    // i.dateBrith = i.dateBrith.replace(pattern, '$3-$2-$1')
+                }
             });
+        },
+
+        getDate(date) {
+            return date.getDate().toString().padStart(2, '0') + '.' + String(date.getMonth() + 1).padStart(2, '0') + '.' + date.getFullYear().toString();
         }
     },
     delimiters: ['${', '}$'],

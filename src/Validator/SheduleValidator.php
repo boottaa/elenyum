@@ -34,7 +34,7 @@ class SheduleValidator extends AbstractBaseValidator
                     'price' => new Constraints\Type('integer'),
                     'duration' => new Constraints\Type('integer'),
                     'count' => new Constraints\Type('integer'),
-                ]),
+                ], null, null, true, false),
             ),
         ], null, null, true, false);
 

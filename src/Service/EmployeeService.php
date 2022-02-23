@@ -29,6 +29,13 @@ class EmployeeService extends BaseAbstractService
         return $this->repository->listForCalendar($params);
     }
 
+
+
+    public function get(int $id): array
+    {
+        return $this->repository->get($id);
+    }
+
     /**
      * @param Employee $employee
      * @param array $data

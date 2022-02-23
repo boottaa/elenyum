@@ -7,6 +7,7 @@ use App\Entity\Employee;
 use App\Exception\ArrayException;
 use App\Utils\Paginator;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\AbstractQuery;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -40,6 +41,23 @@ class EmployeeRepository extends ServiceEntityRepository implements ListReposito
             ->setParameter('company', $company);
 
         return (new Paginator($qb))->paginate($page);
+    }
+
+    /**
+     * @param int $id
+     * @return array
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    public function get(int $id): array
+    {
+        $qb = $this->createQueryBuilder("e")
+            ->select('e', 'PARTIAL p.{id,title}')
+            ->orderBy('e.id', 'ASC')
+            ->where('e.id=:id')
+            ->leftJoin('e.position', 'p')
+            ->setParameter('id', $id);
+
+        return $qb->getQuery()->getOneOrNullResult(AbstractQuery::HYDRATE_ARRAY);
     }
 
 

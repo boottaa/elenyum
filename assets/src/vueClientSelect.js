@@ -99,16 +99,12 @@ export let menu = Vue.component('v-client', {
                     phone: null,
                     name: null,
                 };
-            }
-
-            this.$emit('input', this.select);
-        },
-
-        createClient(value) {
-            this.select = {
-                phone: value,
-                id: null,
-                name: null,
+            } else {
+                this.select = {
+                    phone: value,
+                    id: null,
+                    name: null,
+                }
             }
 
             this.$emit('input', this.select);

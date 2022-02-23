@@ -45,8 +45,10 @@ let employeePost = new Vue({
                 if (r.success === true) {
                     this.object = r.item;
                     let st = r.item.dateBrith;
-                    let pattern = /(\d{2})\.(\d{2})\.(\d{4})/;
-                    this.object.dateBrith = new Date(st.replace(pattern, '$3-$2-$1'));
+                    if (!!st) {
+                        let pattern = /(\d{2})\.(\d{2})\.(\d{4})/;
+                        this.object.dateBrith = new Date(st.replace(pattern, '$3-$2-$1'));
+                    }
                 }
             });
         }

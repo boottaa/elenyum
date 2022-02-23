@@ -66,8 +66,8 @@ class EmployeeController extends AbstractController
     }
 
     #[IsGranted('ROLE_'.Role::EMPLOYEE_GET)]
-    #[Route('/api/employee/get/{id<\d+>}', name: 'apiEmployeeGet', methods: 'GET')]
-    public function getEmployee(Employee $employee): Response
+    #[Route('/api/employee/get/{employeeId<\d+>}', name: 'apiEmployeeGet', methods: 'GET')]
+    public function getEmployee(int $employeeId, EmployeeService $service): Response
     {
         $user = $this->getUser();
         if (!$user instanceof Employee) {
@@ -76,7 +76,7 @@ class EmployeeController extends AbstractController
 
         return $this->json([
             'success' => true,
-            'item' => $employee,
+            'item' => $service->get($employeeId),
         ]);
     }
 
