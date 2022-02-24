@@ -1,7 +1,7 @@
 import './app';
 import "./src/baseCalendar";
 import Vue from 'vue';
-import {del, get} from "./src/baseQuery";
+import {del} from "./src/baseQuery";
 import {vueList} from "./src/vueList";
 import {vueAlert} from "./src/vueAlert";
 
@@ -64,15 +64,17 @@ let employeeList = new Vue({
         prepare(data) {
             data.items.map((i) => {
                 i.position = i.position.title;
-                if (!!i.dateBrith) {
-                    let st = i.dateBrith;
-                    if (!!st) {
-                        let pattern = /(\d{2})\.(\d{2})\.(\d{4})/;
-                        let date = new Date(st.replace(pattern, '$3-$2-$1'));
-                        i.dateBrith = this.getDate(date);
-                    }
-                    // console.log(i.dateBrith.replace(pattern, '$3-$2-$1'));
-                    // i.dateBrith = i.dateBrith.replace(pattern, '$3-$2-$1')
+                let st = i.dateBrith;
+                if (!!st) {
+                    let pattern = /(\d{2})\.(\d{2})\.(\d{4})/;
+                    let date = new Date(st.replace(pattern, '$3-$2-$1'));
+                    i.dateBrith = this.getDate(date);
+                } else {
+                    i.dateBrith = '-';
+                }
+
+                if(!i.additionalPhone) {
+                    i.additionalPhone = '-';
                 }
             });
         },
