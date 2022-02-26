@@ -108,8 +108,8 @@ $(function () {
 
                 let name = renderInfo.resource.extendedProps.name,
                     fio = name.split(' ');
-                if(fio.length > 1) {
-                    name = fio[0] + ' .' + fio[1].substr(0, 1);
+                if (fio.length > 1) {
+                    name = fio[0] + ' ' + fio[1].substr(0, 1) + '.';
                 }
                 divEl.innerHTML += `<div style="font-size: 20px" class="resourceName mr-2 d-lg-inline text-gray-600"><span title="${renderInfo.resource.extendedProps.name}">${name}<span> &nbsp;
                                     <img style="width: 30px; vertical-align: -3px;" src="${resourceImg}" class="img-profile rounded-circle" alt="${renderInfo.resource.extendedProps.name}">
