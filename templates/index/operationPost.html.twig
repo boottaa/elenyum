@@ -4,6 +4,19 @@
 
 {% block style %}
     {{ encore_entry_link_tags('calendar') }}
+    <style>
+        /* Chrome, Safari, Edge, Opera */
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        /* Firefox */
+        input[type=number] {
+            -moz-appearance: textfield;
+        }
+    </style>
 {% endblock %}
 
 {% block js %}
@@ -22,15 +35,15 @@
             <div class="mb-3">
                 <label for="price" class="form-label">Цена</label>
                 <div class="input-group mb-3">
-                    <input type="number" v-model="object.price" class="form-control" id="price" required>
+                    <input type="number" v-model="object.price" min="1" class="form-control" id="price" required>
                     <span class="input-group-text">руб.</span>
                 </div>
             </div>
             <div class="mb-3">
                 <label for="duration" class="form-label">Время <span title="Введите время которое занимает услуга в минутах"><i class="fas fa-info-circle"></i></span></label>
                 <div class="input-group mb-3">
-                    <input type="number" v-model="object.duration" class="form-control" id="duration" required>
-                    <span class="input-group-text">мин</span>
+{#                    <input type="number" v-model="object.duration" class="form-control" id="duration" required>#}
+                    <date-picker aria-required="true" id="dateBrith" style="width: 100%" format="HH:mm" v-model="object.duration" type="time"></date-picker>
                 </div>
             </div>
             <input type="button" v-on:click="send" class="btn btn-primary btn-user btn-block" value="Сохранить">

@@ -73,7 +73,7 @@ let employeeList = new Vue({
                     i.dateBrith = '-';
                 }
 
-                if(!i.additionalPhone) {
+                if (!i.additionalPhone) {
                     i.additionalPhone = '-';
                 }
             });

@@ -52,6 +52,13 @@ let operationList = new Vue({
         prepare(data) {
             data.items.map((i) => {
                 i.inCalendar = i.inCalendar === true ? 'Да' : 'Нет';
+                let time = new Date();
+                time.setHours(0);
+                time.setMinutes(0);
+                time.setSeconds(0);
+                time = new Date(time.getTime() + i.duration * 60000);
+
+                i.duration = time.getHours().toString().padStart(2, '0') + ':' + time.getMinutes().toString().padStart(2, '0');
             });
         }
     },

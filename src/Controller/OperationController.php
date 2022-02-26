@@ -113,7 +113,7 @@ class OperationController extends AbstractController
      * @throws \JsonException
      */
     #[IsGranted('ROLE_'.Role::EMPLOYEE_POST)]
-    #[Route('/api/operation/put', name: 'apiOperationPut', methods: 'PUT')]
+    #[Route('/api/operation/put/{operationId<\d+>?}', name: 'apiOperationPut', methods: 'PUT')]
     public function put(Request $request, OperationService $service): Response
     {
         $user = $this->getUser();
