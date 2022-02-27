@@ -61,6 +61,12 @@ class Client
      */
     private DateTimeImmutable $createdAt;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Company::class)
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private Company $company;
+
     public function __construct()
     {
         $this->setCreatedAt(new DateTimeImmutable());
@@ -184,6 +190,25 @@ class Client
     public function setCreatedAt(DateTimeImmutable $createdAt): self
     {
         $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    /**
+     * @return Company
+     */
+    public function getCompany(): Company
+    {
+        return $this->company;
+    }
+
+    /**
+     * @param Company $company
+     * @return $this
+     */
+    public function setCompany(Company $company): Client
+    {
+        $this->company = $company;
 
         return $this;
     }

@@ -32,16 +32,7 @@ class RolesCommand extends Command
     {
         $io = new SymfonyStyle($input, $output);
 
-        $roles = [
-            Role::BRANCH_SETTING => ['title' => 'BRANCH_SETTING', 'description' => 'Настройка филиала'],
-            Role::SHEDULE_ME => ['title' => 'SHEDULE_ME', 'description' => 'Получение записей только по себе'],
-            Role::SHEDULE_ALL => ['title' => 'SHEDULE_ALL', 'description' => 'Получение записей по всем сотрудников и добавление, редактирование и удаление записей'],
-            Role::POSITION_EDIT => ['title' => 'POSITION_EDIT', 'description' => 'Добавление, редактирование и удаление должностей'],
-            Role::EMPLOYEE_EDIT => ['title' => 'EMPLOYEE_EDIT', 'description' => 'Добавление, редактирование и удаление сотрудников'],
-            Role::OPERATION_EDIT => ['title' => 'OPERATION_EDIT', 'description' => 'Добавление, редактирование и удаление услуг'],
-            Role::WORK_SCHEDULE_EDIT => ['title' => 'WORK_SCHEDULE_EDIT', 'description' => 'Добавление, редактирование и удаление графика работы'],
-            Role::WORK_SCHEDULE_VIEW => ['title' => 'WORK_SCHEDULE_VIEW', 'description' => 'Просмотр графика работы'],
-        ];
+        $roles = Role::ROLES;
 
         $this->em->getConnection()->prepare('DELETE FROM role;')->executeQuery();
         foreach ($roles as $key => $role) {

@@ -30,12 +30,15 @@ class ClientRepository extends ServiceEntityRepository implements ListRepository
     public function list(?array $params, int $page): Paginator
     {
         $query = $params['query'];
+        $company = $params['company'];
 
         $qb = $this->createQueryBuilder('c')
-            ->orderBy('c.id', 'DESC');
+            ->orderBy('c.id', 'DESC')
+            ->where('c.company=:company')
+            ->setParameter('company', $company);
 
         if (!empty($query)) {
-            $qb->where('c.phone LIKE :query');
+            $qb->andWhere('c.phone LIKE :query');
             $qb->setParameter('query', "%{$query}%");
         }
 

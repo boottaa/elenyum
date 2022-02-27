@@ -21,7 +21,7 @@ class OperationController extends AbstractController
      * @return Response
      * @throws ArrayException
      */
-    #[IsGranted('ROLE_'.Role::OPERATION_EDIT)]
+    #[IsGranted(Role::ROLE_OPERATION_EDIT)]
     #[Route('/api/operation/list', name: 'operation')]
     public function list(OperationService $service, Request $request): Response
     {
@@ -49,7 +49,7 @@ class OperationController extends AbstractController
      * @param OperationService $service
      * @return Response
      */
-    #[IsGranted('ROLE_'.Role::OPERATION_EDIT)]
+    #[IsGranted(Role::ROLE_OPERATION_EDIT)]
     #[Route('/api/operation/delete/{operationId<\d+>}', name: 'apiOperationDelete', methods: 'DELETE')]
     public function delete(int $operationId, OperationService $service): Response
     {
@@ -69,7 +69,7 @@ class OperationController extends AbstractController
         ]);
     }
 
-    #[IsGranted('ROLE_'.Role::OPERATION_EDIT)]
+    #[IsGranted(Role::ROLE_OPERATION_EDIT)]
     #[Route('/api/operation/get/{id<\d+>}', name: 'apiOperationGet', methods: 'GET')]
     public function getOperation(Operation $operation): Response
     {
@@ -88,7 +88,7 @@ class OperationController extends AbstractController
      * @throws ArrayException
      * @throws \JsonException
      */
-    #[IsGranted('ROLE_'.Role::OPERATION_EDIT)]
+    #[IsGranted(Role::ROLE_OPERATION_EDIT)]
     #[Route('/api/operation/post', name: 'apiOperationPost', methods: 'POST')]
     public function post(Request $request, OperationService $service): Response
     {
@@ -112,7 +112,7 @@ class OperationController extends AbstractController
      * @throws ArrayException
      * @throws \JsonException
      */
-    #[IsGranted('ROLE_'.Role::OPERATION_EDIT)]
+    #[IsGranted(Role::ROLE_OPERATION_EDIT)]
     #[Route('/api/operation/put/{operationId<\d+>?}', name: 'apiOperationPut', methods: 'PUT')]
     public function put(Request $request, OperationService $service): Response
     {

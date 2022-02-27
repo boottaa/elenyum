@@ -29,7 +29,7 @@ class SheduleController extends AbstractController
     #[Route('/api/shedule/list', name: 'sheduleList')]
     public function list(Request $request, SheduleRepository $sheduleRepository): Response
     {
-        if (! $this->isGranted('ROLE_'.Role::SHEDULE_ALL) && ! $this->isGranted('ROLE_'.Role::SHEDULE_ME)) {
+        if (! $this->isGranted(Role::ROLE_SHEDULE_ALL) && ! $this->isGranted(Role::ROLE_SHEDULE_ME)) {
             return $this->json((new ArrayException('Нет прав', 202))->toArray());
         }
 
@@ -65,7 +65,6 @@ class SheduleController extends AbstractController
      * @throws \Doctrine\ORM\NonUniqueResultException
      * @throws \JsonException
      */
-    #[IsGranted('ROLE_'.Role::SHEDULE_ALL)]
     #[Route('/api/shedule/post', name: 'shedulePost', methods: ['POST'])]
     public function post(
         Request $request,
@@ -73,6 +72,15 @@ class SheduleController extends AbstractController
         SheduleValidator $validator,
         SheduleRepository $sheduleRepository
     ): Response {
+        if (! $this->isGranted(Role::ROLE_SHEDULE_ALL) && ! $this->isGranted(Role::ROLE_SHEDULE_ME)) {
+            return $this->json((new ArrayException('Нет прав', 202))->toArray());
+        }
+
+        $user = $this->getUser();
+        if (!$user instanceof Employee) {
+            return $this->json((new ArrayException('Пользователь не найден', 202))->toArray());
+        }
+
         $data = json_decode($request->getContent(), true, 512, JSON_THROW_ON_ERROR);
 
         if ($validator->isValid($data)) {
@@ -84,6 +92,7 @@ class SheduleController extends AbstractController
                 $client->setStatus(Client::STATUS_NEW_CLIENT);
                 $em->persist($client);
                 $client->setPhone($data['client']['phone']);
+                $client->setCompany($user->getCompany());
             } else {
                 $client = $em->find(Client::class, $data['client']['id']);
             }
@@ -145,10 +154,13 @@ class SheduleController extends AbstractController
     /**
      * @throws Exception
      */
-    #[IsGranted('ROLE_'.Role::SHEDULE_ALL)]
     #[Route('/api/shedule/remove/{id<\d+>}', name: 'sheduleRemove', methods: 'GET')]
     public function remove(Shedule $shedule, EntityManagerInterface $em): Response
     {
+        if (! $this->isGranted(Role::ROLE_SHEDULE_ALL) && ! $this->isGranted(Role::ROLE_SHEDULE_ME)) {
+            return $this->json((new ArrayException('Нет прав', 202))->toArray());
+        }
+
         foreach ($shedule->getSheduleOperations() as $sheduleOperation) {
             $em->remove($sheduleOperation);
         }

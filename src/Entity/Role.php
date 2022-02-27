@@ -12,14 +12,58 @@ use JsonSerializable;
  */
 class Role implements JsonSerializable
 {
-    public const BRANCH_SETTING = 1; // Настройка филиала
-    public const SHEDULE_ME = 2; // Получение записей только по себе
-    public const SHEDULE_ALL = 3; // Получение записей по всем сотрудников и добавление, редактирование и удаление записей
-    public const POSITION_EDIT = 4; // Добавление, редактирование и удаление должностей
-    public const EMPLOYEE_EDIT = 5; // Добавление, редактирование и удаление сотрудников
-    public const OPERATION_EDIT = 6; // Добавление, редактирование и удаление услуг
-    public const WORK_SCHEDULE_EDIT = 7; // Добавление, редактирование и удаление графика работы
-    public const WORK_SCHEDULE_VIEW = 8; // Просмотр графика работы
+    private const BRANCH_SETTING = 1;
+    private const SHEDULE_ME = 2;
+    private const SHEDULE_ALL = 3;
+    private const POSITION_EDIT = 4;
+    private const EMPLOYEE_EDIT = 5;
+    private const OPERATION_EDIT = 6;
+    private const WORK_SCHEDULE_EDIT = 7;
+    private const WORK_SCHEDULE_VIEW = 8;
+
+    public const ROLE_BRANCH_SETTING = 'ROLE_BRANCH_SETTING';
+    public const ROLE_SHEDULE_ME = 'ROLE_SHEDULE_ME';
+    public const ROLE_SHEDULE_ALL = 'ROLE_SHEDULE_ALL';
+    public const ROLE_POSITION_EDIT = 'ROLE_POSITION_EDIT';
+    public const ROLE_EMPLOYEE_EDIT = 'ROLE_EMPLOYEE_EDIT';
+    public const ROLE_OPERATION_EDIT = 'ROLE_OPERATION_EDIT';
+    public const ROLE_WORK_SCHEDULE_EDIT = 'ROLE_WORK_SCHEDULE_EDIT';
+    public const ROLE_WORK_SCHEDULE_VIEW = 'ROLE_WORK_SCHEDULE_VIEW';
+
+    public const ROLES = [
+        Role::BRANCH_SETTING => [
+            'title' => self::ROLE_BRANCH_SETTING,
+            'description' => 'Настройка филиала'
+        ],
+        Role::SHEDULE_ME => [
+            'title' => self::ROLE_SHEDULE_ME,
+            'description' => 'Получение записей только по себе'
+        ],
+        Role::SHEDULE_ALL => [
+            'title' => self::ROLE_SHEDULE_ALL,
+            'description' => 'Получение записей по всем сотрудников и добавление, редактирование и удаление записей',
+        ],
+        Role::POSITION_EDIT => [
+            'title' => self::ROLE_POSITION_EDIT,
+            'description' => 'Добавление, редактирование и удаление должностей',
+        ],
+        Role::EMPLOYEE_EDIT => [
+            'title' => self::ROLE_EMPLOYEE_EDIT,
+            'description' => 'Добавление, редактирование и удаление сотрудников',
+        ],
+        Role::OPERATION_EDIT => [
+            'title' => self::ROLE_OPERATION_EDIT,
+            'description' => 'Добавление, редактирование и удаление услуг',
+        ],
+        Role::WORK_SCHEDULE_EDIT => [
+            'title' => self::ROLE_WORK_SCHEDULE_EDIT,
+            'description' => 'Добавление, редактирование и удаление графика работы',
+        ],
+        Role::WORK_SCHEDULE_VIEW => [
+            'title' => self::ROLE_WORK_SCHEDULE_VIEW,
+            'description' => 'Просмотр графика работы'
+        ],
+    ];
 
     /**
      * @ORM\Id

@@ -280,8 +280,9 @@ class Employee implements UserInterface, PasswordHasherAwareInterface, PasswordA
         $roles = $this->getPosition()->getPositionRole()->getRoles();
 
         return array_map(static function ($item) {
-            // For is granted
-            return 'ROLE_'.$item;
+            if (array_key_exists($item, Role::ROLES)) {
+                return Role::ROLES[$item]['title'];
+            }
         }, $roles);
     }
 

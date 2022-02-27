@@ -19,7 +19,7 @@ class RolesController extends AbstractController
      * @return Response
      * @throws \App\Exception\ArrayException
      */
-    #[IsGranted('ROLE_' . Role::POSITION_EDIT)]
+    #[IsGranted(Role::ROLE_POSITION_EDIT)]
     #[Route('/api/role/list', name: 'apiRoleList')]
     public function list(RoleService $service, Request $request): Response
     {

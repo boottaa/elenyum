@@ -21,7 +21,7 @@ class PositionController extends AbstractController
     /**
      * @throws ArrayException
      */
-    #[IsGranted('ROLE_'.Role::POSITION_EDIT)]
+    #[IsGranted(Role::ROLE_POSITION_EDIT)]
     #[Route('/api/position/list', name: 'apiPositionList')]
     public function list(PositionService $service, Request $request): Response
     {
@@ -47,7 +47,7 @@ class PositionController extends AbstractController
      * @param PositionService $service
      * @return Response
      */
-    #[IsGranted('ROLE_'.Role::POSITION_EDIT)]
+    #[IsGranted(Role::ROLE_POSITION_EDIT)]
     #[Route('/api/position/delete/{positionId<\d+>}', name: 'apiPositionDelete', methods: 'DELETE')]
     public function delete(int $positionId, PositionService $service): Response
     {
@@ -71,7 +71,7 @@ class PositionController extends AbstractController
         ]);
     }
 
-    #[IsGranted('ROLE_'.Role::POSITION_EDIT)]
+    #[IsGranted(Role::ROLE_POSITION_EDIT)]
     #[Route('/api/position/get/{positionId<\d+>}', name: 'apiPositionGet', methods: 'GET')]
     public function getPosition(int $positionId, PositionService $service): Response
     {
@@ -90,7 +90,7 @@ class PositionController extends AbstractController
      * @throws ArrayException
      * @throws \JsonException
      */
-    #[IsGranted('ROLE_'.Role::POSITION_EDIT)]
+    #[IsGranted(Role::ROLE_POSITION_EDIT)]
     #[Route('/api/position/post', name: 'apiPositionPost', methods: 'POST')]
     public function post(Request $request, PositionService $service): Response
     {
@@ -114,7 +114,7 @@ class PositionController extends AbstractController
      * @throws ArrayException
      * @throws \JsonException
      */
-    #[IsGranted('ROLE_'.Role::POSITION_EDIT)]
+    #[IsGranted(Role::ROLE_POSITION_EDIT)]
     #[Route('/api/position/put/{positionId<\d+>?}', name: 'apiPositionPut', methods: 'PUT')]
     public function put(Request $request, PositionService $service): Response
     {

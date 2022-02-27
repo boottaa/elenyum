@@ -34,7 +34,7 @@ class BranchController extends AbstractController
      * @return Response
      * @throws \JsonException
      */
-    #[IsGranted('ROLE_'.Role::BRANCH_SETTING)]
+    #[IsGranted(Role::ROLE_BRANCH_SETTING)]
     #[Route('/api/branch/put/{branchId<\d+>?}', name: 'apiBranchPut', methods: 'PUT')]
     public function put(Request $request, BranchService $service): Response
     {
