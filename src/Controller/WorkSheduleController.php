@@ -21,7 +21,7 @@ class WorkSheduleController extends AbstractController
      * @return Response
      * @throws ArrayException
      */
-    #[IsGranted('ROLE_'.Role::EMPLOYEE_POST)]
+    #[IsGranted('ROLE_'.Role::WORK_SCHEDULE_VIEW)]
     #[Route('/api/workSchedule/list/{userId<\d+>?}', name: 'apiWorkSheduleList', methods: 'GET')]
     public function list(int $userId, Request $request, WorkSheduleService $service): Response
     {
@@ -46,7 +46,7 @@ class WorkSheduleController extends AbstractController
      * @return Response
      * @throws \JsonException
      */
-    #[IsGranted('ROLE_'.Role::EMPLOYEE_POST)]
+    #[IsGranted('ROLE_'.Role::WORK_SCHEDULE_EDIT)]
     #[Route('/api/workSchedule/post/collection', name: 'apiWorkShedulePostCollection', methods: 'POST')]
     public function post(Request $request, WorkSheduleService $service): Response
     {

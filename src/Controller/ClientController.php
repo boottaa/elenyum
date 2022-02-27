@@ -18,7 +18,7 @@ class ClientController extends AbstractController
      * @return Response
      * @throws \App\Exception\ArrayException
      */
-    #[IsGranted('ROLE_' . Role::CLIENT_GET)]
+    #[IsGranted('ROLE_' . Role::SHEDULE_ALL)]
     #[Route('/api/client/query', name: 'client')]
     public function query(ClientService $service, Request $request): Response
     {

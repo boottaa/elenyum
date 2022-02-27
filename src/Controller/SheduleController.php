@@ -8,6 +8,7 @@ use App\Entity\Operation;
 use App\Entity\Role;
 use App\Entity\Shedule;
 use App\Entity\SheduleOperation;
+use App\Exception\ArrayException;
 use App\Repository\SheduleRepository;
 use App\Validator\SheduleValidator;
 use DateTimeImmutable;
@@ -25,14 +26,19 @@ class SheduleController extends AbstractController
     /**
      * @throws Exception
      */
-    #[IsGranted('ROLE_' . Role::SHEDULE_GET)]
     #[Route('/api/shedule/list', name: 'sheduleList')]
     public function list(Request $request, SheduleRepository $sheduleRepository): Response
     {
+        if (! $this->isGranted('ROLE_'.Role::SHEDULE_ALL) && ! $this->isGranted('ROLE_'.Role::SHEDULE_ME)) {
+            return $this->json((new ArrayException('Нет прав', 202))->toArray());
+        }
+
         $start = $request->query->getInt('start');
         $end = $request->query->getInt('end');
         if (empty($start) || empty($end)) {
-            throw new Exception('Не верно переданы параметры даты начала и окончания');
+            return $this->json(
+                (new ArrayException('Не верно переданы параметры даты начала и окончания'))->toArray()
+            );
         }
 
         $timeStart = DateTimeImmutable::createFromFormat('U', round($start / 1000))->setTimezone(
@@ -59,7 +65,7 @@ class SheduleController extends AbstractController
      * @throws \Doctrine\ORM\NonUniqueResultException
      * @throws \JsonException
      */
-    #[IsGranted('ROLE_' . Role::SHEDULE_POST)]
+    #[IsGranted('ROLE_'.Role::SHEDULE_ALL)]
     #[Route('/api/shedule/post', name: 'shedulePost', methods: ['POST'])]
     public function post(
         Request $request,
@@ -139,7 +145,7 @@ class SheduleController extends AbstractController
     /**
      * @throws Exception
      */
-    #[IsGranted('ROLE_' . Role::SHEDULE_DELETE)]
+    #[IsGranted('ROLE_'.Role::SHEDULE_ALL)]
     #[Route('/api/shedule/remove/{id<\d+>}', name: 'sheduleRemove', methods: 'GET')]
     public function remove(Shedule $shedule, EntityManagerInterface $em): Response
     {

@@ -68,6 +68,7 @@ class EmployeeRepository extends ServiceEntityRepository implements ListReposito
     public function listForCalendar(?array $params): Paginator
     {
         $company = $params['company'];
+        $userId = $params['userId'] ?? null;
         if (!$company instanceof Company) {
             throw new ArrayException('Company undefined', '422');
         }
@@ -79,6 +80,11 @@ class EmployeeRepository extends ServiceEntityRepository implements ListReposito
             ->andWhere('p.inCalendar=:inCalendar')
             ->setParameter('company', $company)
             ->setParameter('inCalendar', true);
+        if ($userId) {
+            $qb
+                ->andWhere('e.id=:userId')
+                ->setParameter('userId', $userId);
+        }
 
         return (new Paginator($qb, 1000))->paginate();
     }

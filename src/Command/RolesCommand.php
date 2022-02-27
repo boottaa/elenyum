@@ -33,27 +33,14 @@ class RolesCommand extends Command
         $io = new SymfonyStyle($input, $output);
 
         $roles = [
-            Role::SHEDULE_POST => ['title' => 'SHEDULE_POST', 'description' => 'Добавление записей к специалисту'],
-            Role::SHEDULE_DELETE => ['title' => 'SHEDULE_DELETE', 'description' => 'Удаление записей к специалисту'],
-            Role::SHEDULE_GET => ['title' => 'SHEDULE_GET', 'description' => 'Получения записей к специалисту'],
-            Role::OPERATION_POST => ['title' => 'OPERATION_POST', 'description' => 'Добавление операций'],
-            Role::OPERATION_DELETE => ['title' => 'OPERATION_DELETE', 'description' => 'Удаление операций'],
-            Role::OPERATION_GET => ['title' => 'OPERATION_GET', 'description' => 'Получения операций'],
-            Role::CLIENT_POST => ['title' => 'CLIENT_POST', 'description' => 'Добавление клиентов'],
-            Role::CLIENT_DELETE => ['title' => 'CLIENT_DELETE', 'description' => 'Удаление клиентов'],
-            Role::CLIENT_GET => ['title' => 'CLIENT_GET', 'description' => 'Получения клиентов'],
-            Role::EMPLOYEE_POST => ['title' => 'EMPLOYEE_POST', 'description' => 'Добавление и редактирование данных сотрудников'],
-            Role::EMPLOYEE_DELETE => ['title' => 'EMPLOYEE_DELETE', 'description' => 'Удаление сотрудников'],
-            Role::EMPLOYEE_GET => ['title' => 'EMPLOYEE_GET', 'description' => 'Получения сотрудников'],
-            Role::BRANCH_POST => ['title' => 'BRANCH_POST', 'description' => 'Добавление и редактирование филиалов'],
-            Role::BRANCH_DELETE => ['title' => 'BRANCH_DELETE', 'description' => 'Удаление филиалов'],
-            Role::BRANCH_GET => ['title' => 'BRANCH_GET', 'description' => 'Получение филиалов'],
-            Role::COMMODITY_POST => ['title' => 'COMMODITY_POST', 'description' => 'Добавление и редактирование товаров'],
-            Role::COMMODITY_DELETE => ['title' => 'COMMODITY_DELETE', 'description' => 'Удаление товаров'],
-            Role::COMMODITY_GET => ['title' => 'COMMODITY_GET', 'description' => 'Получение товаров'],
-            Role::TECHNOLOGICAL_MAP_POST => ['title' => 'TECHNOLOGICAL_MAP_POST', 'description' => 'Добавление и редактирование технологической карты'],
-            Role::TECHNOLOGICAL_MAP_DELETE => ['title' => 'TECHNOLOGICAL_MAP_DELETE', 'description' => 'Удаление технологической карты'],
-            Role::TECHNOLOGICAL_MAP_GET => ['title' => 'TECHNOLOGICAL_MAP_GET', 'description' => 'Получения технологических карт'],
+            Role::BRANCH_SETTING => ['title' => 'BRANCH_SETTING', 'description' => 'Настройка филиала'],
+            Role::SHEDULE_ME => ['title' => 'SHEDULE_ME', 'description' => 'Получение записей только по себе'],
+            Role::SHEDULE_ALL => ['title' => 'SHEDULE_ALL', 'description' => 'Получение записей по всем сотрудников и добавление, редактирование и удаление записей'],
+            Role::POSITION_EDIT => ['title' => 'POSITION_EDIT', 'description' => 'Добавление, редактирование и удаление должностей'],
+            Role::EMPLOYEE_EDIT => ['title' => 'EMPLOYEE_EDIT', 'description' => 'Добавление, редактирование и удаление сотрудников'],
+            Role::OPERATION_EDIT => ['title' => 'OPERATION_EDIT', 'description' => 'Добавление, редактирование и удаление услуг'],
+            Role::WORK_SCHEDULE_EDIT => ['title' => 'WORK_SCHEDULE_EDIT', 'description' => 'Добавление, редактирование и удаление графика работы'],
+            Role::WORK_SCHEDULE_VIEW => ['title' => 'WORK_SCHEDULE_VIEW', 'description' => 'Просмотр графика работы'],
         ];
 
         $this->em->getConnection()->prepare('DELETE FROM role;')->executeQuery();

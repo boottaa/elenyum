@@ -12,30 +12,14 @@ use JsonSerializable;
  */
 class Role implements JsonSerializable
 {
-    public const SHEDULE_POST = 1;
-    public const SHEDULE_DELETE = 2;
-    public const SHEDULE_GET = 3;
-    public const OPERATION_POST = 4;
-    public const OPERATION_DELETE = 5;
-    public const OPERATION_GET = 6;
-    public const CLIENT_POST = 7;
-    public const CLIENT_DELETE = 8;
-    public const CLIENT_GET = 9;
-    public const EMPLOYEE_POST = 10;
-    public const EMPLOYEE_DELETE = 11;
-    public const EMPLOYEE_GET = 12;
-    public const BRANCH_POST = 16;
-    public const BRANCH_DELETE = 17;
-    public const BRANCH_GET = 18;
-    public const COMMODITY_POST = 19;
-    public const COMMODITY_DELETE = 20;
-    public const COMMODITY_GET = 21;
-    public const COMPANY_POST = 22;
-    public const COMPANY_DELETE = 23;
-    public const COMPANY_GET = 24;
-    public const TECHNOLOGICAL_MAP_POST = 25;
-    public const TECHNOLOGICAL_MAP_DELETE = 26;
-    public const TECHNOLOGICAL_MAP_GET = 27;
+    public const BRANCH_SETTING = 1; // Настройка филиала
+    public const SHEDULE_ME = 2; // Получение записей только по себе
+    public const SHEDULE_ALL = 3; // Получение записей по всем сотрудников и добавление, редактирование и удаление записей
+    public const POSITION_EDIT = 4; // Добавление, редактирование и удаление должностей
+    public const EMPLOYEE_EDIT = 5; // Добавление, редактирование и удаление сотрудников
+    public const OPERATION_EDIT = 6; // Добавление, редактирование и удаление услуг
+    public const WORK_SCHEDULE_EDIT = 7; // Добавление, редактирование и удаление графика работы
+    public const WORK_SCHEDULE_VIEW = 8; // Просмотр графика работы
 
     /**
      * @ORM\Id

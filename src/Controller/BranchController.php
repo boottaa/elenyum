@@ -14,11 +14,6 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class BranchController extends AbstractController
 {
-    /**
-     * @param Request $request
-     * @return Response
-     */
-    #[IsGranted('ROLE_'.Role::EMPLOYEE_POST)]
     #[Route('/api/branch/get', name: 'apiBranchGet')]
     public function list(Request $request): Response
     {
@@ -39,7 +34,7 @@ class BranchController extends AbstractController
      * @return Response
      * @throws \JsonException
      */
-    #[IsGranted('ROLE_'.Role::EMPLOYEE_POST)]
+    #[IsGranted('ROLE_'.Role::BRANCH_SETTING)]
     #[Route('/api/branch/put/{branchId<\d+>?}', name: 'apiBranchPut', methods: 'PUT')]
     public function put(Request $request, BranchService $service): Response
     {

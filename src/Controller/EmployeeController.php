@@ -20,7 +20,7 @@ class EmployeeController extends AbstractController
      * @return Response
      * @throws ArrayException
      */
-    #[IsGranted('ROLE_'.Role::EMPLOYEE_GET)]
+    #[IsGranted('ROLE_'.Role::EMPLOYEE_EDIT)]
     #[Route('/api/employee/list', name: 'apiEmployeeList')]
     public function list(EmployeeService $service, Request $request): Response
     {
@@ -46,7 +46,6 @@ class EmployeeController extends AbstractController
      * @return Response
      * @throws ArrayException
      */
-    #[IsGranted('ROLE_'.Role::EMPLOYEE_GET)]
     #[Route('/api/employee/listForCalendar', name: 'apiEmployeeListForCalendar')]
     public function listForCalendar(EmployeeService $service, Request $request): Response
     {
@@ -54,7 +53,16 @@ class EmployeeController extends AbstractController
         if (!$user instanceof Employee) {
             return $this->json((new ArrayException('Пользователь не найден', 202))->toArray());
         }
-        $list = $service->listForCalendar(['company' => $user->getCompany()]);
+        $params = ['company' => $user->getCompany()];
+        if (! $this->isGranted('ROLE_'.Role::SHEDULE_ALL) && ! $this->isGranted('ROLE_'.Role::SHEDULE_ME)) {
+            return $this->json((new ArrayException('Нет прав', 202))->toArray());
+        }
+        //Если нет прав на просмотр всех задач то загружаем только текущего пользователя
+        if ($this->isGranted('ROLE_'.Role::SHEDULE_ME) && ! $this->isGranted('ROLE_'.Role::SHEDULE_ALL)) {
+            $params['userId'] = $user->getId();
+        }
+
+        $list = $service->listForCalendar($params);
 
         return $this->json([
             'success' => true,
@@ -65,7 +73,7 @@ class EmployeeController extends AbstractController
         ]);
     }
 
-    #[IsGranted('ROLE_'.Role::EMPLOYEE_GET)]
+    #[IsGranted('ROLE_'.Role::EMPLOYEE_EDIT)]
     #[Route('/api/employee/get/{employeeId<\d+>}', name: 'apiEmployeeGet', methods: 'GET')]
     public function getEmployee(int $employeeId, EmployeeService $service): Response
     {
@@ -85,7 +93,7 @@ class EmployeeController extends AbstractController
      * @param EmployeeService $service
      * @return Response
      */
-    #[IsGranted('ROLE_'.Role::EMPLOYEE_DELETE)]
+    #[IsGranted('ROLE_'.Role::EMPLOYEE_EDIT)]
     #[Route('/api/employee/delete/{employeeId<\d+>}', name: 'apiEmployeeDelete', methods: 'DELETE')]
     public function delete(int $employeeId, EmployeeService $service): Response
     {
@@ -117,7 +125,7 @@ class EmployeeController extends AbstractController
      * @throws ArrayException
      * @throws \JsonException
      */
-    #[IsGranted('ROLE_'.Role::EMPLOYEE_POST)]
+    #[IsGranted('ROLE_'.Role::EMPLOYEE_EDIT)]
     #[Route('/api/employee/post', name: 'apiEmployeePost', methods: 'POST')]
     public function post(Request $request, EmployeeService $service): Response
     {
@@ -144,7 +152,7 @@ class EmployeeController extends AbstractController
      * @throws ArrayException
      * @throws \JsonException
      */
-    #[IsGranted('ROLE_'.Role::EMPLOYEE_POST)]
+    #[IsGranted('ROLE_'.Role::EMPLOYEE_EDIT)]
     #[Route('/api/employee/put/{employeeId<\d+>?}', name: 'apiEmployeePut', methods: 'PUT')]
     public function put(Request $request, EmployeeService $service): Response
     {
