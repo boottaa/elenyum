@@ -23,6 +23,12 @@ import {vueConfig} from "./src/vueConfig";
  * Время для сотрудника
  * @todo https://fullcalendar.io/docs/businessHours-per-resource
  */
+// Для заполнения графика сотрудников по шаблону (Пока этого нет)
+function lastday(y, m) {
+    return new Date(y, m + 1, 0);
+}
+
+
 $(document).ready(function () {
     workSchedulePost.$once('configLoaded', (data) => {
         let elModalEvent = document.getElementById('modalEvent'),
@@ -46,11 +52,6 @@ $(document).ready(function () {
             return date;
         }
 
-        // Для заполнения графика сотрудников по шаблону (Пока этого нет)
-        function lastday(y, m) {
-            return new Date(y, m + 1, 0).getDate();
-        }
-
         let calendar = new Calendar(calendarEl, {
             selectable: workSchedulePost.canEdit,
             plugins: [dayGridPlugin, interactionPlugin],
@@ -63,6 +64,12 @@ $(document).ready(function () {
             firstDay: 1,
             buttonText: {
                 today: 'сегодня',
+            },
+            viewDidMount: function () {
+                $('.fc-prev-button, .fc-next-button, .fc-today-button').on('click', () => {
+                    workSchedulePost.start = calendar.view.currentStart;
+                    workSchedulePost.end = calendar.view.currentEnd;
+                });
             },
             eventClick: function (info) {
                 if (workSchedulePost.canEdit) {
@@ -167,13 +174,11 @@ $(document).ready(function () {
                 display: 'block',
             });
         }
-
-
         //Если выбран шаблон то выводим календарь
         // workSchedulePost.$once('selectedTemplate', (data) => {
-        calendar.render();
 
-        workSchedulePost.$once('workSchedulesLoaded', (data) => {
+        workSchedulePost.$on('workSchedulesLoaded', (data) => {
+            calendar.removeAllEvents();
             data.forEach(i => {
                 let start = new Date(i.start);
                 let end = new Date(i.end);
@@ -188,8 +193,9 @@ $(document).ready(function () {
 
                 addWorkSchedule(calendar, workSchedule);
                 workSchedulePost.object.workSchedules.push(workSchedule);
-            })
+            });
 
+            console.log('render');
             calendar.render();
         });
     })
@@ -242,6 +248,8 @@ let workSchedulePost = new Vue({
                 endTimeStr: null,
             },
 
+            start: null,
+            end: null,
             canEdit: false,
         }
     },
@@ -249,25 +257,36 @@ let workSchedulePost = new Vue({
         this.resetObject();
         vueConfig.$once('loaded', (data) => {
             this.branch = data.branch;
-
             this.canEdit = Boolean(data.roles.includes("ROLE_WORK_SCHEDULE_EDIT"));
 
+            let array = location.href.split('/', 6);
+            let id = array[5];
+
+            if (id !== undefined) {
+                this.object.employeeId = id;
+                this.start = new Date();
+                this.start.setDate(1);
+                this.start.setMinutes(0);
+                this.start.setHours(0);
+                this.start.setSeconds(0);
+                this.end = lastday(this.start.getFullYear(), this.start.getMonth());
+            }
             this.$emit('configLoaded', data);
         });
-
-        let array = location.href.split('/', 6);
-        let id = array[5];
-
-        if (id !== undefined) {
-            this.object.employeeId = id;
-            get('/api/workSchedule/list/' + id, (r) => {
+    },
+    watch: {
+        end() {
+            this.loadWorkSchedules(this.start, this.end)
+        },
+    },
+    methods: {
+        loadWorkSchedules(start, end) {
+            get(`/api/workSchedule/list/${this.object.employeeId}?start=${start.getTime()}&end=${end.getTime()}`, (r) => {
                 if (r.success === true) {
                     this.$emit('workSchedulesLoaded', r.items);
                 }
             });
-        }
-    },
-    methods: {
+        },
         send() {
             post('/api/workSchedule/post/collection', this.object, (result) => {
                 if (result.success === true) {

@@ -6,6 +6,8 @@ use App\Entity\Employee;
 use App\Entity\Role;
 use App\Exception\ArrayException;
 use App\Service\WorkSheduleService;
+use DateTimeImmutable;
+use DateTimeZone;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -29,6 +31,23 @@ class WorkSheduleController extends AbstractController
             'userId' => $userId
         ];
         $page = $request->get('page', 1);
+        $start = $request->query->getInt('start');
+        $end = $request->query->getInt('end');
+        if (empty($start) || empty($end)) {
+            return $this->json(
+                (new ArrayException('Не верно переданы параметры даты начала и окончания'))->toArray()
+            );
+        }
+
+        $timeStart = DateTimeImmutable::createFromFormat('U', round($start / 1000))->setTimezone(
+            new DateTimeZone('Europe/Moscow')
+        );
+        $timeEnd = DateTimeImmutable::createFromFormat('U', round($end / 1000))->setTimezone(
+            new DateTimeZone('Europe/Moscow')
+        );
+        $params['start'] = $timeStart;
+        $params['end'] = $timeEnd;
+
         $list = $service->list($params, $page);
 
         return $this->json([

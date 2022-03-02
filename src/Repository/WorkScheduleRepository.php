@@ -30,11 +30,17 @@ class WorkScheduleRepository extends ServiceEntityRepository implements ListRepo
     public function list(?array $params, int $page): Paginator
     {
         $userId = $params['userId'];
+        $start = $params['start'];
+        $end = $params['end'];
         $qb = $this->createQueryBuilder('ws')
             ->orderBy('ws.id', 'DESC');
 
-        $qb->where('ws.employee=:userId');
-        $qb->setParameter('userId', $userId);
+        $qb->where('ws.employee=:userId')
+            ->andWhere('ws.start >= :start')
+            ->andWhere('ws.end <= :end')
+            ->setParameter('userId', $userId)
+            ->setParameter('start', $start)
+            ->setParameter('end', $end);
 
         return (new Paginator($qb))->paginate($page);
     }
