@@ -32,22 +32,6 @@ export let modalVue = new Vue({
             }
         }
     },
-    created() {
-        get('/api/branch/get', (r) => {
-            if (r.success === true) {
-                this.branch.item = r.item;
-                let start = new Date(r.item.start);
-                this.branch.start = start;
-                let end = new Date(r.item.end);
-                this.branch.end = end;
-
-                this.branch.startTimeStr = start.getHours().toString().padStart(2, '0') + ':' + start.getMinutes().toString().padStart(2, '0');
-                this.branch.endTimeStr = end.getHours().toString().padStart(2, '0') + ':' + end.getMinutes().toString().padStart(2, '0');
-
-                this.$emit('branchDataLoaded', this.branch);
-            }
-        });
-    },
 
     computed: {
         totalPrice() {

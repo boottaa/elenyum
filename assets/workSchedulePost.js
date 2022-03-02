@@ -17,177 +17,182 @@ import {vueWorkShedule} from "./src/vueWorkShedule";
 import DatePicker from "vue2-datepicker";
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from "@fullcalendar/interaction";
+import {vueConfig} from "./src/vueConfig";
 
 /**
  * Время для сотрудника
  * @todo https://fullcalendar.io/docs/businessHours-per-resource
  */
 $(document).ready(function () {
-    let elModalEvent = document.getElementById('modalEvent'),
-        modalEvent = new bootstrap.Modal(elModalEvent);
+    workSchedulePost.$once('configLoaded', (data) => {
+        let elModalEvent = document.getElementById('modalEvent'),
+            modalEvent = new bootstrap.Modal(elModalEvent);
 
-    let calendarEl = document.getElementById('workScheduleCalendar');
+        let calendarEl = document.getElementById('workScheduleCalendar');
 
-    function getDate(date) {
-        return date.getFullYear().toString() + '-' + String(date.getMonth() + 1).padStart(2, '0') + '-' + date.getDate().toString().padStart(2, '0');
-    }
-
-    function getHours(date) {
-        return date.getHours().toString().padStart(2, '0') + ":" + date.getMinutes().toString().padStart(2, '0');
-    }
-
-    function addDay(date, day) {
-        if (day !== 0) {
-            return new Date(date.getTime() + (day * 24 * 60 * 60 * 1000));
+        function getDate(date) {
+            return date.getFullYear().toString() + '-' + String(date.getMonth() + 1).padStart(2, '0') + '-' + date.getDate().toString().padStart(2, '0');
         }
 
-        return date;
-    }
+        function getHours(date) {
+            return date.getHours().toString().padStart(2, '0') + ":" + date.getMinutes().toString().padStart(2, '0');
+        }
 
-    // Для заполнения графика сотрудников по шаблону (Пока этого нет)
-    function lastday(y, m){
-        return  new Date(y, m +1, 0).getDate();
-    }
+        function addDay(date, day) {
+            if (day !== 0) {
+                return new Date(date.getTime() + (day * 24 * 60 * 60 * 1000));
+            }
 
-    let calendar = new Calendar(calendarEl, {
-        selectable: true,
-        plugins: [dayGridPlugin, interactionPlugin],
-        headerToolbar: {
-            right: 'today,prev,next',
-        },
-        initialView: 'dayGridMonth',
-        locale: 'ru',
-        height: 'auto',
-        firstDay: 1,
-        buttonText: {
-            today: 'сегодня',
-        },
-        eventClick: function (info) {
-            workSchedulePost.selected.time = [
-                info.event.extendedProps.workSchedule.start,
-                info.event.extendedProps.workSchedule.end
-            ];
+            return date;
+        }
 
-            info.event.extendedProps.workSchedule.start = new Date();
+        // Для заполнения графика сотрудников по шаблону (Пока этого нет)
+        function lastday(y, m) {
+            return new Date(y, m + 1, 0).getDate();
+        }
 
-            workSchedulePost.$once('editedEvent', (data) => {
-                if (data !== null) {
+        let calendar = new Calendar(calendarEl, {
+            selectable: workSchedulePost.canEdit,
+            plugins: [dayGridPlugin, interactionPlugin],
+            headerToolbar: {
+                right: 'today,prev,next',
+            },
+            initialView: 'dayGridMonth',
+            locale: 'ru',
+            height: 'auto',
+            firstDay: 1,
+            buttonText: {
+                today: 'сегодня',
+            },
+            eventClick: function (info) {
+                if (workSchedulePost.canEdit) {
+                    workSchedulePost.selected.time = [
+                        info.event.extendedProps.workSchedule.start,
+                        info.event.extendedProps.workSchedule.end
+                    ];
 
-                    info.event.extendedProps.workSchedule.start = data[0];
-                    info.event.extendedProps.workSchedule.end = data[1];
-                    modalEvent.hide();
+                    info.event.extendedProps.workSchedule.start = new Date();
 
-                    calendar.render();
+                    workSchedulePost.$once('editedEvent', (data) => {
+                        if (data !== null) {
+
+                            info.event.extendedProps.workSchedule.start = data[0];
+                            info.event.extendedProps.workSchedule.end = data[1];
+                            modalEvent.hide();
+
+                            calendar.render();
+                        }
+                    });
+
+                    modalEvent.show();
                 }
+            },
+            select: function (info) {
+                let counter = (info.end.getTime() - info.start.getTime()) / 86400000;
+                for (let i = 0; i < counter; i++) {
+                    let dateStart = addDay(new Date(info.start.getTime()), i);
+                    let dateEnd = addDay(new Date(info.start.getTime()), i + 1);
+                    let getStartDate = getDate(dateStart);
+                    let getEndDate = getDate(dateEnd);
+
+                    let isDelete = false;
+
+                    calendar.getEvents().forEach((event) => {
+                        if (event.extendedProps.workSchedule.startStr === getStartDate || event.extendedProps.workSchedule.endStr === getEndDate) {
+                            isDelete = true;
+
+                            event.remove();
+                        }
+                    });
+                    if (isDelete) {
+                        workSchedulePost.object.workSchedules = workSchedulePost.object.workSchedules.filter((event) => {
+                            return !(event.startStr === getStartDate || event.endStr === getEndDate);
+                        });
+                    }
+
+                    if (isDelete === false) {
+                        let start = workSchedulePost.branch.start;
+                        let end = workSchedulePost.branch.end;
+                        let timeBranchWorkStart = (new Date(dateStart.getTime()));
+                        timeBranchWorkStart.setHours(start.getHours());
+                        timeBranchWorkStart.setMinutes(start.getMinutes());
+
+                        let timeBranchWorkEnd = (new Date(dateStart.getTime()));
+                        timeBranchWorkEnd.setHours(end.getHours());
+                        timeBranchWorkEnd.setMinutes(end.getMinutes());
+
+                        let workSchedule = {
+                            id: i,
+                            startStr: getStartDate,
+                            endStr: getEndDate,
+                            start: timeBranchWorkStart,
+                            end: timeBranchWorkEnd,
+                        };
+
+                        addWorkSchedule(calendar, workSchedule);
+                        workSchedulePost.object.workSchedules.push(workSchedule);
+                    }
+                }
+                calendar.unselect();
+            },
+            eventContent: function (e) {
+                let divEl = document.createElement('div');
+                divEl.className = 'eventBlockWorkShedule';
+
+                if (e.event.display !== 'background') {
+                    divEl.innerText = `${getHours(e.event.extendedProps.workSchedule.start)} - ${getHours(e.event.extendedProps.workSchedule.end)}`;
+                    let arrayOfDomNodes = [divEl];
+
+                    return {domNodes: arrayOfDomNodes};
+                }
+            },
+        });
+
+        function addWorkSchedule(calendar, workSchedule) {
+            calendar.addEvent({
+                id: workSchedule.id,
+                start: workSchedule.startStr,
+                end: workSchedule.endStr,
+                workSchedule: workSchedule,
+                overlap: true,
+                display: 'background',
+                color: 'rgba(0,90,255,0.4)'
             });
 
-            modalEvent.show();
-        },
-        select: function (info) {
-            let counter = (info.end.getTime() - info.start.getTime()) / 86400000;
-            for (let i = 0; i < counter; i++) {
-                let dateStart = addDay(new Date(info.start.getTime()), i);
-                let dateEnd = addDay(new Date(info.start.getTime()), i + 1);
-                let getStartDate = getDate(dateStart);
-                let getEndDate = getDate(dateEnd);
-
-                let isDelete = false;
-
-                calendar.getEvents().forEach((event) => {
-                    if (event.extendedProps.workSchedule.startStr === getStartDate || event.extendedProps.workSchedule.endStr === getEndDate) {
-                        isDelete = true;
-
-                        event.remove();
-                    }
-                });
-                if (isDelete) {
-                    workSchedulePost.object.workSchedules = workSchedulePost.object.workSchedules.filter((event) => {
-                        return ! (event.startStr === getStartDate || event.endStr === getEndDate);
-                    });
-                }
-
-                if (isDelete === false) {
-                    let start = workSchedulePost.branch.start;
-                    let end = workSchedulePost.branch.end;
-                    let timeBranchWorkStart = (new Date(dateStart.getTime()));
-                    timeBranchWorkStart.setHours(start.getHours());
-                    timeBranchWorkStart.setMinutes(start.getMinutes());
-
-                    let timeBranchWorkEnd = (new Date(dateStart.getTime()));
-                    timeBranchWorkEnd.setHours(end.getHours());
-                    timeBranchWorkEnd.setMinutes(end.getMinutes());
-
-                    let workSchedule = {
-                        id: i,
-                        startStr: getStartDate,
-                        endStr: getEndDate,
-                        start: timeBranchWorkStart,
-                        end: timeBranchWorkEnd,
-                    };
-
-                    addWorkSchedule(calendar, workSchedule);
-                    workSchedulePost.object.workSchedules.push(workSchedule);
-                }
-            }
-            calendar.unselect();
-        },
-        eventContent: function (e) {
-            let divEl = document.createElement('div');
-            divEl.className = 'eventBlockWorkShedule';
-
-            if (e.event.display !== 'background') {
-                divEl.innerText = `${getHours(e.event.extendedProps.workSchedule.start)} - ${getHours(e.event.extendedProps.workSchedule.end)}`;
-                let arrayOfDomNodes = [divEl];
-
-                return {domNodes: arrayOfDomNodes};
-            }
-        },
-    });
-
-     function addWorkSchedule (calendar, workSchedule) {
-        calendar.addEvent({
-            id: workSchedule.id,
-            start: workSchedule.startStr,
-            end: workSchedule.endStr,
-            workSchedule: workSchedule,
-            overlap: true,
-            display: 'background',
-            color: 'rgba(0,90,255,0.4)'
-        });
-
-        calendar.addEvent({
-            id: workSchedule.id,
-            start: workSchedule.start,
-            end: workSchedule.end,
-            workSchedule: workSchedule,
-            display: 'block',
-        });
-    }
+            calendar.addEvent({
+                id: workSchedule.id,
+                start: workSchedule.start,
+                end: workSchedule.end,
+                workSchedule: workSchedule,
+                display: 'block',
+            });
+        }
 
 
-    //Если выбран шаблон то выводим календарь
-    // workSchedulePost.$once('selectedTemplate', (data) => {
-    calendar.render();
+        //Если выбран шаблон то выводим календарь
+        // workSchedulePost.$once('selectedTemplate', (data) => {
+        calendar.render();
 
-    workSchedulePost.$once('workSchedulesLoaded', (data) => {
-        data.forEach(i => {
-            let start = new Date(i.start);
-            let end = new Date(i.end);
-            let endStr = getDate(addDay(new Date(i.end), 1));
-            let workSchedule = {
-                id: i.id,
-                startStr: getDate(start),
-                endStr: endStr,
-                start: start,
-                end: end,
-            };
+        workSchedulePost.$once('workSchedulesLoaded', (data) => {
+            data.forEach(i => {
+                let start = new Date(i.start);
+                let end = new Date(i.end);
+                let endStr = getDate(addDay(new Date(i.end), 1));
+                let workSchedule = {
+                    id: i.id,
+                    startStr: getDate(start),
+                    endStr: endStr,
+                    start: start,
+                    end: end,
+                };
 
-            addWorkSchedule(calendar, workSchedule);
-            workSchedulePost.object.workSchedules.push(workSchedule);
+                addWorkSchedule(calendar, workSchedule);
+                workSchedulePost.object.workSchedules.push(workSchedule);
+            })
+
             calendar.render();
-        })
-    });
-    // });
+        });
+    })
 });
 
 let object = {
@@ -225,7 +230,6 @@ let workSchedulePost = new Vue({
             selected: {
                 time: [],
             },
-
             object: {
                 employeeId: null,
                 workSchedules: [],
@@ -236,23 +240,19 @@ let workSchedulePost = new Vue({
                 end: null,
                 startTimeStr: null,
                 endTimeStr: null,
-            }
+            },
+
+            canEdit: false,
         }
     },
     created() {
         this.resetObject();
+        vueConfig.$once('loaded', (data) => {
+            this.branch = data.branch;
 
-        get('/api/branch/get', (r) => {
-            if (r.success === true) {
-                this.branch.item = r.item;
-                let start = new Date(r.item.start);
-                this.branch.start = start;
-                let end = new Date(r.item.end);
-                this.branch.end = end;
+            this.canEdit = Boolean(data.roles.includes("ROLE_WORK_SCHEDULE_EDIT"));
 
-                this.branch.startTimeStr = start.getHours().toString().padStart(2, '0') + ':' + start.getMinutes().toString().padStart(2, '0');
-                this.branch.endTimeStr = end.getHours().toString().padStart(2, '0') + ':' + end.getMinutes().toString().padStart(2, '0');
-            }
+            this.$emit('configLoaded', data);
         });
 
         let array = location.href.split('/', 6);

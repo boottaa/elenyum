@@ -22,11 +22,11 @@
 {#                <v-select id="selectPositions" aria-required="true" @input="onSelected" v-model="object.template" :options="templates" label="title"></v-select>#}
 {#            </div>#}
             <div class="mb-3">
-                <label for="roles" class="form-label">Выберете период</label>
+                <label v-if="canEdit"  for="roles" class="form-label">Выберете даты</label>
                 <br>
                 <div id="workScheduleCalendar"></div>
             </div>
-            <input type="button" v-on:click="send" class="btn btn-primary btn-user btn-block" value="Сохранить">
+            <input type="button" v-if="canEdit" v-on:click="send" class="btn btn-primary btn-user btn-block" value="Сохранить">
         </div>
         <div class="col-lg-4">
             <div id=""></div>

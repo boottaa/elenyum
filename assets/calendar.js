@@ -11,6 +11,7 @@ import scrollGridPlugin from '@fullcalendar/scrollgrid';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import {modalVue} from "./calendar/modalEvent";
 import {baseCalendar} from "./src/baseCalendar";
+import {vueConfig} from "./src/vueConfig";
 
 $(function () {
     let elModalEvent = document.getElementById('modalEvent'),
@@ -48,7 +49,7 @@ $(function () {
         },
     };
 
-    modalVue.$once('branchDataLoaded', (branchData) => {
+    vueConfig.$once('loaded', (data) => {
         let calendar = new Calendar(calendarEl, {
             plugins: [resourceTimeGridPlugin, bootstrapPlugin, scrollGridPlugin, dayGridPlugin, interactionPlugin],
             locale: 'ru',
@@ -199,15 +200,15 @@ $(function () {
                     slotLabelFormat: [
                         {hour12: false, hour: '2-digit', minute: '2-digit'},
                     ],
-                    slotMinTime: branchData.startTimeStr,
-                    slotMaxTime: branchData.endTimeStr,
+                    slotMinTime: data.branch.startTimeStr,
+                    slotMaxTime: data.branch.endTimeStr,
                 },
                 resourceTimeGridWeek: {
                     slotLabelFormat: [
                         {hour12: false, hour: '2-digit', minute: '2-digit'},
                     ],
-                    slotMinTime: branchData.startTimeStr,
-                    slotMaxTime: branchData.endTimeStr,
+                    slotMinTime: data.branch.startTimeStr,
+                    slotMaxTime: data.branch.endTimeStr,
                 },
             },
             eventContent: function (e) {

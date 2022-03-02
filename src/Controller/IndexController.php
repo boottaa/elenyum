@@ -101,10 +101,10 @@ class IndexController extends AbstractController
         return $this->render('index/branchSetting.html.twig', []);
     }
 
-    #[Route('/workSchedule/post/{id<\d+>?}', name: 'workSchedulePost')]
+    #[Route('/workSchedule/view/{id<\d+>?}', name: 'workSchedulePost')]
     public function workSchedulePost(): Response
     {
-        if (!$this->isGranted(Role::ROLE_WORK_SCHEDULE_EDIT)) {
+        if (! $this->isGranted(Role::ROLE_WORK_SCHEDULE_EDIT) && ! $this->isGranted(Role::ROLE_WORK_SCHEDULE_VIEW)) {
             return $this->redirectToRoute('login');
         }
 

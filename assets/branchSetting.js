@@ -7,6 +7,7 @@ import {vueAlert} from "./src/vueAlert";
 import {get, post, put} from "./src/baseQuery";
 import {vueWorkShedule} from "./src/vueWorkShedule";
 import DatePicker from "vue2-datepicker";
+import {vueConfig} from "./src/vueConfig";
 
 let object = {
     id: null,
