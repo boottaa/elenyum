@@ -45,7 +45,10 @@ class WorkSheduleService extends BaseAbstractService
      */
     public function postCollection(array $data): bool
     {
-        $this->em->getConnection()->executeQuery("DELETE FROM work_schedule WHERE employee_id={$data['employeeId']}");
+        $start = $data['range']['start'];
+        $end = $data['range']['end'];
+        //Удаляем за текущей месяц и сохраняем новую колеккцию
+        $this->em->getConnection()->executeQuery("DELETE FROM work_schedule WHERE employee_id={$data['employeeId']} AND start>='{$start}' AND end<='{$end}'");
 
         $employee = $this->em->getRepository(Employee::class)->find($data['employeeId']);
         $items = $data['data'];

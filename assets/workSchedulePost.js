@@ -179,6 +179,7 @@ $(document).ready(function () {
 
         workSchedulePost.$on('workSchedulesLoaded', (data) => {
             calendar.removeAllEvents();
+            workSchedulePost.object.workSchedules = [];
             data.forEach(i => {
                 let start = new Date(i.start);
                 let end = new Date(i.end);
@@ -195,7 +196,6 @@ $(document).ready(function () {
                 workSchedulePost.object.workSchedules.push(workSchedule);
             });
 
-            console.log('render');
             calendar.render();
         });
     })
@@ -288,7 +288,13 @@ let workSchedulePost = new Vue({
             });
         },
         send() {
-            post('/api/workSchedule/post/collection', this.object, (result) => {
+            let data = this.object;
+            data.range = {
+                start: this.start,
+                end: this.end
+            };
+
+            post('/api/workSchedule/post/collection', data, (result) => {
                 if (result.success === true) {
                     workSchedulePost.$refs.alert.addAlert('График сотрудника обновлён', 'success');
                 }
