@@ -79,14 +79,7 @@ class WorkSheduleController extends AbstractController
         $result = [
             'employeeId' => $data['employeeId'],
             'data' => $data['workSchedules'],
-            'range' => [
-                'start' => DateTimeImmutable::createFromFormat('U', strtotime($data['range']['start']))->setTimezone(
-                    new DateTimeZone('Europe/Moscow')
-                )->format('Y-m-d H:i:s'),
-                'end' => DateTimeImmutable::createFromFormat('U', strtotime($data['range']['end']))->setTimezone(
-                    new DateTimeZone('Europe/Moscow')
-                )->format('Y-m-d H:i:s')
-            ]
+            'range' => $data['range'],
         ];
 
         $service->postCollection($result);

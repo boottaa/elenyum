@@ -45,8 +45,13 @@ class WorkSheduleService extends BaseAbstractService
      */
     public function postCollection(array $data): bool
     {
-        $start = $data['range']['start'];
-        $end = $data['range']['end'];
+        $start = DateTimeImmutable::createFromFormat('U', strtotime($data['range']['start']))->setTimezone(
+            new DateTimeZone('Europe/Moscow')
+        )->format('Y-m-d H:i:s');
+
+        $end =DateTimeImmutable::createFromFormat('U', strtotime($data['range']['end']))->setTimezone(
+            new DateTimeZone('Europe/Moscow')
+        )->format('Y-m-d H:i:s');
         //Удаляем за текущей месяц и сохраняем новую колеккцию
         $this->em->getConnection()->executeQuery("DELETE FROM work_schedule WHERE employee_id={$data['employeeId']} AND start>='{$start}' AND end<='{$end}'");
 
