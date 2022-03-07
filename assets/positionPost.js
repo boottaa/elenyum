@@ -57,10 +57,6 @@ let positionPost = new Vue({
                     value: this.object.roles,
                     validators: ['notEmpty'],
                 },
-                '#operations': {
-                    value: this.object.operations,
-                    validators: ['notEmpty'],
-                },
             };
             return isValid(items);
         },

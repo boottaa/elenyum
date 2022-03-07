@@ -71,7 +71,7 @@ new Vue({
                 },
                 '#userName': {
                     value: this.object.userName,
-                    validators: ['notEmpty'],
+                    validators: ['notEmpty', 'fio'],
                 },
                 '#position': {
                     value: this.object.position,
@@ -79,7 +79,7 @@ new Vue({
                 },
                 '#email': {
                     value: this.object.email,
-                    validators: ['notEmpty'],
+                    validators: ['email'],
                 },
                 '#companyName': {
                     value: this.object.companyName,
@@ -87,11 +87,17 @@ new Vue({
                 },
                 '#password': {
                     value: this.object.password,
-                    validators: ['notEmpty'],
+                    validators: ['password'],
+                    repeat: this.object.repeatPassword
+                },
+                '#repeatPassword': {
+                    value: this.object.repeatPassword,
+                    validators: ['password'],
+                    repeat: this.object.password
                 },
                 '#address': {
                     value: this.object.address,
-                    validators: ['address'],
+                    validators: ['notEmpty'],
                 }
             };
             return isValid(items);

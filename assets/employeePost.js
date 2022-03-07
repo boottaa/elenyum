@@ -56,25 +56,25 @@ let employeePost = new Vue({
     methods: {
         validation() {
             let items = {
-                '#positionId': {
+                '#position': {
                     value: this.object.position,
                     validators: ['notEmpty'],
                 },
                 '#userName': {
                     value: this.object.name,
-                    validators: ['notEmpty'],
+                    validators: ['notEmpty', 'fio'],
                 },
                 '#phone': {
                     value: this.object.phone,
-                    validators: ['notEmpty'],
+                    validators: ['phone'],
+                },
+                '#additionalPhone': {
+                    value: this.object.additionalPhone,
+                    validators: ['phone'],
                 },
                 '#email': {
                     value: this.object.email,
-                    validators: ['notEmpty'],
-                },
-                '#dateBrith': {
-                    value: this.object.dateBrith,
-                    validators: ['notEmpty'],
+                    validators: ['email'],
                 },
             };
             return isValid(items);

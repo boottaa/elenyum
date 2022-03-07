@@ -1,21 +1,70 @@
 let validator = {
     phone: (value) => {
-        let returnClass = 'invalid-phone';
+        value = value.value;
         let regex = /^((8|\+7)[\- ]?)?(\(?\d{3}\)?[\- ]?)?[\d\- ]{7,10}$/;
-        if (regex.test(value)) {
-            return {
-                success: true,
-                message: '',
-                class: returnClass,
-            };
-        } else {
+        if (value !== null && value !== '' && ! regex.test(value)) {
             return {
                 success: false,
                 message: 'Номер телефона не корректный',
             };
+        } else {
+            return {
+                success: true,
+            };
         }
     },
-    notEmpty: (value) => {
+    password: (data) => {
+        let repeat = data.repeat;
+        let value = data.value;
+        let regex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/;
+
+        if (!regex.test(value)) {
+            return {
+                success: false,
+                message: 'Пароль должен содержать хотя бы одну заглавную букву и одну цифру и должен быть не меньше 8 символов',
+            };
+        } else if (repeat !== value) {
+            return {
+                success: false,
+                message: 'Пароли не совпадают, повторите пароль',
+            };
+        } else {
+            return {
+                success: true,
+            };
+        }
+    },
+    fio: (value) => {
+        value = value.value;
+        if (value === null || value.split(' ').length < 2) {
+            return {
+                success: false,
+                message: 'Необходимо ввести хотя бы имя и фамилию',
+            };
+        } else {
+            return {
+                success: true,
+            };
+
+        }
+    },
+    email: (value) => {
+        value = value.value;
+        let regex = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        if (!regex.test(value)) {
+            return {
+                success: false,
+                message: 'Email не корректный',
+            };
+        } else {
+            return {
+                success: true,
+            };
+
+        }
+    },
+    notEmpty: (data) => {
+        let value = data.value;
         if (value === null || value === '' || value === undefined || value?.length === 0 || value === {}) {
             return {
                 success: false,
@@ -24,7 +73,6 @@ let validator = {
         } else {
             return {
                 success: true,
-                message: '',
             };
         }
     },
@@ -32,11 +80,12 @@ let validator = {
 
 export function isValid(items) {
     let result = null;
+    $('.invalid-feedback').remove();
 
     for (const [key, value] of Object.entries(items)) {
         value.validators.forEach((item) => {
             if (typeof validator[item] === 'function') {
-                let validResult = validator[item](value.value);
+                let validResult = validator[item](value);
                 if (validResult.success === false) {
                     addErrorMessage(key, validResult.message);
 
@@ -59,7 +108,6 @@ export function isValid(items) {
 }
 
 export function addErrorMessage(itemId, message) {
-    $(itemId).parent().find('.invalid-feedback').remove();
     $(itemId).addClass('is-invalid');
     $(itemId).parent().append(`<div class="invalid-feedback">${message} </div>`);
 }

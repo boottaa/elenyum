@@ -8,6 +8,7 @@ import {get, post, put} from "./src/baseQuery";
 import {vueWorkShedule} from "./src/vueWorkShedule";
 import DatePicker from "vue2-datepicker";
 import {vueConfig} from "./src/vueConfig";
+import {isValid} from "./validator/validator";
 
 let object = {
     id: null,
@@ -44,15 +45,35 @@ let branchSetting = new Vue({
         });
     },
     methods: {
-        send() {
-            this.object.start = this.time[0];
-            this.object.end = this.time[1];
-            put('/api/branch/put', this.object.id, this.object, (result) => {
-                if (result.success === true) {
-                    branchSetting.$refs.alert.addAlert('Данные филиала обновлены', 'success');
+        validation() {
+
+            let items = {
+                '#name': {
+                    value: this.object.name,
+                    validators: ['notEmpty'],
+                },
+                '#address': {
+                    value: this.object.address,
+                    validators: ['notEmpty'],
+                },
+                '#time': {
+                    value: this.time[0],
+                    validators: ['notEmpty'],
                 }
-            });
-            return 1;
+            };
+            return isValid(items);
+        },
+
+        send() {
+            if (this.validation()) {
+                this.object.start = this.time[0];
+                this.object.end = this.time[1];
+                put('/api/branch/put', this.object.id, this.object, (result) => {
+                    if (result.success === true) {
+                        branchSetting.$refs.alert.addAlert('Данные филиала обновлены', 'success');
+                    }
+                });
+            }
         },
 
         resetObject() {

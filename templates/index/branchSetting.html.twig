@@ -16,15 +16,15 @@
         <vue-alert ref="alert"></vue-alert>
         <div class="col-lg-4">
             <div class="mb-3">
-                <label for="positionId" class="form-label">Названия филиала</label>
-                <input type="text" v-model="object.name" class="form-control" id="branchName" required>
+                <label for="name" class="form-label">Названия филиала</label>
+                <input type="text" v-model="object.name" class="form-control" id="name" required>
             </div>
             <div class="mb-3">
-                <label for="positionId" class="form-label">Адрес филиала</label>
-                <input type="text" v-model="object.address" class="form-control" id="branchAddress" required>
+                <label for="address" class="form-label">Адрес филиала</label>
+                <input type="text" v-model="object.address" class="form-control" id="address" required>
             </div>
             <div class="mb-3">
-                <vue-work-shedule v-model="time" text="Выберите время" start="00:00" end="24:00"></vue-work-shedule>
+                <vue-work-shedule v-model="time" id="time" text="Выберите время" start="00:00" end="24:00"></vue-work-shedule>
             </div>
 
             <input type="button" v-on:click="send" class="btn btn-primary btn-user btn-block" value="Сохранить">

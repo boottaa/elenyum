@@ -30,7 +30,7 @@
                             </div>
                             <form class="user">
                                 <div class="form-group">
-                                    <input type="email" class="form-control form-control-user" v-model="object.companyName" id="companyName"
+                                    <input type="text" class="form-control form-control-user" v-model="object.companyName" id="companyName"
                                            placeholder="Название компании">
                                 </div>
                                 <div class="form-group">
@@ -58,11 +58,11 @@
 
                                 <div class="form-group row">
                                     <div class="col-sm-6 mb-3 mb-sm-0">
-                                        <input type="password" class="form-control form-control-user" v-model="object.password"
+                                        <input type="password" id="password" class="form-control form-control-user" v-model="object.password"
                                                placeholder="Пароль">
                                     </div>
                                     <div class="col-sm-6">
-                                        <input type="password" class="form-control form-control-user" v-model="object.repeatPassword"
+                                        <input id="repeatPassword" type="password" class="form-control form-control-user" v-model="object.repeatPassword"
                                               placeholder="Повторите пароль">
                                     </div>
                                 </div>

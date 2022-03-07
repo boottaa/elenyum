@@ -55,12 +55,14 @@ class EmployeeService extends BaseAbstractService
         $employee->setPhone($data['phone']);
         $employee->setEmail($data['email']);
 
-        $dateBrith = DateTimeImmutable::createFromFormat('U', strtotime($data['dateBrith']))->setTimezone(
-            new DateTimeZone('Europe/Moscow')
-        );
+        if (!empty($data['dateBrith'])) {
+            $dateBrith = DateTimeImmutable::createFromFormat('U', strtotime($data['dateBrith']))->setTimezone(
+                new DateTimeZone('Europe/Moscow')
+            );
+            $employee->setDateBrith($dateBrith ?? null);
+        }
         $employee->setAdditionalPhone($data['additionalPhone'] ?? null);
         $employee->setPassword($data['password'] ?? null);
-        $employee->setDateBrith($dateBrith ?? null);
     }
 
     /**
