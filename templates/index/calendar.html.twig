@@ -66,12 +66,12 @@
                                         <div class="col">
                                             <label for="eventStart" class="form-label">Дата начала</label><br>
                                             <date-picker aria-required="true" id="eventStart" style="width: 100%"
-                                                         v-model="object.start" type="datetime"></date-picker>
+                                                         v-model="object.start" type="time" :time-picker-options="{start: startTimeStr, step: '00:15', end: endTimeStr}" format="HH:mm"></date-picker>
                                         </div>
                                         <div class="col">
                                             <label for="eventEnd" class="form-label">Дата окончания</label><br>
                                             <date-picker aria-required="true" id="eventEnd" style="width: 100%"
-                                                         v-model="object.end" type="datetime"></date-picker>
+                                                         v-model="object.end" type="time" :time-picker-options="{start: startTimeStr, step: '00:05', end: endTimeStr}" format="HH:mm"></date-picker>
                                         </div>
                                     </div>
                                 </div>
@@ -85,9 +85,9 @@
                                     <div class="mb-3">
                                         <div class="row">
                                             <div class="input-group mb-3">
-                                                <span class="input-group-text" title="Персональная скидка"><i class="fas fa-info-circle"></i>&nbsp; Скидка: 0%</span>
-                                                <span class="input-group-text" title="Баллы которые на счёту у клиента"><i class="fas fa-info-circle"></i> &nbsp; Баллы: 9999</span>
-                                                <input type="text" class="form-control" id="paymentCard" placeholder="Кол-во списанных баллов" required>
+{#                                                <span class="input-group-text" title="Персональная скидка"><i class="fas fa-info-circle"></i>&nbsp; Скидка: 0%</span>#}
+{#                                                <span class="input-group-text" title="Баллы которые на счёту у клиента"><i class="fas fa-info-circle"></i> &nbsp; Баллы: 9999</span>#}
+{#                                                <input type="text" class="form-control" id="paymentCard" placeholder="Кол-во списанных баллов" required>#}
                                                 <span class="input-group-text" title="Итого к оплате"><i class="fas fa-cart-arrow-down"></i></span>
                                                 <input type="text" :value="totalPrice" class="form-control" id="paymentCard" required>
                                                 <span class="input-group-text">руб.</span>

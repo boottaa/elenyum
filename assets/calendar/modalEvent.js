@@ -8,6 +8,7 @@ import DatePicker from 'vue2-datepicker';
 import {isValid} from "../validator/validator";
 import {menuItems, paymentTypes, sheduleStatus, sheduleObject} from "./objects";
 import {get} from "../src/baseQuery";
+import {vueConfig} from "../src/vueConfig";
 
 //https://vue-select.org/guide/values.html#getting-and-setting
 Vue.component('v-select', vSelect);
@@ -29,10 +30,19 @@ export let modalVue = new Vue({
                 end: null,
                 startTimeStr: null,
                 endTimeStr: null,
-            }
+            },
+
+            startTimeStr: null,
+            endTimeStr: null,
         }
     },
-
+    created() {
+        vueConfig.$once('loaded', (data) => {
+            let b = data.branch;
+            this.startTimeStr = b.startTimeStr;
+            this.endTimeStr = b.endTimeStr;
+        });
+    },
     computed: {
         totalPrice() {
             let total = 0;
@@ -140,6 +150,17 @@ export let modalVue = new Vue({
         clickPaymentType(value) {
             if (this.object.paymentType === value) {
                 this.object.paymentType = false;
+
+                return;
+            }
+
+            if (value === 1) {
+                this.object.paymentCard = this.totalPrice;
+            } else if (value === 2) {
+                this.object.paymentCash = this.totalPrice;
+            } else {
+                this.object.paymentCard = 0;
+                this.object.paymentCash = 0;
             }
         },
     },
