@@ -93,14 +93,13 @@ export let menu = Vue.component('v-client', {
             this.getData();
         },
         setSelected(value) {
-            console.log(value);
             if (value === null) {
                 this.select = {
                     id: null,
                     phone: null,
                     name: null,
                 };
-            } else if(Object.is(value)) {
+            } else if(typeof value === 'object') {
                 this.select = {
                     phone: value.phone,
                     id: value.id,
