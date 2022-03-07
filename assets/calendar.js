@@ -283,15 +283,19 @@ $(function () {
 
             switch (item.status) {
                 case 1:
+                    //Подтвердил
                     backgroundColor = 'rgb(176 192 255)';
                     break;
                 case 2:
+                    //Не Подтвердил
                     backgroundColor = 'rgb(236 184 184)';
                     break;
                 case 3:
+                    //Пришёл
                     backgroundColor = 'rgb(187 236 189)';
                     break;
                 case 4:
+                    //Не Пришёл
                     backgroundColor = 'rgb(240 230 191)';
                     break;
                 default:
