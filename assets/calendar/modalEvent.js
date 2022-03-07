@@ -7,7 +7,6 @@ import '../src/vueOperationSelect';
 import DatePicker from 'vue2-datepicker';
 import {isValid} from "../validator/validator";
 import {menuItems, paymentTypes, sheduleStatus, sheduleObject} from "./objects";
-import {get} from "../src/baseQuery";
 import {vueConfig} from "../src/vueConfig";
 
 //https://vue-select.org/guide/values.html#getting-and-setting

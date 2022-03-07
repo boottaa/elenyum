@@ -36,9 +36,9 @@ class Shedule
     private Client $client;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", nullable=true)
      */
-    private int $status;
+    private ?int $status;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
@@ -83,7 +83,6 @@ class Shedule
     public function __construct()
     {
         $this->setCreatedAt(new DateTimeImmutable());
-        $this->setStatus(self::STATUS_ADDED);
         $this->sheduleOperations = new ArrayCollection();
     }
 
@@ -117,18 +116,18 @@ class Shedule
     }
 
     /**
-     * @return int
+     * @return int|null
      */
-    public function getStatus(): int
+    public function getStatus(): ?int
     {
         return $this->status;
     }
 
     /**
-     * @param int $status
-     * @return Shedule
+     * @param int|null $status
+     * @return $this
      */
-    public function setStatus(int $status): Shedule
+    public function setStatus(?int $status): Shedule
     {
         $this->status = $status;
 

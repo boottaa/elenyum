@@ -215,10 +215,17 @@ $(function () {
                 let divEl = document.createElement('div');
                 divEl.className = 'eventBlock';
 
+                let userFullName = e.event.extendedProps.client.name;
+
+                let name = userFullName;
+                if (userFullName.length > 10) {
+                    name = userFullName.substring(0, 10) + "..."
+                }
+
                 if (e.event.extendedProps.client) {
                     divEl.innerHTML += `
                 <div class="eventUserInfo">
-                    ${e.event.extendedProps.client.name}
+                    <span title="${userFullName}">${name}</span>
                     <span style="color: #2a84e1">${e.event.extendedProps.client.phone}</span>
                 </div>
                 `;
@@ -271,7 +278,25 @@ $(function () {
          * @returns {{paymentCard: (null|any), resourceId, operations: [], start, client: {phone: (null|*), name: (null|*), id: (null|*), status: (boolean|*)}, end, id, paymentCash: (null|any), paymentType: (boolean|*), status}}
          */
         function prepareCalendarEvent(item) {
-            let operations = [];
+            let operations = [],
+                backgroundColor = null;
+
+            switch (item.status) {
+                case 1:
+                    backgroundColor = 'rgb(176 192 255)';
+                    break;
+                case 2:
+                    backgroundColor = 'rgb(236 184 184)';
+                    break;
+                case 3:
+                    backgroundColor = 'rgb(187 236 189)';
+                    break;
+                case 4:
+                    backgroundColor = 'rgb(240 230 191)';
+                    break;
+                default:
+                    backgroundColor = 'rgb(209 215 241)';
+            }
             item.sheduleOperations.forEach((sheduleOperation) => {
                 operations.push({
                     id: sheduleOperation.operation.id,
@@ -298,6 +323,7 @@ $(function () {
                 paymentCash: item.paymentCash,
                 paymentCard: item.paymentCard,
                 status: item.status,
+                backgroundColor: backgroundColor,
             };
         }
 
