@@ -6,6 +6,7 @@ use App\Entity\Employee;
 use App\Entity\Role;
 use App\Exception\ArrayException;
 use App\Service\EmployeeService;
+use App\Validator\EmployeeValidator;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -47,18 +48,18 @@ class EmployeeController extends AbstractController
      * @throws ArrayException
      */
     #[Route('/api/employee/listForCalendar', name: 'apiEmployeeListForCalendar')]
-    public function listForCalendar(EmployeeService $service, Request $request): Response
+    public function listForCalendar(EmployeeService $service): Response
     {
         $user = $this->getUser();
         if (!$user instanceof Employee) {
             return $this->json((new ArrayException('Пользователь не найден', 202))->toArray());
         }
         $params = ['company' => $user->getCompany()];
-        if (! $this->isGranted(Role::ROLE_SHEDULE_ALL) && ! $this->isGranted(Role::ROLE_SHEDULE_ME)) {
+        if (!$this->isGranted(Role::ROLE_SHEDULE_ALL) && !$this->isGranted(Role::ROLE_SHEDULE_ME)) {
             return $this->json((new ArrayException('Нет прав', 202))->toArray());
         }
         //Если нет прав на просмотр всех задач то загружаем только текущего пользователя
-        if ($this->isGranted(Role::ROLE_SHEDULE_ME) && ! $this->isGranted(Role::ROLE_SHEDULE_ALL)) {
+        if ($this->isGranted(Role::ROLE_SHEDULE_ME) && !$this->isGranted(Role::ROLE_SHEDULE_ALL)) {
             $params['userId'] = $user->getId();
         }
 
@@ -121,25 +122,34 @@ class EmployeeController extends AbstractController
      *
      * @param Request $request
      * @param EmployeeService $service
+     * @param EmployeeValidator $validator
      * @return Response
      * @throws ArrayException
      * @throws \JsonException
      */
     #[IsGranted(Role::ROLE_EMPLOYEE_EDIT)]
     #[Route('/api/employee/post', name: 'apiEmployeePost', methods: 'POST')]
-    public function post(Request $request, EmployeeService $service): Response
+    public function post(Request $request, EmployeeService $service, EmployeeValidator $validator): Response
     {
-        $user = $this->getUser();
-        if (!$user instanceof Employee) {
-            return $this->json((new ArrayException('Пользователь не найден', 202))->toArray());
-        }
-        $data['employee'] = json_decode($request->getContent(), true, 512, JSON_THROW_ON_ERROR);
-        $data['user'] = $user;
+        $content = json_decode($request->getContent(), true, 512, JSON_THROW_ON_ERROR);
+        if ($validator->isValid($content)) {
+            $user = $this->getUser();
+            if (!$user instanceof Employee) {
+                return $this->json((new ArrayException('Пользователь не найден', 202))->toArray());
+            }
+            $data['employee'] = $content;
+            $data['user'] = $user;
 
-        $service->post($data);
+            $service->post($data);
+
+            return $this->json([
+                'success' => true,
+            ]);
+        }
 
         return $this->json([
-            'success' => true,
+            'success' => false,
+            'message' => 'Не корректные данные',
         ]);
     }
 
@@ -148,24 +158,35 @@ class EmployeeController extends AbstractController
      *
      * @param Request $request
      * @param EmployeeService $service
+     * @param EmployeeValidator $validator
      * @return Response
      * @throws ArrayException
      * @throws \JsonException
      */
     #[IsGranted(Role::ROLE_EMPLOYEE_EDIT)]
     #[Route('/api/employee/put/{employeeId<\d+>?}', name: 'apiEmployeePut', methods: 'PUT')]
-    public function put(Request $request, EmployeeService $service): Response
+    public function put(Request $request, EmployeeService $service, EmployeeValidator $validator): Response
     {
-        $user = $this->getUser();
-        if (!$user instanceof Employee) {
-            return $this->json((new ArrayException('Пользователь не найден', 202))->toArray());
-        }
-        $data['employee'] = json_decode($request->getContent(), true, 512, JSON_THROW_ON_ERROR);
+        $content = json_decode($request->getContent(), true, 512, JSON_THROW_ON_ERROR);
 
-        $service->put($data);
+        if ($validator->isValid($content)) {
+            $user = $this->getUser();
+            if (!$user instanceof Employee) {
+                return $this->json((new ArrayException('Пользователь не найден', 202))->toArray());
+            }
+            $data['employee'] = $content;
+
+            $service->put($data);
+
+            return $this->json([
+                'success' => true,
+            ]);
+        }
 
         return $this->json([
-            'success' => true,
+            'success' => false,
+            'message' => 'Не корректные данные',
+            'errors' => $validator->getErrors()
         ]);
     }
 }

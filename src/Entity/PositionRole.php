@@ -18,7 +18,7 @@ class PositionRole
     private int $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Position::class, inversedBy="positionRole")
+     * @ORM\OneToOne(targetEntity=Position::class, inversedBy="positionRole")
      * @ORM\JoinColumn(nullable=false)
      */
     private Position $position;

@@ -100,7 +100,7 @@ class Employee implements UserInterface, PasswordHasherAwareInterface, PasswordA
     private Position $position;
 
     /**
-     * @ORM\OneToMany(targetEntity=WorkSchedule::class, mappedBy="employeeId")
+     * @ORM\OneToMany(targetEntity=WorkSchedule::class, mappedBy="employee")
      */
     private $workSchedules;
 

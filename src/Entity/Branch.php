@@ -40,7 +40,7 @@ class Branch implements JsonSerializable
     private Collection $employees;
 
     /**
-     * @ORM\OneToOne(targetEntity=Location::class, mappedBy="branch")
+     * @ORM\OneToOne(targetEntity=Location::class)
      * @ORM\JoinColumn(nullable=false)
      */
     private Location $location;
