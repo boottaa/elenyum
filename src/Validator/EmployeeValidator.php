@@ -14,7 +14,16 @@ class EmployeeValidator extends AbstractBaseValidator
     {
         $constraints = new Constraints\Collection([
             'id' => new Constraints\Type('integer'),
-            'position' => new Constraints\NotBlank(),
+            'position' => new Constraints\Collection([
+                'id' => [
+                    new Constraints\NotBlank(),
+                    new Constraints\Type('integer')
+                ],
+                'title' => [
+                    new Constraints\NotBlank(),
+                    new Constraints\Type('string'),
+                ]
+            ], null, null, false),
             'name' => [
                 new Constraints\NotBlank(),
                 new Constraints\Type('string')

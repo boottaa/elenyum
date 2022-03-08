@@ -9,6 +9,7 @@ use App\Entity\Role;
 use App\Exception\ArrayException;
 use App\Repository\PositionRepository;
 use App\Service\PositionService;
+use App\Validator\PositionValidator;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -92,21 +93,30 @@ class PositionController extends AbstractController
      */
     #[IsGranted(Role::ROLE_POSITION_EDIT)]
     #[Route('/api/position/post', name: 'apiPositionPost', methods: 'POST')]
-    public function post(Request $request, PositionService $service): Response
+    public function post(Request $request, PositionService $service, PositionValidator $validator): Response
     {
-        $user = $this->getUser();
-        if (!$user instanceof Employee) {
-            return $this->json((new ArrayException('Пользователь не найден', 202))->toArray());
+        $content = json_decode($request->getContent(), true, 512, JSON_THROW_ON_ERROR);
+        if ($validator->isValid($content)) {
+            $user = $this->getUser();
+            if (!$user instanceof Employee) {
+                return $this->json((new ArrayException('Пользователь не найден', 202))->toArray());
+            }
+
+            $data = $content;
+            $data['position'] = $data;
+            $data['user'] = $user;
+
+            $service->post($data);
+
+            return $this->json([
+                'success' => true,
+            ]);
         }
 
-        $data = json_decode($request->getContent(), true, 512, JSON_THROW_ON_ERROR);
-        $data['position'] = $data;
-        $data['user'] = $user;
-
-        $service->post($data);
-
         return $this->json([
-            'success' => true,
+            'success' => false,
+            'message' => 'Не корректные данные',
+            'errors' => $validator->getErrors()
         ]);
     }
 
@@ -116,20 +126,29 @@ class PositionController extends AbstractController
      */
     #[IsGranted(Role::ROLE_POSITION_EDIT)]
     #[Route('/api/position/put/{positionId<\d+>?}', name: 'apiPositionPut', methods: 'PUT')]
-    public function put(Request $request, PositionService $service): Response
+    public function put(Request $request, PositionService $service, PositionValidator $validator): Response
     {
-        $user = $this->getUser();
-        if (!$user instanceof Employee) {
-            return $this->json((new ArrayException('Пользователь не найден', 202))->toArray());
+        $content = json_decode($request->getContent(), true, 512, JSON_THROW_ON_ERROR);
+        if ($validator->isValid($content)) {
+            $user = $this->getUser();
+            if (!$user instanceof Employee) {
+                return $this->json((new ArrayException('Пользователь не найден', 202))->toArray());
+            }
+
+            $data['data'] = $content;
+            $data['user'] = $user;
+
+            $service->put($data);
+
+            return $this->json([
+                'success' => true,
+            ]);
         }
 
-        $data['data'] = json_decode($request->getContent(), true, 512, JSON_THROW_ON_ERROR);
-        $data['user'] = $user;
-
-        $service->put($data);
-
         return $this->json([
-            'success' => true,
+            'success' => false,
+            'message' => 'Не корректные данные',
+            'errors' => $validator->getErrors()
         ]);
     }
 }
