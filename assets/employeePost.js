@@ -11,7 +11,7 @@ import {post, get, put} from "./src/baseQuery";
 let object = {
     id: null,
     position: null,
-    userName: null,
+    name: null,
     phone: null,
     email: null,
     additionalPhone: null,
@@ -43,7 +43,13 @@ let employeePost = new Vue({
         if (id !== undefined) {
             get('/api/employee/get/' + id, (r) => {
                 if (r.success === true) {
-                    this.object = r.item;
+                    this.object.id = r.item.id;
+                    this.object.position = r.item.position;
+                    this.object.name = r.item.name;
+                    this.object.phone = r.item.phone;
+                    this.object.email = r.item.email;
+                    this.object.additionalPhone = r.item.additionalPhone;
+
                     let st = r.item.dateBrith;
                     if (!!st) {
                         let pattern = /(\d{2})\.(\d{2})\.(\d{4})/;

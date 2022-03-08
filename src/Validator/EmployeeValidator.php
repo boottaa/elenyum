@@ -24,7 +24,6 @@ class EmployeeValidator extends AbstractBaseValidator
                 new Constraints\Type('string')
             ],
             'additionalPhone' => [
-                new Constraints\NotBlank(),
                 new Constraints\Type('string')
             ],
             'email' => [
