@@ -47,14 +47,15 @@ class BranchController extends AbstractController
                 return $this->json((new ArrayException('Пользователь не найден', 202))->toArray());
             }
 
-            $data['branch'] = $user->getBranch();
+            $branch = $user->getBranch();
+            $data['branch'] = $branch;
             $data['data'] = $content;
 
             $service->put($data);
 
             return $this->json([
                 'success' => true,
-                'item' => $user->getBranch(),
+                'item' => $branch,
             ]);
         }
 

@@ -106,10 +106,11 @@ class PositionController extends AbstractController
             $data['position'] = $data;
             $data['user'] = $user;
 
-            $service->post($data);
+            $position = $service->post($data);
 
             return $this->json([
                 'success' => true,
+                'item' => $position
             ]);
         }
 
@@ -138,10 +139,11 @@ class PositionController extends AbstractController
             $data['data'] = $content;
             $data['user'] = $user;
 
-            $service->put($data);
+            $position = $service->put($data);
 
             return $this->json([
                 'success' => true,
+                'item' => $position,
             ]);
         }
 

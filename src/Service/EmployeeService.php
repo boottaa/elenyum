@@ -30,7 +30,6 @@ class EmployeeService extends BaseAbstractService
     }
 
 
-
     public function get(int $id): array
     {
         return $this->repository->get($id);
@@ -62,7 +61,10 @@ class EmployeeService extends BaseAbstractService
             $employee->setDateBrith($dateBrith ?? null);
         }
         $employee->setAdditionalPhone($data['additionalPhone'] ?? null);
-        $employee->setPassword($data['password'] ?? null);
+        $password = $data['password'] ?? null;
+        if (!empty($password)) {
+            $employee->setPassword($password);
+        }
     }
 
     /**

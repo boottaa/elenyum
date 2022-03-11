@@ -103,10 +103,11 @@ class OperationController extends AbstractController
             $data['operation'] = $content;
             $data['user'] = $user;
 
-            $service->post($data);
+            $operation = $service->post($data);
 
             return $this->json([
                 'success' => true,
+                'item' => $operation
             ]);
         }
 
@@ -135,10 +136,11 @@ class OperationController extends AbstractController
             $data['operation'] = $content;
             $data['user'] = $user;
 
-            $service->put($data);
+            $operation = $service->put($data);
 
             return $this->json([
                 'success' => true,
+                'item' => $operation,
             ]);
         }
 

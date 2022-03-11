@@ -140,10 +140,11 @@ class EmployeeController extends AbstractController
             $data['employee'] = $content;
             $data['user'] = $user;
 
-            $service->post($data);
+            $employee = $service->post($data);
 
             return $this->json([
                 'success' => true,
+                'item' => $employee
             ]);
         }
 
@@ -176,10 +177,11 @@ class EmployeeController extends AbstractController
             }
             $data['employee'] = $content;
 
-            $service->put($data);
+            $employee = $service->put($data);
 
             return $this->json([
                 'success' => true,
+                'item' => $employee,
             ]);
         }
 
