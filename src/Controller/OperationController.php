@@ -7,6 +7,7 @@ use App\Entity\Operation;
 use App\Entity\Role;
 use App\Exception\ArrayException;
 use App\Service\OperationService;
+use App\Validator\OperationValidator;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -90,21 +91,29 @@ class OperationController extends AbstractController
      */
     #[IsGranted(Role::ROLE_OPERATION_EDIT)]
     #[Route('/api/operation/post', name: 'apiOperationPost', methods: 'POST')]
-    public function post(Request $request, OperationService $service): Response
+    public function post(Request $request, OperationService $service, OperationValidator $validator): Response
     {
-        $user = $this->getUser();
-        if (!$user instanceof Employee) {
-            return $this->json((new ArrayException('Пользователь не найден', 202))->toArray());
+        $content = json_decode($request->getContent(), true, 512, JSON_THROW_ON_ERROR);
+        if ($validator->isValid($content)) {
+            $user = $this->getUser();
+            if (!$user instanceof Employee) {
+                return $this->json((new ArrayException('Пользователь не найден', 202))->toArray());
+            }
+
+            $data['operation'] = $content;
+            $data['user'] = $user;
+
+            $service->post($data);
+
+            return $this->json([
+                'success' => true,
+            ]);
         }
 
-        $data = json_decode($request->getContent(), true, 512, JSON_THROW_ON_ERROR);
-        $data['operation'] = $data;
-        $data['user'] = $user;
-
-        $service->post($data);
-
         return $this->json([
-            'success' => true,
+            'success' => false,
+            'message' => 'Не корректные данные',
+            'errors' => $validator->getErrors(),
         ]);
     }
 
@@ -114,20 +123,29 @@ class OperationController extends AbstractController
      */
     #[IsGranted(Role::ROLE_OPERATION_EDIT)]
     #[Route('/api/operation/put/{operationId<\d+>?}', name: 'apiOperationPut', methods: 'PUT')]
-    public function put(Request $request, OperationService $service): Response
+    public function put(Request $request, OperationService $service, OperationValidator $validator): Response
     {
-        $user = $this->getUser();
-        if (!$user instanceof Employee) {
-            return $this->json((new ArrayException('Пользователь не найден', 202))->toArray());
+        $content = json_decode($request->getContent(), true, 512, JSON_THROW_ON_ERROR);
+        if ($validator->isValid($content)) {
+            $user = $this->getUser();
+            if (!$user instanceof Employee) {
+                return $this->json((new ArrayException('Пользователь не найден', 202))->toArray());
+            }
+
+            $data['operation'] = $content;
+            $data['user'] = $user;
+
+            $service->put($data);
+
+            return $this->json([
+                'success' => true,
+            ]);
         }
 
-        $data['operation'] = json_decode($request->getContent(), true, 512, JSON_THROW_ON_ERROR);
-        $data['user'] = $user;
-
-        $service->put($data);
-
         return $this->json([
-            'success' => true,
+            'success' => false,
+            'message' => 'Не корректные данные',
+            'errors' => $validator->getErrors(),
         ]);
     }
 }

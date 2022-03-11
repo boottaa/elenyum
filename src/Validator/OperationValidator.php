@@ -3,9 +3,8 @@
 namespace App\Validator;
 
 use Symfony\Component\Validator\Constraints;
-use Symfony\Component\Validator\Context\ExecutionContext;
 
-class BranchValidation extends AbstractBaseValidator
+class OperationValidator extends AbstractBaseValidator
 {
     /**
      * @param array $data
@@ -15,19 +14,15 @@ class BranchValidation extends AbstractBaseValidator
     {
         $constraints = new Constraints\Collection([
             'id' => new Constraints\Type('integer'),
-            'name' => [
+            'price' => [
+                new Constraints\Type('integer'),
                 new Constraints\NotBlank(),
-                new Constraints\Type('string')
             ],
-            'address' => [
+            'duration' => [
+                new Constraints\Type('integer'),
                 new Constraints\NotBlank(),
-                new Constraints\Type('string')
             ],
-            'start' => [
-                new Constraints\NotBlank(),
-                new Constraints\Type('string')
-            ],
-            'end' => [
+            'title' => [
                 new Constraints\NotBlank(),
                 new Constraints\Type('string')
             ]

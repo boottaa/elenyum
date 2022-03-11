@@ -6,7 +6,7 @@ use App\Entity\Employee;
 use App\Entity\Role;
 use App\Exception\ArrayException;
 use App\Service\BranchService;
-use App\Validator\BranchValidation;
+use App\Validator\BranchValidator;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -32,16 +32,16 @@ class BranchController extends AbstractController
     /**
      * @param Request $request
      * @param BranchService $service
-     * @param BranchValidation $validation
+     * @param BranchValidator $validator
      * @return Response
      * @throws \JsonException
      */
     #[IsGranted(Role::ROLE_BRANCH_SETTING)]
     #[Route('/api/branch/put/{branchId<\d+>?}', name: 'apiBranchPut', methods: 'PUT')]
-    public function put(Request $request, BranchService $service, BranchValidation $validation): Response
+    public function put(Request $request, BranchService $service, BranchValidator $validator): Response
     {
         $content = json_decode($request->getContent(), true, 512, JSON_THROW_ON_ERROR);
-        if ($validation->isValid($content)) {
+        if ($validator->isValid($content)) {
             $user = $this->getUser();
             if (!$user instanceof Employee) {
                 return $this->json((new ArrayException('Пользователь не найден', 202))->toArray());
