@@ -40,9 +40,9 @@ class BranchService extends BaseAbstractService
 
     /**
      * @param array $data
-     * @return bool
+     * @return Branch
      */
-    public function put(array $data): bool
+    public function put(array $data): Branch
     {
         $branch = $data['branch'];
         $data = $data['data'];
@@ -50,7 +50,7 @@ class BranchService extends BaseAbstractService
         $this->hydrate($branch, $data);
         $this->em->flush();
 
-        return true;
+        return $branch;
     }
 
 }

@@ -67,12 +67,11 @@ class EmployeeService extends BaseAbstractService
 
     /**
      * @param array $data
-     * @return bool
+     * @return Employee
      * @throws ArrayException
      */
-    public function put(
-        array $data
-    ): bool {
+    public function put(array $data): Employee
+    {
         $employeeData = $data['employee'];
 
         $employee = $this->em->getRepository(Employee::class)->find($employeeData['id']);
@@ -82,7 +81,7 @@ class EmployeeService extends BaseAbstractService
         $this->hydrate($employee, $employeeData);
         $this->em->flush();
 
-        return true;
+        return $employee;
     }
 
     /**

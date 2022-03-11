@@ -85,10 +85,11 @@ class PositionService extends BaseAbstractService
 
     /**
      * @param array $data
-     * @return bool
+     * @return Position
      * @throws ArrayException
+     * @throws \Doctrine\DBAL\Exception
      */
-    public function put(array $data): bool
+    public function put(array $data): Position
     {
         $positionData = $data['data'];
         $position = $this->em->getRepository(Position::class)->find($positionData['id']);
@@ -98,7 +99,7 @@ class PositionService extends BaseAbstractService
         $this->hydrate($position, $positionData);
         $this->em->flush();
 
-        return true;
+        return $position;
     }
 
     /**

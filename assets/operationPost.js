@@ -77,6 +77,7 @@ let operationPost = new Vue({
                 time.setSeconds(0);
 
                 result.duration = (this.object.duration.getTime() - time.getTime()) / 60000;
+                result.price = parseInt(this.object.price) || 0;
 
                 if (this.object.id === null) {
                     post('/api/operation/post', result, (result) => {

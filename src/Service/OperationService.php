@@ -32,10 +32,11 @@ class OperationService extends BaseAbstractService
 
     /**
      * @param array $data
-     * @return bool
+     * @return Operation
      * @throws ArrayException
      */
-    public function put(array $data): bool {
+    public function put(array $data): Operation
+    {
         $operationData = $data['operation'];
         $operation = $this->repository->find($operationData['id']);
         if (!$operation instanceof Operation) {
@@ -44,7 +45,7 @@ class OperationService extends BaseAbstractService
         $this->hydrate($operation, $operationData);
         $this->em->flush();
 
-        return true;
+        return $operation;
     }
 
     /**
@@ -58,12 +59,12 @@ class OperationService extends BaseAbstractService
         $operationData = $data['operation'];
 
         if (!$user instanceof Employee) {
-            throw new ArrayException('Not defined'.Employee::class, '422');
+            throw new ArrayException('Not defined '.Employee::class, '422');
         }
 
-        $position = new Operation();
-        $position->setCompany($user->getCompany());
-        $this->hydrate($position, $operationData);
+        $operation = new Operation();
+        $operation->setCompany($user->getCompany());
+        $this->hydrate($operation, $operationData);
         $this->em->flush();
 
         return true;
