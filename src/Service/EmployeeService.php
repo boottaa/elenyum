@@ -6,7 +6,6 @@ use App\Entity\Employee;
 use App\Entity\Position;
 use App\Exception\ArrayException;
 use App\Repository\EmployeeRepository;
-use App\Repository\ListRepositoryInterface;
 use App\Utils\Paginator;
 use DateTimeImmutable;
 use DateTimeZone;
@@ -61,10 +60,6 @@ class EmployeeService extends BaseAbstractService
             $employee->setDateBrith($dateBrith ?? null);
         }
         $employee->setAdditionalPhone($data['additionalPhone'] ?? null);
-        $password = $data['password'] ?? null;
-        if (!empty($password)) {
-            $employee->setPassword($password);
-        }
     }
 
     /**
