@@ -22,12 +22,10 @@ interface BaseInterface
     public function put(array $data): object;
 
     /**
-     * Add data
-     *
      * @param array $data
-     * @return bool
+     * @return object
      */
-    public function post(array $data): bool;
+    public function post(array $data): object;
 
     /**
      * @param int $id

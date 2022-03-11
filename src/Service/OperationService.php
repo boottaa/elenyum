@@ -50,10 +50,10 @@ class OperationService extends BaseAbstractService
 
     /**
      * @param array $data
-     * @return bool
+     * @return Operation
      * @throws ArrayException
      */
-    public function post(array $data): bool
+    public function post(array $data): Operation
     {
         $user = $data['user'];
         $operationData = $data['operation'];
@@ -67,7 +67,7 @@ class OperationService extends BaseAbstractService
         $this->hydrate($operation, $operationData);
         $this->em->flush();
 
-        return true;
+        return $operation;
     }
 
     /**

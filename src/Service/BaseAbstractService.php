@@ -35,10 +35,10 @@ abstract class BaseAbstractService implements BaseInterface
 
     /**
      * @param array $data
-     * @return bool
+     * @return object
      * @throws ArrayException
      */
-    public function post(array $data): bool
+    public function post(array $data): object
     {
         throw new ArrayException('Method: "' . __METHOD__ . '" is empty', '500');
     }

@@ -86,10 +86,10 @@ class EmployeeService extends BaseAbstractService
 
     /**
      * @param array $data
-     * @return bool
+     * @return Employee
      * @throws ArrayException
      */
-    public function post(array $data): bool
+    public function post(array $data): Employee
     {
         $user = $data['user'];
         $employeeData = $data['employee'];
@@ -107,7 +107,7 @@ class EmployeeService extends BaseAbstractService
         $this->hydrate($employee, $employeeData);
         $this->em->flush();
 
-        return true;
+        return $employee;
     }
 
     /**
