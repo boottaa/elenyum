@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Client;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\AbstractQuery;
 use Doctrine\Persistence\ManagerRegistry;
 use App\Utils\Paginator;
 use Exception;
@@ -43,5 +44,21 @@ class ClientRepository extends ServiceEntityRepository implements ListRepository
         }
 
         return (new Paginator($qb))->paginate($page);
+    }
+
+    /**
+     * @param int $id
+     * @return array
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    public function get(int $id): array
+    {
+        $qb = $this->createQueryBuilder("c")
+            ->select('c')
+            ->orderBy('c.id', 'ASC')
+            ->where('c.id=:id')
+            ->setParameter('id', $id);
+
+        return $qb->getQuery()->getOneOrNullResult(AbstractQuery::HYDRATE_ARRAY);
     }
 }

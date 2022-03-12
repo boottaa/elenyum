@@ -36,6 +36,7 @@ Encore
     .addEntry('employeePost', './assets/employeePost.js')
     .addEntry('employeeList', './assets/employeeList.js')
     .addEntry('clientList', './assets/clientList.js')
+    .addEntry('clientPost', './assets/clientPost.js')
     .addEntry('positionPost', './assets/positionPost.js')
     .addEntry('positionList', './assets/positionList.js')
     .addEntry('operationPost', './assets/operationPost.js')

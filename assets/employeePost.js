@@ -88,7 +88,12 @@ let employeePost = new Vue({
         send() {
             if (this.validation()) {
                 if (this.object.id === null) {
-                    post('/api/employee/post', this.object, (result) => {
+                    let result = this.object;
+                    result.position = {
+                        id: this.object.position.id,
+                        title: this.object.position.title
+                    }
+                    post('/api/employee/post', result, (result) => {
                         if (result.success === true) {
                             employeePost.$refs.alert.addAlert('Сотрудник добавлен', 'success');
                             setTimeout(() => {
@@ -97,7 +102,12 @@ let employeePost = new Vue({
                         }
                     });
                 } else {
-                    put('/api/employee/put', this.object.id, this.object, (result) => {
+                    let result = this.object;
+                    result.position = {
+                        id: this.object.position.id,
+                        title: this.object.position.title
+                    }
+                    put('/api/employee/put', result.id, result, (result) => {
                         if (result.success === true) {
                             employeePost.$refs.alert.addAlert('Данные сотрудника обновлены', 'success');
                         }

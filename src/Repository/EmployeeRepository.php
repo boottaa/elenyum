@@ -60,7 +60,6 @@ class EmployeeRepository extends ServiceEntityRepository implements ListReposito
         return $qb->getQuery()->getOneOrNullResult(AbstractQuery::HYDRATE_ARRAY);
     }
 
-
     /**
      * @throws ArrayException
      * @throws \Exception

@@ -7,8 +7,7 @@ use App\Entity\Employee;
 use App\Entity\Role;
 use App\Exception\ArrayException;
 use App\Service\ClientService;
-use App\Service\EmployeeService;
-use App\Validator\EmployeeValidator;
+use App\Validator\ClientValidator;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -76,7 +75,7 @@ class ClientController extends AbstractController
 
     #[IsGranted(Role::ROLE_SHEDULE_ALL)]
     #[Route('/api/client/get/{clientId<\d+>}', name: 'apiClientGet', methods: 'GET')]
-    public function getClient(int $clientId, EmployeeService $service): Response
+    public function getClient(int $clientId, ClientService $service): Response
     {
         $user = $this->getUser();
         if (!$user instanceof Employee) {
@@ -119,14 +118,14 @@ class ClientController extends AbstractController
      *
      * @param Request $request
      * @param ClientService $service
-     * @param EmployeeValidator $validator
+     * @param ClientValidator $validator
      * @return Response
      * @throws ArrayException
      * @throws \JsonException
      */
     #[IsGranted(Role::ROLE_SHEDULE_ALL)]
     #[Route('/api/client/post', name: 'apiClientPost', methods: 'POST')]
-    public function post(Request $request, ClientService $service, EmployeeValidator $validator): Response
+    public function post(Request $request, ClientService $service, ClientValidator $validator): Response
     {
         $content = json_decode($request->getContent(), true, 512, JSON_THROW_ON_ERROR);
         if ($validator->isValid($content)) {
@@ -152,18 +151,16 @@ class ClientController extends AbstractController
     }
 
     /**
-     * Update resource
-     *
      * @param Request $request
-     * @param EmployeeService $service
-     * @param EmployeeValidator $validator
+     * @param ClientService $service
+     * @param ClientValidator $validator
      * @return Response
      * @throws ArrayException
      * @throws \JsonException
      */
     #[IsGranted(Role::ROLE_SHEDULE_ALL)]
-    #[Route('/api/client/put/{clientId<\d+>?}', name: 'apiEmployeePut', methods: 'PUT')]
-    public function put(Request $request, EmployeeService $service, EmployeeValidator $validator): Response
+    #[Route('/api/client/put/{clientId<\d+>?}', name: 'apiClientPut', methods: 'PUT')]
+    public function put(Request $request, ClientService $service, ClientValidator $validator): Response
     {
         $content = json_decode($request->getContent(), true, 512, JSON_THROW_ON_ERROR);
 

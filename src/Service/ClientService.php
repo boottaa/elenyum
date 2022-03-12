@@ -17,6 +17,11 @@ class ClientService extends BaseAbstractService
         $this->repository = $repository;
     }
 
+    public function get(int $id): array
+    {
+        return $this->repository->get($id);
+    }
+
     /**
      * @param Client $client
      * @param array $data
@@ -26,7 +31,6 @@ class ClientService extends BaseAbstractService
     {
         $client->setName($data['name']);
         $client->setDateBrith($data['dateBrith']);
-        $client->setStatus($data['status']);
         $client->setEmail($data['email']);
         $client->setPhone($data['phone']);
         $client->setAdditionalPhone($data['additionalPhone']);

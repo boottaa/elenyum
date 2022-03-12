@@ -151,6 +151,7 @@ class EmployeeController extends AbstractController
         return $this->json([
             'success' => false,
             'message' => 'Не корректные данные',
+            'error' => $validator->getErrors()
         ]);
     }
 

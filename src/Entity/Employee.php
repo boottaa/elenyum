@@ -37,7 +37,7 @@ class Employee implements UserInterface, PasswordHasherAwareInterface, PasswordA
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private ?string $img;
+    private ?string $img = null;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
