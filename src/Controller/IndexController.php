@@ -128,4 +128,24 @@ class IndexController extends AbstractController
     {
         return $this->render('index/forgotPassword.html.twig', []);
     }
+
+    #[Route('/client/post/{id<\d+>?}', name: 'clientPost')]
+    public function clientPost(): Response
+    {
+        if (! $this->isGranted(Role::ROLE_EMPLOYEE_EDIT)) {
+            return $this->redirectToRoute('appIndex');
+        }
+
+        return $this->render('index/clientPost.html.twig');
+    }
+
+    #[Route('/client/list', name: 'clientList')]
+    public function clientList(): Response
+    {
+        if (! $this->isGranted(Role::ROLE_EMPLOYEE_EDIT)) {
+            return $this->redirectToRoute('appIndex');
+        }
+
+        return $this->render('index/clientList.html.twig', []);
+    }
 }

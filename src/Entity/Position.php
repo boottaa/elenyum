@@ -7,12 +7,13 @@ use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use JetBrains\PhpStorm\Internal\TentativeType;
 use JsonSerializable;
 
 /**
  * @ORM\Entity(repositoryClass=PositionRepository::class)
  */
-class Position
+class Position implements JsonSerializable
 {
     /**
      * @ORM\Id
@@ -197,5 +198,14 @@ class Position
         $this->company = $company;
 
         return $this;
+    }
+
+    public function jsonSerialize()
+    {
+        return [
+            'id' => $this->getId(),
+            'title' => $this->getTitle(),
+            'inCalendar' => $this->getInCalendar()
+        ];
     }
 }

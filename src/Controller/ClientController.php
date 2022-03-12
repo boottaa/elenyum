@@ -161,7 +161,7 @@ class ClientController extends AbstractController
      * @throws ArrayException
      * @throws \JsonException
      */
-    #[IsGranted(Role::ROLE_EMPLOYEE_EDIT)]
+    #[IsGranted(Role::ROLE_SHEDULE_ALL)]
     #[Route('/api/client/put/{clientId<\d+>?}', name: 'apiEmployeePut', methods: 'PUT')]
     public function put(Request $request, EmployeeService $service, EmployeeValidator $validator): Response
     {
@@ -172,13 +172,13 @@ class ClientController extends AbstractController
             if (!$user instanceof Employee) {
                 return $this->json((new ArrayException('Пользователь не найден', 202))->toArray());
             }
-            $data['employee'] = $content;
+            $data['client'] = $content;
 
-            $employee = $service->put($data);
+            $client = $service->put($data);
 
             return $this->json([
                 'success' => true,
-                'item' => $employee,
+                'item' => $client,
             ]);
         }
 

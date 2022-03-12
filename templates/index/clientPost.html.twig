@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Добавление клиента{% endblock %}
+
+{% block style %}
+    {{ encore_entry_link_tags('calendar') }}
+{% endblock %}
+
+{% block js %}
+    {{ encore_entry_script_tags('clientPost') }}
+{% endblock %}
+
+{% block body %}
+    <div id="employeePost" class="row">
+        <h3 class="mb-4" style="border-bottom: solid 1px #a8a8a8">Добавление клиента</h3>
+        <vue-alert ref="alert"></vue-alert>
+        <div class="col-lg-4">
+            <div class="mb-3">
+                <label for="userName" class="form-label">ФИО</label>
+                <input type="text" v-model="object.name" class="form-control" id="userName"
+                       required>
+            </div>
+            <div class="mb-3">
+                <label for="phone" class="form-label">Телефон</label>
+                <input type="text" v-model="object.phone" class="form-control" id="phone"
+                       required>
+            </div>
+            <div class="mb-3">
+                <label for="additionalPhone" class="form-label">Доп. телефон</label>
+                <input type="text" v-model="object.additionalPhone" class="form-control" id="additionalPhone"
+                       required>
+            </div>
+            <div class="mb-3">
+                <label for="email" class="form-label">Email</label>
+                <input type="email" v-model="object.email" class="form-control" id="email"
+                       required>
+            </div>
+            <div class="mb-5">
+                <label for="dateBrith" class="form-label">День рождения</label>
+                <date-picker aria-required="true" id="dateBrith" style="width: 100%" format="DD.MM.YYYY"
+                             v-model="object.dateBrith" type="date"></date-picker>
+            </div>
+            <input type="button" v-on:click="send" class="btn btn-primary btn-user btn-block" value="Сохранить">
+        </div>
+    </div>
+{% endblock %}

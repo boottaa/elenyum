@@ -29,7 +29,7 @@ class ClientRepository extends ServiceEntityRepository implements ListRepository
      */
     public function list(?array $params, int $page): Paginator
     {
-        $query = $params['query'];
+        $query = $params['query'] ?? null;
         $company = $params['company'];
 
         $qb = $this->createQueryBuilder('c')

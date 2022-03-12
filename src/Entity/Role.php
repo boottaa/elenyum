@@ -33,15 +33,15 @@ class Role implements JsonSerializable
     public const ROLES = [
         Role::BRANCH_SETTING => [
             'title' => self::ROLE_BRANCH_SETTING,
-            'description' => 'Настройка филиала'
+            'description' => 'Настройка филиала',
         ],
         Role::SHEDULE_ME => [
             'title' => self::ROLE_SHEDULE_ME,
-            'description' => 'Получение записей только по себе'
+            'description' => 'Получение записей только по себе',
         ],
         Role::SHEDULE_ALL => [
             'title' => self::ROLE_SHEDULE_ALL,
-            'description' => 'Получение записей по всем сотрудников и добавление, редактирование и удаление записей',
+            'description' => 'Получение записей по всем сотрудников, добавление, редактирование, удаление сотрудников а так-же просмотр всех клиентов в настройках',
         ],
         Role::POSITION_EDIT => [
             'title' => self::ROLE_POSITION_EDIT,
@@ -61,7 +61,7 @@ class Role implements JsonSerializable
         ],
         Role::WORK_SCHEDULE_VIEW => [
             'title' => self::ROLE_WORK_SCHEDULE_VIEW,
-            'description' => 'Просмотр графика работы'
+            'description' => 'Просмотр графика работы',
         ],
     ];
 

@@ -90,6 +90,9 @@
                     {% if is_granted('ROLE_EMPLOYEE_EDIT') %}
                         <a class="collapse-item {{ app.request.get('_route') == 'employeeList' ? 'active' }}" href="{{ path('employeeList') }}">Cотрудники</a>
                     {% endif %}
+                    {% if is_granted('ROLE_SHEDULE_ALL') %}
+                        <a class="collapse-item {{ app.request.get('_route') == 'clientList' ? 'active' }}" href="{{ path('clientList') }}">Клиенты</a>
+                    {% endif %}
                     {% if is_granted('ROLE_OPERATION_EDIT') %}
                         <a class="collapse-item {{ app.request.get('_route') == 'operationList' ? 'active' }}" href="{{ path('operationList') }}">Услуг</a>
                     {% endif %}
