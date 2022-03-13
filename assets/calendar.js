@@ -144,7 +144,6 @@ $(function () {
                     if (data !== null) {
                         calendar.getEventById(data.id)?.remove();
                         postEvent(data);
-                        //Потом добавляем событие в календарь
 
                         modalEvent.hide();
                     }
@@ -251,7 +250,16 @@ $(function () {
                         operations += `<span class="eventOption">${operation.title} (${operation.price} руб.) x${operation.count}</span> <br>`;
                     });
 
-                    operations += `<div style="position: absolute; right: 1px; bottom: 1px;" class="totalPrice badge rounded-pill bg-success">${totalPrice} руб.</div>`
+                    let priceClass = 'bg-warning';
+                    if (e.event.extendedProps.paymentType === 1) {
+                        priceClass = 'bg-primary';
+                    } else if (e.event.extendedProps.paymentType === 2) {
+                        priceClass = 'bg-success';
+                    } else if (e.event.extendedProps.paymentType === 3) {
+                        priceClass = 'bg-info';
+                    }
+                    console.log();
+                    operations += `<div style="position: absolute; right: 1px; bottom: 1px;" class="totalPrice badge rounded-pill ${priceClass}">${totalPrice} руб.</div>`
                     operations += '</div>';
 
                     divEl.innerHTML += operations;

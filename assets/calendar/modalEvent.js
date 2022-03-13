@@ -125,7 +125,7 @@ export let modalVue = new Vue({
                 addErrorMessage('#paymentCash', 'Сумма не соответствует итоговой сумме');
                 return;
             }
-            if (this.object.paymentType === 3 && this.totalPrice !== (this.object.paymentCard + this.object.paymentCash)) {
+            if (this.object.paymentType === 3 && this.totalPrice !== parseInt(this.object.paymentCard) + parseInt(this.object.paymentCash)) {
                 addErrorMessage('#paymentCard', 'Суммарная сумма по карте и наличным не соответствует итоговой сумме');
                 addErrorMessage('#paymentCash', 'Суммарная сумма по карте и наличным не соответствует итоговой сумме');
                 return;
