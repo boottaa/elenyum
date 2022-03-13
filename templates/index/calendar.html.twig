@@ -36,22 +36,22 @@
                             <div class="col-lg-9 mb-3">
                                 <div class="btn-group mb-3 col-lg-12" style="padding: 2px" role="group" aria-label="Basic radio toggle button group">
                                     <template v-for="eventStatus in sheduleStatus">
-                                        <input type="radio" @click="clickEventStatus(eventStatus.id)" class="btn-check" :disabled="object.client.phone === null || object.client.name === null" :value="eventStatus.id" v-model="object.status" name="userStatus" :id="'userStatus' + eventStatus.id" autocomplete="off">
+                                        <input type="radio" :disabled="object.paymentType !== null" @click="clickEventStatus(eventStatus.id)" class="btn-check" :disabled="object.client.phone === null || object.client.name === null" :value="eventStatus.id" v-model="object.status" name="userStatus" :id="'userStatus' + eventStatus.id" autocomplete="off">
                                         <label style="width: 180px; border-radius: 0;" class="btn btn-outline-primary" :for="'userStatus' + eventStatus.id">${ eventStatus.label }$</label>
                                     </template>
                                 </div>
                                 <div class="mb-3">
                                     <label for="clientPhone" class="form-label">Телефон клиента</label>
-                                    <v-client v-model="object.client" id="clientPhone"></v-client>
+                                    <v-client :disabled="object.paymentType !== null" v-model="object.client" id="clientPhone"></v-client>
                                 </div>
                                 <div class="mb-3">
                                     <label for="clientName" class="form-label">Имя клиента</label>
-                                    <input type="text" v-model="object.client.name" class="form-control" id="clientName"
+                                    <input type="text" :disabled="object.paymentType !== null" v-model="object.client.name" class="form-control" id="clientName"
                                            ref="clientName" required>
                                 </div>
                                 <div class="mb-3">
                                     <label for="operations" class="form-label">Выберите услуги</label>
-                                    <v-operation v-model="object.operations" :employee="object.resourceId" @input="changeOperation"></v-operation>
+                                    <v-operation :disabled="object.paymentType !== null" v-model="object.operations" :employee="object.resourceId" @input="changeOperation"></v-operation>
                                     <template v-if="object.operations.length > 0" v-for="operation in object.operations">
                                         <div class="input-group mt-1">
                                             <span style="width: 80%" class="input-group-text"
@@ -70,12 +70,12 @@
                                     <div class="row">
                                         <div class="col">
                                             <label for="eventStart" class="form-label">Дата начала</label><br>
-                                            <date-picker aria-required="true" id="eventStart" style="width: 100%"
+                                            <date-picker :disabled="object.paymentType !== null" aria-required="true" id="eventStart" style="width: 100%"
                                                          v-model="object.start" type="time" :time-picker-options="{start: startTimeStr, step: '00:15', end: endTimeStr}" format="HH:mm"></date-picker>
                                         </div>
                                         <div class="col">
                                             <label for="eventEnd" class="form-label">Дата окончания</label><br>
-                                            <date-picker aria-required="true" id="eventEnd" style="width: 100%"
+                                            <date-picker :disabled="object.paymentType !== null" aria-required="true" id="eventEnd" style="width: 100%"
                                                          v-model="object.end" type="time" :time-picker-options="{start: startTimeStr, step: '00:05', end: endTimeStr}" format="HH:mm"></date-picker>
                                         </div>
                                     </div>

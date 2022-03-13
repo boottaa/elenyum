@@ -163,7 +163,7 @@ export let modalVue = new Vue({
         clickPaymentType(value) {
             $('.invalid-feedback').remove();
             if (this.object.paymentType === value) {
-                this.object.paymentType = false;
+                this.object.paymentType = null;
 
                 return;
             }

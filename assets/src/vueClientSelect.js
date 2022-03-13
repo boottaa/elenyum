@@ -3,7 +3,7 @@ import Vue from "vue";
 
 export let menu = Vue.component('v-client', {
     components: {vSelect},
-    props: ['value'],
+    props: ['value', 'disabled'],
     data() {
         return {
             select: null,
@@ -53,6 +53,7 @@ export let menu = Vue.component('v-client', {
                 label="phone"
                 v-model="select"
                 :filterable="false"
+                :disabled="this.disabled"
                 :options="items"
       >
           <template #option="{ phone, name }">

@@ -3,7 +3,7 @@ import Vue from "vue";
 
 export let menu = Vue.component('v-operation', {
     components: {vSelect},
-    props: ['value', 'employee'],
+    props: ['value', 'employee', 'disabled'],
     data() {
         return {
             select: null,
@@ -32,6 +32,7 @@ export let menu = Vue.component('v-operation', {
                 v-model="select"
                 :options="items"
                 label="title"
+                :disabled="this.disabled"
                 :get-option-label="(operation) => operation.title">
       <template #no-options>
         Услуга не найдена
