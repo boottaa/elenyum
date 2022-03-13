@@ -16,7 +16,7 @@ let object = {
     operations: [],
 };
 
-let positionPost = new Vue({
+new Vue({
     components: { vueAlert },
     el: '#positionPost',
     data() {
@@ -70,14 +70,15 @@ let positionPost = new Vue({
                 if (this.object.id === null) {
                     post('/api/position/post', result, (result) => {
                         if (result.success === true) {
-                            positionPost.$refs.alert.addAlert('Должность добавлена', 'success');
                             this.resetObject();
+                            location.href = '/position/list#added';
                         }
                     });
                 } else {
                     put('/api/position/put', result.id, result, (result) => {
                         if (result.success === true) {
-                            positionPost.$refs.alert.addAlert('Должность обновлена', 'success');
+                            this.resetObject();
+                            location.href = '/position/list#edited';
                         }
                     });
                 }

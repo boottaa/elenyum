@@ -83,16 +83,15 @@ let clientPost = new Vue({
                 if (this.object.id === null) {
                     post('/api/client/post', this.object, (result) => {
                         if (result.success === true) {
-                            clientPost.$refs.alert.addAlert('Клиент добавлен', 'success');
-                            setTimeout(() => {
-                                document.location = '/client/list';
-                            }, 1000);
+                            this.resetObject();
+                            location.href = '/client/list#added';
                         }
                     });
                 } else {
                     put('/api/client/put', this.object.id, this.object, (result) => {
                         if (result.success === true) {
-                            clientPost.$refs.alert.addAlert('Данные клиента обновлены', 'success');
+                            this.resetObject();
+                            location.href = '/client/list#edited';
                         }
                     });
                 }

@@ -82,14 +82,16 @@ let operationPost = new Vue({
                 if (this.object.id === null) {
                     post('/api/operation/post', result, (result) => {
                         if (result.success === true) {
-                            operationPost.$refs.alert.addAlert('Услуга сохранена', 'success');
                             this.resetObject();
+                            location.href = '/operation/list#added';
                         }
+
                     });
                 } else {
                     put('/api/operation/put', this.object.id, result, (result) => {
                         if (result.success === true) {
-                            operationPost.$refs.alert.addAlert('Услуга сохранена', 'success');
+                            this.resetObject();
+                            location.href = '/operation/list#added';
                         }
                     });
                 }

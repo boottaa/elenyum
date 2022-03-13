@@ -6,6 +6,8 @@ use App\Entity\Client;
 use App\Entity\Employee;
 use App\Exception\ArrayException;
 use App\Repository\ClientRepository;
+use DateTimeImmutable;
+use DateTimeZone;
 use Doctrine\ORM\EntityManagerInterface;
 
 class ClientService extends BaseAbstractService
@@ -30,7 +32,12 @@ class ClientService extends BaseAbstractService
     private function hydrate(Client $client, array $data): void
     {
         $client->setName($data['name']);
-        $client->setDateBrith($data['dateBrith']);
+        if (!empty($data['dateBrith'])) {
+            $dateBrith = DateTimeImmutable::createFromFormat('U', strtotime($data['dateBrith']))->setTimezone(
+                new DateTimeZone('Europe/Moscow')
+            );
+            $client->setDateBrith($dateBrith ?? null);
+        }
         $client->setEmail($data['email']);
         $client->setPhone($data['phone']);
         $client->setAdditionalPhone($data['additionalPhone']);

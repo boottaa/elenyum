@@ -5,7 +5,7 @@ import {del} from "./src/baseQuery";
 import {vueList} from "./src/vueList";
 import {vueAlert} from "./src/vueAlert";
 
-let employeeList = new Vue({
+new Vue({
     components: {vueList, vueAlert},
     el: '#positionList',
     data() {
@@ -27,11 +27,11 @@ let employeeList = new Vue({
                                 if (r.success === true) {
                                     button.parents('tr').remove();
                                 } else {
-                                    employeeList.$refs.alert.addAlert(r.message, 'danger');
+                                    this.$refs.alert.addAlert(r.message, 'danger');
                                 }
                             },
                             (e) => {
-                                employeeList.$refs.alert.addAlert(e.message, 'danger');
+                                this.$refs.alert.addAlert(e.message, 'danger');
                             }
                         );
                     }
@@ -45,6 +45,16 @@ let employeeList = new Vue({
                     }
                 },
             ],
+        }
+    },
+    mounted() {
+        if (location.hash === '#added') {
+            this.$refs.alert.addAlert('Должность добавлена', 'success');
+            location.hash = ''
+        }
+        if (location.hash === '#edited') {
+            this.$refs.alert.addAlert('Должность обновлена', 'success');
+            location.hash = ''
         }
     },
     methods: {

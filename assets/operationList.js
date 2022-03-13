@@ -48,6 +48,16 @@ let operationList = new Vue({
             ],
         }
     },
+    mounted() {
+        if (location.hash === '#added') {
+            this.$refs.alert.addAlert('Услуга добавлена', 'success');
+            location.hash = ''
+        }
+        if (location.hash === '#edited') {
+            this.$refs.alert.addAlert('Услуга обновлена', 'success');
+            location.hash = ''
+        }
+    },
     methods: {
         prepare(data) {
             data.items.map((i) => {

@@ -60,6 +60,16 @@ let employeeList = new Vue({
             ],
         }
     },
+    mounted() {
+        if (location.hash === '#added') {
+            this.$refs.alert.addAlert('Сотрудник добавлен', 'success');
+            location.hash = ''
+        }
+        if (location.hash === '#edited') {
+            this.$refs.alert.addAlert('Данные сотрудника обновлены', 'success');
+            location.hash = ''
+        }
+    },
     methods: {
         prepare(data) {
             data.items.map((i) => {

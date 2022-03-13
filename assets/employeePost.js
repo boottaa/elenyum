@@ -95,10 +95,8 @@ let employeePost = new Vue({
                     }
                     post('/api/employee/post', result, (result) => {
                         if (result.success === true) {
-                            employeePost.$refs.alert.addAlert('Сотрудник добавлен', 'success');
-                            setTimeout(() => {
-                                document.location = '/employee/list';
-                            }, 1000);
+                            this.resetObject();
+                            location.href = '/employee/list#added';
                         }
                     });
                 } else {
@@ -109,7 +107,8 @@ let employeePost = new Vue({
                     }
                     put('/api/employee/put', result.id, result, (result) => {
                         if (result.success === true) {
-                            employeePost.$refs.alert.addAlert('Данные сотрудника обновлены', 'success');
+                            this.resetObject();
+                            location.href = '/employee/list#edited';
                         }
                     });
                 }

@@ -40,7 +40,6 @@ class PositionValidator extends AbstractBaseValidator
                 ], null, null, false)
             ]),
             'operations' => [
-                new Constraints\NotBlank(),
                 new Constraints\Type('array'),
             ],
         ], null, null, true, false);
