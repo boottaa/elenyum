@@ -83,7 +83,7 @@ let clientPost = new Vue({
                 if (this.object.id === null) {
                     post('/api/client/post', this.object, (result) => {
                         if (result.success === true) {
-                            employeePost.$refs.alert.addAlert('Клиент добавлен', 'success');
+                            clientPost.$refs.alert.addAlert('Клиент добавлен', 'success');
                             setTimeout(() => {
                                 document.location = '/client/list';
                             }, 1000);
@@ -92,7 +92,7 @@ let clientPost = new Vue({
                 } else {
                     put('/api/client/put', this.object.id, this.object, (result) => {
                         if (result.success === true) {
-                            employeePost.$refs.alert.addAlert('Данные клиента обновлены', 'success');
+                            clientPost.$refs.alert.addAlert('Данные клиента обновлены', 'success');
                         }
                     });
                 }

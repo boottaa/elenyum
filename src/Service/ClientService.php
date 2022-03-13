@@ -70,7 +70,9 @@ class ClientService extends BaseAbstractService
 
         $client = new Client();
         $client->setCompany($user->getCompany());
+        $client->setStatus(Client::STATUS_NEW_CLIENT);
         $this->hydrate($client, $clientData);
+        $this->em->persist($client);
         $this->em->flush();
 
         return $client;

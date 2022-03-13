@@ -39,7 +39,7 @@ let validator = {
         if (value === null || value.split(' ').length < 2) {
             return {
                 success: false,
-                message: 'Необходимо ввести хотя бы имя и фамилию',
+                message: 'Необходимо ввести имя и фамилию через пробел (пример: Александр Жуков)',
             };
         } else {
             return {
@@ -51,7 +51,8 @@ let validator = {
     email: (value) => {
         value = value.value;
         let regex = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-        if (!regex.test(value)) {
+
+        if (Boolean(value) && !regex.test(value)) {
             return {
                 success: false,
                 message: 'Email не корректный',

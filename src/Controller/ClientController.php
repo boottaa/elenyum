@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use App\Entity\Client;
 use App\Entity\Employee;
 use App\Entity\Role;
 use App\Exception\ArrayException;
@@ -98,7 +97,7 @@ class ClientController extends AbstractController
     public function delete(int $clientId, ClientService $service): Response
     {
         $user = $this->getUser();
-        if (!$user instanceof Client) {
+        if (!$user instanceof Employee) {
             return $this->json((new ArrayException('Пользователь не найден', 202))->toArray());
         }
 
@@ -130,7 +129,7 @@ class ClientController extends AbstractController
         $content = json_decode($request->getContent(), true, 512, JSON_THROW_ON_ERROR);
         if ($validator->isValid($content)) {
             $user = $this->getUser();
-            if (!$user instanceof Client) {
+            if (!$user instanceof Employee) {
                 return $this->json((new ArrayException('Пользователь не найден', 202))->toArray());
             }
             $data['client'] = $content;

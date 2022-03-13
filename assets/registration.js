@@ -79,7 +79,7 @@ new Vue({
                 },
                 '#email': {
                     value: this.object.email,
-                    validators: ['email'],
+                    validators: ['notEmpty', 'email'],
                 },
                 '#companyName': {
                     value: this.object.companyName,
