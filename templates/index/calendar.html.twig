@@ -61,6 +61,11 @@
                                         </div>
                                     </template>
                                 </div>
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text" title="Итого к оплате"><i class="fas fa-cart-arrow-down"></i></span>
+                                    <input type="text" readonly="readonly" :value="totalPrice" class="form-control" id="paymentCard" required>
+                                    <span class="input-group-text">руб.</span>
+                                </div>
                                 <div class="mb-3">
                                     <div class="row">
                                         <div class="col">
@@ -75,43 +80,42 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div v-if="object.status === 1 || object.status === 3" class="btn-group col-lg-12" style="padding: 2px" role="group" aria-label="Basic radio toggle button group">
-                                    <template v-for="paymentType in paymentTypes">
-                                        <input type="radio" @click="clickPaymentType(paymentType.id)" class="btn-check" :value="paymentType.id" v-model="object.paymentType" name="paymentType" :id="'paymentType' + paymentType.id" autocomplete="off">
-                                        <label style="border-radius: 0;" class="btn btn-outline-primary" :for="'paymentType' + paymentType.id"><i :class="paymentType.icon"></i> ${ paymentType.label }$ </label>
-                                    </template>
-                                </div>
-                                <template v-if="object.paymentType === 1 || object.paymentType === 2 || object.paymentType === 3">
-                                    <div class="mb-3">
-                                        <div class="row">
-                                            <div class="input-group mb-3">
-{#                                                <span class="input-group-text" title="Персональная скидка"><i class="fas fa-info-circle"></i>&nbsp; Скидка: 0%</span>#}
-{#                                                <span class="input-group-text" title="Баллы которые на счёту у клиента"><i class="fas fa-info-circle"></i> &nbsp; Баллы: 9999</span>#}
-{#                                                <input type="text" class="form-control" id="paymentCard" placeholder="Кол-во списанных баллов" required>#}
-                                                <span class="input-group-text" title="Итого к оплате"><i class="fas fa-cart-arrow-down"></i></span>
-                                                <input type="text" :value="totalPrice" class="form-control" id="paymentCard" required>
-                                                <span class="input-group-text">руб.</span>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div v-if="object.paymentType !== 2" class="col">
-                                                <label for="paymentCard" class="form-label">Сумма оплаты картой</label>
-                                                <div class="input-group mb-3">
-                                                    <span class="input-group-text"><i class="fas fa-credit-card"></i></span>
-                                                    <input type="text" v-model="object.paymentCard" class="form-control" id="paymentCard" required>
-                                                    <span class="input-group-text">руб.</span>
-                                                </div>
-                                            </div>
-                                            <div v-if="object.paymentType !== 1" class="col">
-                                                <label for="paymentCash" class="form-label">Сумма оплаты наличными</label>
-                                                <div class="input-group mb-3">
-                                                    <span class="input-group-text"><i class="far fa-money-bill-alt"></i></span>
-                                                    <input type="text" v-model="object.paymentCash" class="form-control" id="paymentCash" required>
-                                                    <span class="input-group-text">руб.</span>
-                                                </div>
-                                            </div>
-                                        </div>
+                                <template v-if="object.status === 1 || object.status === 3">
+                                    <div class="btn-group col-lg-12" style="padding: 2px" role="group" aria-label="Basic radio toggle button group">
+                                        <template v-for="paymentType in paymentTypes">
+                                            <input type="radio" @click="clickPaymentType(paymentType.id)" class="btn-check" :value="paymentType.id" v-model="object.paymentType" name="paymentType" :id="'paymentType' + paymentType.id" autocomplete="off">
+                                            <label style="border-radius: 0;" class="btn btn-outline-primary" :for="'paymentType' + paymentType.id"><i :class="paymentType.icon"></i> ${ paymentType.label }$ </label>
+                                        </template>
                                     </div>
+                                    <template v-if="object.paymentType === 1 || object.paymentType === 2 || object.paymentType === 3">
+                                        <div class="mb-3">
+                                            <div class="row">
+                                                <div class="input-group mb-3">
+    {#                                                <span class="input-group-text" title="Персональная скидка"><i class="fas fa-info-circle"></i>&nbsp; Скидка: 0%</span>#}
+    {#                                                <span class="input-group-text" title="Баллы которые на счёту у клиента"><i class="fas fa-info-circle"></i> &nbsp; Баллы: 9999</span>#}
+    {#                                                <input type="text" class="form-control" id="paymentCard" placeholder="Кол-во списанных баллов" required>#}
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div v-if="object.paymentType !== 2" class="col">
+                                                    <label for="paymentCard" class="form-label">Сумма оплаты картой</label>
+                                                    <div class="input-group mb-3">
+                                                        <span class="input-group-text"><i class="fas fa-credit-card"></i></span>
+                                                        <input type="text" v-model="object.paymentCard" class="form-control" id="paymentCard" required>
+                                                        <span class="input-group-text">руб.</span>
+                                                    </div>
+                                                </div>
+                                                <div v-if="object.paymentType !== 1" class="col">
+                                                    <label for="paymentCash" class="form-label">Сумма оплаты наличными</label>
+                                                    <div class="input-group mb-3">
+                                                        <span class="input-group-text"><i class="far fa-money-bill-alt"></i></span>
+                                                        <input type="text" v-model="object.paymentCash" class="form-control" id="paymentCash" required>
+                                                        <span class="input-group-text">руб.</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </template>
                                 </template>
                             </div>
                         </template>
