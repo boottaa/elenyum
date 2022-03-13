@@ -132,6 +132,10 @@ class PositionService extends BaseAbstractService
      */
     public function del(int $id): bool
     {
+        $employees = $this->em->getRepository(Employee::class)->findBy(['position' => $id]);
+        if (count($employees) !== 0) {
+            throw new ArrayException('Невозможно удалить пока есть пользователь с такой должностью', 202);
+        }
         $position = $this->em->find(Position::class, $id);
         if (!$position instanceof Position) {
             throw new ArrayException('Not defined '.Position::class, '422');

@@ -31,6 +31,7 @@ let employeeList = new Vue({
                             (r) => {
                                 if (r.success === true) {
                                     button.parents('tr').remove();
+                                    this.$refs.alert.addAlert('Сотрудник удалён', 'success');
                                 } else {
                                     employeeList.$refs.alert.addAlert(r.message, 'danger');
                                 }

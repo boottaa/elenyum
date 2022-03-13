@@ -27,6 +27,7 @@ let operationList = new Vue({
                             (r) => {
                                 if (r.success === true) {
                                     button.parents('tr').remove();
+                                    this.$refs.alert.addAlert('Услуга удалена', 'success');
                                 } else {
                                     employeeList.$refs.alert.addAlert(r.message, 'danger');
                                 }
