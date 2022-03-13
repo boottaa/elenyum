@@ -12,13 +12,11 @@ class PositionValidator extends AbstractBaseValidator
      */
     public function isValid(array $data): bool
     {
-//        dd($data);
         $constraints = new Constraints\Collection([
             'id' => [
                 new Constraints\Type('integer'),
             ],
             'inCalendar' => [
-                new Constraints\NotBlank(),
                 new Constraints\Type('bool'),
             ],
             'title' => [

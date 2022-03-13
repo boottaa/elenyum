@@ -57,7 +57,7 @@ class Employee implements UserInterface, PasswordHasherAwareInterface, PasswordA
     /**
      * @ORM\Column(type="datetime_immutable", nullable=true)
      */
-    private ?\DateTimeImmutable $dateBrith;
+    private ?\DateTimeImmutable $dateBrith = null;
 
     /**
      * У каждого сотрудника свой пароль и свой уровень доступа (доступ по ролям, роли в отдельной таблице)

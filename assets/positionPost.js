@@ -12,7 +12,7 @@ let object = {
     id: null,
     inCalendar: null,
     title: null,
-    roles: null,
+    roles: [],
     operations: [],
 };
 
@@ -27,7 +27,7 @@ let positionPost = new Vue({
                 id: null,
                 inCalendar: null,
                 title: null,
-                roles: null,
+                roles: [],
                 operations: [],
             },
         }
@@ -65,6 +65,8 @@ let positionPost = new Vue({
 
                 let result = Object.assign({}, this.object);
                 result.operations = this.object.operations.map(i => {return i.id});
+                result.roles = this.object.roles.map(i => {return {id: i.id, title: i.title, description: i.description}});
+
                 if (this.object.id === null) {
                     post('/api/position/post', result, (result) => {
                         if (result.success === true) {
