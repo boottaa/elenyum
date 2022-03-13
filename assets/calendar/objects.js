@@ -1,6 +1,6 @@
 export let menuItems = [
     {id: 1, label: 'Детали записи', isActive: true, show: true},
-    {id: 2, label: 'Уведомления', isActive: false, show: true},
+    {id: 2, label: 'Уведомления', isActive: false, show: false},
     {id: 3, label: 'История изменений', isActive: false, show: false},
     {id: 4, label: 'Списание расходников', isActive: false, show: false},
     {id: 5, label: 'Статус визита', isActive: false, show: false},

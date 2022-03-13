@@ -5,7 +5,7 @@ import '../src/vueClientSelect';
 import '../src/vueOperationSelect';
 //https://www.npmjs.com/package/vue2-datepicker
 import DatePicker from 'vue2-datepicker';
-import {isValid} from "../validator/validator";
+import {addErrorMessage, isValid} from "../validator/validator";
 import {menuItems, paymentTypes, sheduleStatus, sheduleObject} from "./objects";
 import {vueConfig} from "../src/vueConfig";
 
@@ -116,6 +116,20 @@ export let modalVue = new Vue({
         },
 
         send() {
+            $('.invalid-feedback').remove();
+            if (this.object.paymentType === 1 && this.totalPrice !== this.object.paymentCard) {
+                addErrorMessage('#paymentCard', 'Сумма не соответствует итоговой сумме');
+                return;
+            }
+            if (this.object.paymentType === 2 && this.totalPrice !== this.object.paymentCash) {
+                addErrorMessage('#paymentCash', 'Сумма не соответствует итоговой сумме');
+                return;
+            }
+            if (this.object.paymentType === 3 && this.totalPrice !== (this.object.paymentCard + this.object.paymentCash)) {
+                addErrorMessage('#paymentCard', 'Суммарная сумма по карте и наличным не соответствует итоговой сумме');
+                addErrorMessage('#paymentCash', 'Суммарная сумма по карте и наличным не соответствует итоговой сумме');
+                return;
+            }
             if (this.validation()) {
                 this.$emit('send', JSON.parse(JSON.stringify(this.object, (key, value) => {
                     return value
@@ -147,6 +161,7 @@ export let modalVue = new Vue({
         },
 
         clickPaymentType(value) {
+            $('.invalid-feedback').remove();
             if (this.object.paymentType === value) {
                 this.object.paymentType = false;
 
@@ -158,8 +173,8 @@ export let modalVue = new Vue({
             } else if (value === 2) {
                 this.object.paymentCash = this.totalPrice;
             } else {
-                this.object.paymentCard = 0;
-                this.object.paymentCash = 0;
+                this.object.paymentCard = null;
+                this.object.paymentCash = null;
             }
         },
     },

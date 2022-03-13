@@ -110,5 +110,5 @@ export function isValid(items) {
 
 export function addErrorMessage(itemId, message) {
     $(itemId).addClass('is-invalid');
-    $(itemId).parent().append(`<div class="invalid-feedback">${message} </div>`);
+    $(itemId).parent().append(`<div class="invalid-feedback">${message}</div>`);
 }
