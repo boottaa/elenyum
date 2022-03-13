@@ -45,7 +45,7 @@ export let sheduleObject = Object.assign({}, {
     end: null,
     operations: [],
     //Тип оплаты
-    paymentType: false,
+    paymentType: null,
     //Сколько оплачено наличкой(сумма)
     paymentCash: null,
     //Оплачено картой (сумма)
