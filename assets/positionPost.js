@@ -71,14 +71,14 @@ new Vue({
                     post('/api/position/post', result, (result) => {
                         if (result.success === true) {
                             this.resetObject();
-                            location.href = '/position/list#added';
+                            // location.href = '/position/list#added';
                         }
                     });
                 } else {
                     put('/api/position/put', result.id, result, (result) => {
                         if (result.success === true) {
                             this.resetObject();
-                            location.href = '/position/list#edited';
+                            // location.href = '/position/list#edited';
                         }
                     });
                 }
