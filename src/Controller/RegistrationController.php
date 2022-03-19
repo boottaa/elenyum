@@ -12,6 +12,7 @@ use App\Exception\ArrayException;
 use App\Repository\EmployeeRepository;
 use App\Repository\RoleRepository;
 use App\Security\EmailVerifier;
+use App\Service\EmailService;
 use App\Validator\RegistrationValidator;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
@@ -26,13 +27,6 @@ use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
 
 class RegistrationController extends AbstractController
 {
-    private EmailVerifier $emailVerifier;
-
-    public function __construct(EmailVerifier $emailVerifier)
-    {
-        $this->emailVerifier = $emailVerifier;
-    }
-
     /**
      * @param Request $request
      * @param UserPasswordHasherInterface $userPasswordHasher
@@ -40,8 +34,10 @@ class RegistrationController extends AbstractController
      * @param EmployeeRepository $employeeRepository
      * @param RoleRepository $roleRepository
      * @param RegistrationValidator $validator
+     * @param \App\Service\EmailService $emailService
      * @return Response
      * @throws \JsonException
+     * @throws \Symfony\Component\Mailer\Exception\TransportExceptionInterface
      */
     #[Route('/api/register', name: 'api_register', methods: ['POST'])]
     public function register(
@@ -51,6 +47,7 @@ class RegistrationController extends AbstractController
         EmployeeRepository $employeeRepository,
         RoleRepository $roleRepository,
         RegistrationValidator $validator,
+        EmailService $emailService,
     ): Response {
         $data = json_decode($request->getContent(), true, 512, JSON_THROW_ON_ERROR);
 
@@ -114,16 +111,7 @@ class RegistrationController extends AbstractController
                 throw $e;
             }
 
-            $this->emailVerifier->sendEmailConfirmation(
-                'api_verify_email',
-                $employee,
-                (new TemplatedEmail())
-                    ->from(new Address('noreplay@elenyum.com', 'Elenyum'))
-                    ->to($employee->getEmail())
-                    ->subject('Пожалуйста подтвердите ваш email')
-                    ->htmlTemplate('registration/confirmation_email.html.twig')
-            );
-
+            $emailService->confirmationEmail($employee);
 
             return $this->json([
                 'success' => true,
@@ -133,27 +121,6 @@ class RegistrationController extends AbstractController
         return $this->json([
             'success' => false,
             'message' => 'Не корректные данные',
-        ]);
-    }
-
-    #[Route('/api/verify/email', name: 'api_verify_email')]
-    public function verifyUserEmail(Request $request): Response
-    {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-
-        // validate email confirmation link, sets User::isVerified=true and persists
-        try {
-            $this->emailVerifier->handleEmailConfirmation($request, $this->getUser());
-        } catch (VerifyEmailExceptionInterface $exception) {
-            return $this->json([
-                'success' => false,
-                'message' => $exception->getMessage(),
-            ]);
-        }
-
-        return $this->json([
-            'success' => true,
-            'message' => 'Email confirmed',
         ]);
     }
 }
