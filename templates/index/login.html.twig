@@ -18,6 +18,7 @@
 
     <body style="background: #076dd6;">
         <div id="login" class="container">
+            <vue-alert  ref="alert"></vue-alert>
             <div class="card o-hidden border-0 shadow-lg my-5">
                 <div class="card-body p-0">
                     <!-- Nested Row within Card Body -->
@@ -40,7 +41,6 @@
                                     <input type="button" v-on:click="send" class="btn btn-primary btn-user btn-block" value="Войти">
                                 </form>
                                 <hr>
-                                <vue-alert  ref="alert"></vue-alert>
                                 <div class="text-center">
                                     <a class="small" href="{{ path('forgotPassword') }}">Забыли пароль?</a>&nbsp;&nbsp;&nbsp;&nbsp;
                                     <a class="small" href="{{ path('registration') }}">Регистрация!</a>
