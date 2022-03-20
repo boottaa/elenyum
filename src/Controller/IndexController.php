@@ -18,7 +18,7 @@ class IndexController extends AbstractController
             return $this->redirectToRoute('login');
         }
 
-        return $this->render('index/index.html.twig', []);
+        return $this->render('index/calendar.html.twig', []);
     }
 
     #[Route('/calendar', name: 'appCalendar')]
