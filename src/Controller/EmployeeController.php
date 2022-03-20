@@ -43,7 +43,6 @@ class EmployeeController extends AbstractController
 
     /**
      * @param EmployeeService $service
-     * @param Request $request
      * @return Response
      * @throws ArrayException
      */

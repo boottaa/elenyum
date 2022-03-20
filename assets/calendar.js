@@ -15,7 +15,8 @@ import {vueConfig} from "./src/vueConfig";
 
 $(function () {
     let elModalEvent = document.getElementById('modalEvent'),
-        modalEvent = new bootstrap.Modal(elModalEvent);
+        modalEvent = new bootstrap.Modal(elModalEvent),
+        countResources = 0;
 
     let calendarEl = document.getElementById('calendar');
 
@@ -277,7 +278,9 @@ $(function () {
             if (data.total > 0) {
                 data.items.forEach(function (item) {
                     calendar.addResource(item);
-                })
+                });
+
+                $(document).trigger("loadedListForCalendar");
             }
         });
 
@@ -391,10 +394,17 @@ $(function () {
             });
         }
 
-        // console.log($.cookie('currentDate'));
         calendar.gotoDate(new Date($.cookie('currentDate')));
+        $(document).on("loadedListForCalendar", function() {
+            if (calendar.getResources().length > 0 && data.branch.startTimeStr !== data.branch.endTimeStr) {
+                calendar.render();
+            } else if(calendar.getResources().length < 0) {
+                $('#calendar').append('<p>Нет сотрудников отображаемых в календаре, вы можете добавить <a class="text-muted" style="color: #008fff !important;" href="/position/post">должность</a> и <a class="text-muted" style="color: #008fff !important;" href="/employee/post">сотрудника</a></p>');
+            } else if(data.branch.startTimeStr === data.branch.endTimeStr) {
+                $('#calendar').append('<p>Время работы филиала настроено не корректно <a class="text-muted" style="color: #008fff !important;" href="/branch/setting">настроить</a>');
+            }
+        });
 
-        calendar.render();
 
         baseCalendar.$on('dateChange', (date) => {
             calendar.gotoDate(date);

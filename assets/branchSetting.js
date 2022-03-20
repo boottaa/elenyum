@@ -39,8 +39,8 @@ let branchSetting = new Vue({
         get('/api/branch/get', (r) => {
             if (r.success === true) {
                 this.object = r.item;
-                this.time.push(new Date(r.item.start));
-                this.time.push(new Date(r.item.end));
+                this.time.push(r.item.start !== null ? new Date(r.item.start) : null);
+                this.time.push(r.item.end !== null ? new Date(r.item.end) : null);
             }
         });
     },

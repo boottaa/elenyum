@@ -21,7 +21,7 @@ class ConfigController extends AbstractController
 
         return $this->json([
             'success' => true,
-            'branch' => $user->getBranch(),
+            'branch' => $user->getBranch()->jsonSerialize(),
             'roles' => $user->getRoles(),
         ]);
     }
