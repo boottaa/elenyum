@@ -17,7 +17,6 @@ class EmailController extends AbstractController
 
     public function __construct(
         private MailerInterface $mailer,
-        private EmailService $emailService,
     ) {
     }
 
@@ -28,7 +27,6 @@ class EmailController extends AbstractController
     #[Route('/api/email/test', name: 'aaaa')]
     public function index(): Response
     {
-
         try {
             $email = (new Email())
                 ->from(self::_NOREPLAY)
@@ -61,6 +59,7 @@ class EmailController extends AbstractController
             $emailService->handleEmailConfirmation($request);
             return $this->redirectToRoute('login');
         } catch (\Exception $exception) {
+            dd($exception);
             return $this->json([
                 'success' => false,
                 'message' => $exception->getMessage(),
