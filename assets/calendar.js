@@ -15,8 +15,7 @@ import {vueConfig} from "./src/vueConfig";
 
 $(function () {
     let elModalEvent = document.getElementById('modalEvent'),
-        modalEvent = new bootstrap.Modal(elModalEvent),
-        countResources = 0;
+        modalEvent = new bootstrap.Modal(elModalEvent);
 
     let calendarEl = document.getElementById('calendar');
 
