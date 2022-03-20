@@ -2,6 +2,7 @@ import './bootstrap';
 import Vue from 'vue';
 import { isValid } from "./validator/validator";
 import { post, setToken } from "./src/baseQuery";
+import {vueAlert} from "./src/vueAlert";
 
 let object = {
     username: null,
@@ -10,6 +11,7 @@ let object = {
 
 new Vue({
     el: '#login',
+    components: { vueAlert },
     data() {
         return {
             object: {
@@ -20,6 +22,12 @@ new Vue({
     },
     created() {
         this.resetObject();
+    },
+    mounted() {
+        if (location.hash === '#confirmed') {
+            this.$refs.alert.addAlert('Учётная запись подтверждена', 'success');
+            location.hash = ''
+        }
     },
     methods: {
         validation() {

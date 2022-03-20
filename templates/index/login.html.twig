@@ -9,7 +9,7 @@
     <meta name="theme-color" content="#dd3d31">
 
     {% block style %}
-        {{ encore_entry_link_tags('app') }}
+        {{ encore_entry_link_tags('calendar') }}
     {% endblock %}
 
     {% block js %}
@@ -40,6 +40,7 @@
                                     <input type="button" v-on:click="send" class="btn btn-primary btn-user btn-block" value="Войти">
                                 </form>
                                 <hr>
+                                <vue-alert  ref="alert"></vue-alert>
                                 <div class="text-center">
                                     <a class="small" href="{{ path('forgotPassword') }}">Забыли пароль?</a>&nbsp;&nbsp;&nbsp;&nbsp;
                                     <a class="small" href="{{ path('registration') }}">Регистрация!</a>

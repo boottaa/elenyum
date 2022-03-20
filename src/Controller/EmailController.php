@@ -57,9 +57,8 @@ class EmailController extends AbstractController
     {
         try {
             $emailService->handleEmailConfirmation($request);
-            return $this->redirectToRoute('login');
+            return $this->redirect($this->generateUrl('login') . '#confirmed');
         } catch (\Exception $exception) {
-            dd($exception);
             return $this->json([
                 'success' => false,
                 'message' => $exception->getMessage(),
