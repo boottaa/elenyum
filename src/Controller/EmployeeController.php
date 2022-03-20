@@ -7,6 +7,8 @@ use App\Entity\Role;
 use App\Exception\ArrayException;
 use App\Service\EmployeeService;
 use App\Validator\EmployeeValidator;
+use DateTimeImmutable;
+use DateTimeZone;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -42,12 +44,13 @@ class EmployeeController extends AbstractController
     }
 
     /**
+     * @param Request $request
      * @param EmployeeService $service
      * @return Response
      * @throws ArrayException
      */
     #[Route('/api/employee/listForCalendar', name: 'apiEmployeeListForCalendar')]
-    public function listForCalendar(EmployeeService $service): Response
+    public function listForCalendar(Request $request, EmployeeService $service): Response
     {
         $user = $this->getUser();
         if (!$user instanceof Employee) {
@@ -61,6 +64,14 @@ class EmployeeController extends AbstractController
         if ($this->isGranted(Role::ROLE_SHEDULE_ME) && !$this->isGranted(Role::ROLE_SHEDULE_ALL)) {
             $params['userId'] = $user->getId();
         }
+        $start = $request->query->getInt('start');
+        $params['start'] = DateTimeImmutable::createFromFormat('U', round($start / 1000))->setTimezone(
+            new DateTimeZone('Europe/Moscow')
+        );
+        $end = $request->query->getInt('end');
+        $params['end'] = DateTimeImmutable::createFromFormat('U', round($end / 1000))->setTimezone(
+            new DateTimeZone('Europe/Moscow')
+        );
 
         $list = $service->listForCalendar($params);
 

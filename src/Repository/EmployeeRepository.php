@@ -68,17 +68,24 @@ class EmployeeRepository extends ServiceEntityRepository implements ListReposito
     {
         $company = $params['company'];
         $userId = $params['userId'] ?? null;
+        $start = $params['start'];
+        $end = $params['end'];
         if (!$company instanceof Company) {
             throw new ArrayException('Company undefined', '422');
         }
         $qb = $this->createQueryBuilder("e")
-            ->select('e', 'p')
+            ->select('e', 'p', 'ws')
             ->orderBy('e.id', 'ASC')
             ->leftJoin('e.position', 'p')
+            ->leftJoin('e.workSchedules', 'ws')
             ->where('e.company=:company')
             ->andWhere('p.inCalendar=:inCalendar')
+            ->andWhere('ws.start>=:start')
+            ->andWhere('ws.end<=:end')
             ->setParameter('company', $company)
-            ->setParameter('inCalendar', true);
+            ->setParameter('inCalendar', true)
+            ->setParameter('start', $start)
+            ->setParameter('end', $end);
         if ($userId) {
             $qb
                 ->andWhere('e.id=:userId')

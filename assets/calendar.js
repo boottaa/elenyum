@@ -273,7 +273,9 @@ $(function () {
             },
         });
 
-        $.get(`/api/employee/listForCalendar`, (data) => {
+        let start = calendar.view.currentStart.getTime();
+        let end = calendar.view.currentEnd.getTime();
+        $.get(`/api/employee/listForCalendar?start=${start}&end=${end}`, (data) => {
             if (data.total > 0) {
                 data.items.forEach(function (item) {
                     calendar.addResource(item);
@@ -355,9 +357,6 @@ $(function () {
             calendar.getEventById(id).remove();
             $.get(`/api/shedule/remove/${id}`);
         }
-
-        let start = calendar.view.currentStart.getTime()
-        let end = calendar.view.currentEnd.getTime();
 
         loadEvents(start, end);
 
