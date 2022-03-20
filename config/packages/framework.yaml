@@ -17,6 +17,10 @@ framework:
     php_errors:
         log: true
 
+symfonycasts_verify_email:
+    #Время в секундах действует ссылка для подтверждения учетной записи
+    lifetime: 86400
+
 when@test:
     framework:
         test: true

@@ -16,7 +16,8 @@ class EmailController extends AbstractController
     private const _NOREPLAY = 'noreply@elenyum.ru';
 
     public function __construct(
-        private MailerInterface $mailer
+        private MailerInterface $mailer,
+        private EmailService $emailService,
     ) {
     }
 
@@ -50,25 +51,20 @@ class EmailController extends AbstractController
         ]);
     }
 
+    /**
+     * @throws VerifyEmailExceptionInterface
+     */
     #[Route('/api/email/verify', name: 'apiEmailVerify')]
-    public function verifyUserEmail(Request $request, EmailService $emailService): Response
+    public function emailVerify(Request $request, EmailService $emailService): Response
     {
-        dd($request);
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-
-        // validate email confirmation link, sets User::isVerified=true and persists
         try {
-            $emailService->handleEmailConfirmation($request, $this->getUser());
-        } catch (VerifyEmailExceptionInterface $exception) {
+            $emailService->handleEmailConfirmation($request);
+            return $this->redirectToRoute('login');
+        } catch (\Exception $exception) {
             return $this->json([
                 'success' => false,
                 'message' => $exception->getMessage(),
             ]);
         }
-
-        return $this->json([
-            'success' => true,
-            'message' => 'Email confirmed',
-        ]);
     }
 }
