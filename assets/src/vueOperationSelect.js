@@ -66,11 +66,8 @@ export let menu = Vue.component('v-operation', {
     },
     methods: {
         getData() {
-            let resource = '';
-            if (!!this.employee) {
-                resource = "&employee=" + this.employee;
-            }
-            $.get("/api/operation/list?page=" + this.page + resource, (data) => {
+            if (this.employee === null) return;
+            $.get("/api/operation/list?page=" + this.page + "&employee=" + this.employee, (data) => {
                 if (data.success === true) {
                     this.items = data.items;
                     this.total = data.total;
