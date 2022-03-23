@@ -77,7 +77,7 @@ class EmployeeRepository extends ServiceEntityRepository implements ListReposito
             ->select('e', 'p', 'ws')
             ->orderBy('e.id', 'ASC')
             ->leftJoin('e.position', 'p')
-            ->leftJoin('e.workSchedules', 'ws')
+            ->innerJoin('e.workSchedules', 'ws')
             ->where('e.company=:company')
             ->andWhere('p.inCalendar=:inCalendar')
             ->andWhere('ws.start>=:start')

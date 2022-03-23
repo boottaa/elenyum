@@ -12,6 +12,7 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import {modalVue} from "./calendar/modalEvent";
 import {baseCalendar} from "./src/baseCalendar";
 import {vueConfig} from "./src/vueConfig";
+import {get} from "./src/baseQuery";
 
 $(function () {
     let elModalEvent = document.getElementById('modalEvent'),
@@ -273,9 +274,10 @@ $(function () {
             },
         });
 
+        calendar.gotoDate(new Date($.cookie('currentDate')));
+
         let start = calendar.view.currentStart.getTime();
         let end = calendar.view.currentEnd.getTime();
-
 
         /**
          * @param item
@@ -346,7 +348,10 @@ $(function () {
         }
 
         function loadEmployee(start, end) {
-            $.get(`/api/employee/listForCalendar?start=${start}&end=${end}`, (data) => {
+            calendar.getResources().map(r => r.remove());
+            calendar.destroy();
+
+            get(`/api/employee/listForCalendar?start=${start}&end=${end}`, (data) => {
                 if (data.total > 0) {
                     data.items.forEach(function (item) {
                         item.businessHours = [];
@@ -364,11 +369,9 @@ $(function () {
                         });
                         calendar.addResource(item);
                     });
-
-
-
-                    $(document).trigger("loadedListForCalendar");
                 }
+
+                $(document).trigger("loadedListForCalendar");
             });
         }
 
@@ -413,14 +416,14 @@ $(function () {
             });
         }
 
-        calendar.gotoDate(new Date($.cookie('currentDate')));
         $(document).on("loadedListForCalendar", function () {
+            $('.noticeCalendarEmpty').remove();
             if (calendar.getResources().length > 0 && data.branch.startTimeStr !== data.branch.endTimeStr) {
                 calendar.render();
-            } else if (calendar.getResources().length < 0) {
-                $('#calendar').append('<p>Нет сотрудников отображаемых в календаре, вы можете добавить <a class="text-muted" style="color: #008fff !important;" href="/position/post">должность</a> и <a class="text-muted" style="color: #008fff !important;" href="/employee/post">сотрудника</a></p>');
+            } else if (calendar.getResources().length <= 0) {
+                $('#calendar').append('<p class="noticeCalendarEmpty">Нет сотрудников отображаемых в календаре, в этот день некто не работает. <a class="text-muted" style="color: #008fff !important;" href="/employee/list">Вы можете настроить график работы</a></p>');
             } else if (data.branch.startTimeStr === data.branch.endTimeStr) {
-                $('#calendar').append('<p>Время работы филиала настроено не корректно <a class="text-muted" style="color: #008fff !important;" href="/branch/setting">настроить</a>');
+                $('#calendar').append('<p class="noticeCalendarEmpty">Время работы филиала настроено не корректно <a class="text-muted" style="color: #008fff !important;" href="/branch/setting">настроить</a>');
             }
         });
 
