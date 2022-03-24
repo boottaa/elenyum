@@ -259,7 +259,7 @@ $(function () {
                     } else if (e.event.extendedProps.paymentType === 3) {
                         priceClass = 'bg-info';
                     }
-                    console.log();
+
                     operations += `<div style="position: absolute; right: 1px; bottom: 1px;" class="totalPrice badge rounded-pill ${priceClass}">${totalPrice} руб.</div>`
                     operations += '</div>';
 
@@ -421,7 +421,7 @@ $(function () {
             if (calendar.getResources().length > 0 && data.branch.startTimeStr !== data.branch.endTimeStr) {
                 calendar.render();
             } else if (calendar.getResources().length <= 0) {
-                $('#calendar').append('<p class="noticeCalendarEmpty">Нет сотрудников отображаемых в календаре, в этот день некто не работает. <a class="text-muted" style="color: #008fff !important;" href="/employee/list">Вы можете настроить график работы</a></p>');
+                $('#calendar').append('<p class="noticeCalendarEmpty">Нет сотрудников отображаемых в календаре, в этот день некто не работает или нет должностей для записи. <a class="text-muted" style="color: #008fff !important;" href="/employee/list">Вы можете настроить график работы</a></p>');
             } else if (data.branch.startTimeStr === data.branch.endTimeStr) {
                 $('#calendar').append('<p class="noticeCalendarEmpty">Время работы филиала настроено не корректно <a class="text-muted" style="color: #008fff !important;" href="/branch/setting">настроить</a>');
             }
