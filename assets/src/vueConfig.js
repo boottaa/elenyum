@@ -23,7 +23,10 @@ export let vueConfig = new Vue({
 
                 this.roles = r.roles;
             }
-            this.$emit('loaded', {branch: this.branch, roles: this.roles});
+            setTimeout(() => {
+                this.$emit('loaded', {branch: this.branch, roles: this.roles});
+            }, 500);
+
         });
     }
 });

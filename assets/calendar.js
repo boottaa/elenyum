@@ -50,7 +50,7 @@ $(function () {
         },
     };
 
-    vueConfig.$once('loaded', (data) => {
+    vueConfig.$on('loaded', (data) => {
         let calendar = new Calendar(calendarEl, {
             plugins: [resourceTimeGridPlugin, bootstrapPlugin, scrollGridPlugin, dayGridPlugin, interactionPlugin],
             locale: 'ru',

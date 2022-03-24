@@ -36,7 +36,7 @@ export let modalVue = new Vue({
         }
     },
     created() {
-        vueConfig.$once('loaded', (data) => {
+        vueConfig.$on('loaded', (data) => {
             let b = data.branch;
             this.startTimeStr = b.startTimeStr;
             this.endTimeStr = b.endTimeStr;
