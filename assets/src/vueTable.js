@@ -24,6 +24,7 @@ export let vueTable = Vue.component('vue-table', {
         clear() {
             let liveListTable = document.getElementById('liveListTable');
             liveListTable.innerHTML = '';
+            liveListTable.style.overflow = 'auto';
         },
         addTable() {
             this.clear();
