@@ -129,6 +129,12 @@ class IndexController extends AbstractController
         return $this->render('index/forgotPassword.html.twig', []);
     }
 
+    #[Route('/recoveryPassword', name: 'recoveryPassword')]
+    public function recoveryPassword(): Response
+    {
+        return $this->render('index/recoveryPassword.html.twig', []);
+    }
+
     #[Route('/client/post/{id<\d+>?}', name: 'clientPost')]
     public function clientPost(): Response
     {

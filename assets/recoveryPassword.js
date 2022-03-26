@@ -4,7 +4,8 @@ import {isValid} from "./validator/validator";
 import {post} from "./src/baseQuery";
 
 let object = {
-    email: null,
+    password: null,
+    repeatPassword: null,
 };
 
 let vueModal = new Vue({
@@ -36,11 +37,12 @@ let vueModal = new Vue({
 });
 
 new Vue({
-    el: '#forgotPassword',
+    el: '#recoveryPassword',
     data() {
         return {
             object: {
-                email: null,
+                password: null,
+                repeatPassword: null,
             },
         }
     },
@@ -50,9 +52,15 @@ new Vue({
     methods: {
         validation() {
             let items = {
-                '#email': {
-                    value: this.object.email,
-                    validators: ['notEmpty', 'email'],
+                '#password': {
+                    value: this.object.password,
+                    validators: ['password'],
+                    repeat: this.object.repeatPassword
+                },
+                '#repeatPassword': {
+                    value: this.object.repeatPassword,
+                    validators: ['password'],
+                    repeat: this.object.password
                 },
             };
             return isValid(items);
@@ -63,13 +71,14 @@ new Vue({
                 let data = JSON.parse(JSON.stringify(this.object, (key, value) => {
                     return value
                 }));
-                post('/api/forgotPassword', data, (result) => {
+                let getParams = document.location.toString().split('?')[1];
+                post('/api/recoveryPassword?' + getParams, data, (result) => {
                     if (result.success === true) {
                         vueModal.message = result.message;
                         vueModal.$root.$emit('show');
                         vueModal.$once('hidden', () => {
                             this.resetObject();
-                            window.location.href = '/login';
+                            window.location.href = '/login#recoveryd';
                         });
                     } else {
                         vueModal.message = result.message;

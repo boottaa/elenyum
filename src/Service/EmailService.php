@@ -4,7 +4,6 @@ namespace App\Service;
 
 use App\Entity\Employee;
 use App\Entity\Signature;
-use App\Repository\EmployeeRepository;
 use App\Repository\SignatureRepository;
 use DateInterval;
 use DateTimeImmutable;
@@ -15,7 +14,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Address;
 use SymfonyCasts\Bundle\VerifyEmail\Exception\ExpiredSignatureException;
-use SymfonyCasts\Bundle\VerifyEmail\Exception\InvalidSignatureException;
 use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
 use SymfonyCasts\Bundle\VerifyEmail\Model\VerifyEmailSignatureComponents;
 use SymfonyCasts\Bundle\VerifyEmail\VerifyEmailHelperInterface;
@@ -23,7 +21,6 @@ use SymfonyCasts\Bundle\VerifyEmail\VerifyEmailHelperInterface;
 class EmailService extends BaseAbstractService
 {
     public function __construct(
-        private EmployeeRepository $employeeRepository,
         private SignatureRepository $signatureRepository,
         private VerifyEmailHelperInterface $verifyEmailHelper,
         private MailerInterface $mailer,
@@ -32,21 +29,6 @@ class EmailService extends BaseAbstractService
     }
 
     private const _NOREPLAY = 'noreply@elenyum.ru';
-
-    /**
-     * @param string $email
-     * @return Employee|null
-     */
-    private function getUserByEmail(string $email): ?Employee
-    {
-        $employee = $this->employeeRepository->findOneBy(['email' => $email]);
-
-        if ($employee instanceof Employee) {
-            return $employee;
-        }
-
-        return null;
-    }
 
     public function saveSignature(
         Employee $employee,
@@ -83,7 +65,38 @@ class EmailService extends BaseAbstractService
      */
     public function confirmationEmail(Employee $employee): void
     {
-        $routeName = 'apiEmailVerify';
+        $this->sendLinkSignatureByTemplate(
+            'apiEmailVerify',
+            $employee,
+            'Пожалуйста подтвердите ваш email',
+            'email/confirmation.html.twig'
+        );
+    }
+
+    /**
+     * @param Employee $employee
+     * @return void
+     * @throws \Symfony\Component\Mailer\Exception\TransportExceptionInterface
+     */
+    public function forgotPasswordEmail(Employee $employee): void
+    {
+        $this->sendLinkSignatureByTemplate(
+            'recoveryPassword',
+            $employee,
+            'Перейдите по ссылке для восстановления пароля',
+            'email/forgotPasswordEmail.html.twig'
+        );
+    }
+
+    /**
+     * @throws \Symfony\Component\Mailer\Exception\TransportExceptionInterface
+     */
+    private function sendLinkSignatureByTemplate(
+        string $routeName,
+        Employee $employee,
+        string $title,
+        string $template
+    ): void {
         $signatureComponents = $this->verifyEmailHelper->generateSignature(
             $routeName,
             $employee->getId(),
@@ -93,8 +106,8 @@ class EmailService extends BaseAbstractService
         $template = (new TemplatedEmail())
             ->from(new Address(self::_NOREPLAY, 'Elenyum'))
             ->to($employee->getEmail())
-            ->subject('Пожалуйста подтвердите ваш email')
-            ->htmlTemplate('email/confirmation.html.twig');
+            ->subject($title)
+            ->htmlTemplate($template);
 
         $context = $template->getContext();
 
@@ -117,16 +130,13 @@ class EmailService extends BaseAbstractService
         $signature = $this->signatureRepository->findOneBy(['token' => $request->get('token')]);
         if (
             $signature instanceof Signature &&
+            $request->get('signature') === $signature->getHash() &&
             $signature->getExpiresAt()->getTimestamp() > (new DateTimeImmutable())->getTimestamp()
         ) {
             $employee = $signature->getEmployee();
-            if ($request->get('signature') === $signature->getHash()) {
-                $employee->setStatus(Employee::STATUS_CONFIRMED);
-                $this->em->remove($signature);
-                $this->em->flush();
-            } else {
-                throw new InvalidSignatureException();
-            }
+            $employee->setStatus(Employee::STATUS_CONFIRMED);
+            $this->em->remove($signature);
+            $this->em->flush();
         } else {
             throw new ExpiredSignatureException();
         }

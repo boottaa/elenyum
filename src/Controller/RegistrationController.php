@@ -8,10 +8,12 @@ use App\Entity\Employee;
 use App\Entity\Location;
 use App\Entity\Position;
 use App\Entity\PositionRole;
+use App\Entity\Signature;
 use App\Exception\ArrayException;
 use App\Repository\EmployeeRepository;
 use App\Repository\RoleRepository;
 use App\Service\EmailService;
+use App\Service\SecurityService;
 use App\Validator\RegistrationValidator;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
@@ -20,6 +22,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use SymfonyCasts\Bundle\VerifyEmail\Exception\ExpiredSignatureException;
 
 class RegistrationController extends AbstractController
 {
@@ -117,6 +120,28 @@ class RegistrationController extends AbstractController
         return $this->json([
             'success' => false,
             'message' => 'Не корректные данные',
+        ]);
+    }
+
+    /**
+     * @param Request $request
+     * @param SecurityService $securityService
+     * @return Response
+     * @throws ExpiredSignatureException
+     * @throws \JsonException
+     */
+    #[Route('/api/recoveryPassword', name: 'apiRecoveryPassword', methods: 'POST')]
+    public function recoveryPassword(Request $request, SecurityService $securityService): Response
+    {
+        $data = json_decode($request->getContent(), true, 512, JSON_THROW_ON_ERROR);
+        $token = $request->get('token');
+        $sign = $request->get('signature');
+
+        $securityService->recoveryPassword($data['password'], $token, $sign);
+
+        return $this->json([
+            'success' => true,
+            'message' => 'Ваш пароль успешно изменён'
         ]);
     }
 }

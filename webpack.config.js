@@ -33,6 +33,7 @@ Encore
     .addEntry('registration', './assets/registration.js')
     .addEntry('login', './assets/login.js')
     .addEntry('forgotPassword', './assets/forgotPassword.js')
+    .addEntry('recoveryPassword', './assets/recoveryPassword.js')
     .addEntry('employeePost', './assets/employeePost.js')
     .addEntry('employeeList', './assets/employeeList.js')
     .addEntry('clientList', './assets/clientList.js')
