@@ -28,7 +28,7 @@ let vueModal = new Vue({
             this.modal.show();
 
             this.elModal.addEventListener('hidden.bs.modal', function (e) {
-                location.href = '/login';
+                vueModal.$emit('hidden', e);
             });
         }
     },

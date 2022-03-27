@@ -29,7 +29,7 @@ class PositionController extends AbstractController
         $page = $request->get('page', 1);
         $user = $this->getUser();
         if (!$user instanceof Employee) {
-            return $this->json((new ArrayException('Пользователь не найден', 202))->toArray());
+            return $this->json(new ArrayException('Пользователь не найден', 202));
         }
 
         $list = $service->list(['company' => $user->getCompany()], $page);
@@ -54,11 +54,11 @@ class PositionController extends AbstractController
     {
         $user = $this->getUser();
         if (!$user instanceof Employee) {
-            return $this->json((new ArrayException('Пользователь не найден', 202))->toArray());
+            return $this->json(new ArrayException('Пользователь не найден', 202));
         }
 
         if ($user->getPosition()->getId() === $positionId) {
-            return $this->json((new ArrayException('Вы не можете удалить свою роль', 202))->toArray());
+            return $this->json(new ArrayException('Вы не можете удалить свою роль', 202));
         }
 
         try {
@@ -78,7 +78,7 @@ class PositionController extends AbstractController
     {
         $user = $this->getUser();
         if (!$user instanceof Employee) {
-            return $this->json((new ArrayException('Пользователь не найден', 202))->toArray());
+            return $this->json(new ArrayException('Пользователь не найден', 202));
         }
 
         return $this->json([
@@ -99,7 +99,7 @@ class PositionController extends AbstractController
         if ($validator->isValid($content)) {
             $user = $this->getUser();
             if (!$user instanceof Employee) {
-                return $this->json((new ArrayException('Пользователь не найден', 202))->toArray());
+                return $this->json(new ArrayException('Пользователь не найден', 202));
             }
 
             $data = $content;
@@ -133,7 +133,7 @@ class PositionController extends AbstractController
         if ($validator->isValid($content)) {
             $user = $this->getUser();
             if (!$user instanceof Employee) {
-                return $this->json((new ArrayException('Пользователь не найден', 202))->toArray());
+                return $this->json(new ArrayException('Пользователь не найден', 202));
             }
 
             $data['data'] = $content;

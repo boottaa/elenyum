@@ -35,7 +35,7 @@ class WorkSheduleController extends AbstractController
         $end = $request->query->getInt('end');
         if (empty($start) || empty($end)) {
             return $this->json(
-                (new ArrayException('Не верно переданы параметры даты начала и окончания'))->toArray()
+                new ArrayException('Не верно переданы параметры даты начала и окончания')
             );
         }
 
@@ -71,7 +71,7 @@ class WorkSheduleController extends AbstractController
     {
         $user = $this->getUser();
         if (!$user instanceof Employee) {
-            return $this->json((new ArrayException('Пользователь не найден', 202))->toArray());
+            return $this->json(new ArrayException('Пользователь не найден', 202));
         }
 
         $data = json_decode($request->getContent(), true, 512, JSON_THROW_ON_ERROR);

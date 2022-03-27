@@ -30,7 +30,7 @@ class EmployeeController extends AbstractController
         $page = $request->get('page', 1);
         $user = $this->getUser();
         if (!$user instanceof Employee) {
-            return $this->json((new ArrayException('Пользователь не найден', 202))->toArray());
+            return $this->json(new ArrayException('Пользователь не найден', 202));
         }
         $list = $service->list(['company' => $user->getCompany()], $page);
 
@@ -54,11 +54,11 @@ class EmployeeController extends AbstractController
     {
         $user = $this->getUser();
         if (!$user instanceof Employee) {
-            return $this->json((new ArrayException('Пользователь не найден', 202))->toArray());
+            return $this->json(new ArrayException('Пользователь не найден', 202));
         }
         $params = ['company' => $user->getCompany()];
         if (!$this->isGranted(Role::ROLE_SHEDULE_ALL) && !$this->isGranted(Role::ROLE_SHEDULE_ME)) {
-            return $this->json((new ArrayException('Нет прав', 202))->toArray());
+            return $this->json(new ArrayException('Нет прав', 202));
         }
         //Если нет прав на просмотр всех задач то загружаем только текущего пользователя
         if ($this->isGranted(Role::ROLE_SHEDULE_ME) && !$this->isGranted(Role::ROLE_SHEDULE_ALL)) {
@@ -90,7 +90,7 @@ class EmployeeController extends AbstractController
     {
         $user = $this->getUser();
         if (!$user instanceof Employee) {
-            return $this->json((new ArrayException('Пользователь не найден', 202))->toArray());
+            return $this->json(new ArrayException('Пользователь не найден', 202));
         }
 
         return $this->json([
@@ -110,10 +110,10 @@ class EmployeeController extends AbstractController
     {
         $user = $this->getUser();
         if (!$user instanceof Employee) {
-            return $this->json((new ArrayException('Пользователь не найден', 202))->toArray());
+            return $this->json(new ArrayException('Пользователь не найден', 202));
         }
         if ($user->getId() === $employeeId) {
-            return $this->json((new ArrayException('Вы не можете удалить сами себя', 202))->toArray());
+            return $this->json(new ArrayException('Вы не можете удалить сами себя', 202));
         }
 
         try {
@@ -145,7 +145,7 @@ class EmployeeController extends AbstractController
         if ($validator->isValid($content)) {
             $user = $this->getUser();
             if (!$user instanceof Employee) {
-                return $this->json((new ArrayException('Пользователь не найден', 202))->toArray());
+                return $this->json(new ArrayException('Пользователь не найден', 202));
             }
             $data['employee'] = $content;
             $data['user'] = $user;
@@ -184,7 +184,7 @@ class EmployeeController extends AbstractController
         if ($validator->isValid($content)) {
             $user = $this->getUser();
             if (!$user instanceof Employee) {
-                return $this->json((new ArrayException('Пользователь не найден', 202))->toArray());
+                return $this->json(new ArrayException('Пользователь не найден', 202));
             }
             $data['employee'] = $content;
 

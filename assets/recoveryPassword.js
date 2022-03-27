@@ -29,7 +29,7 @@ let vueModal = new Vue({
             this.modal.show();
 
             this.elModal.addEventListener('hidden.bs.modal', function (e) {
-                location.href = '/login';
+                vueModal.$emit('hidden', e);
             });
         }
     },
@@ -78,7 +78,7 @@ new Vue({
                         vueModal.$root.$emit('show');
                         vueModal.$once('hidden', () => {
                             this.resetObject();
-                            window.location.href = '/login#recoveryd';
+                            window.location.href = '/login';
                         });
                     } else {
                         vueModal.message = result.message;

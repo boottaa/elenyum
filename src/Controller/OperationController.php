@@ -29,7 +29,7 @@ class OperationController extends AbstractController
         $page = $request->get('page', 1);
         $user = $this->getUser();
         if (!$user instanceof Employee) {
-            return $this->json((new ArrayException('Пользователь не найден', 202))->toArray());
+            return $this->json(new ArrayException('Пользователь не найден', 202));
         }
         $list = $service->list([
             'company' => $user->getCompany(),
@@ -56,7 +56,7 @@ class OperationController extends AbstractController
     {
         $user = $this->getUser();
         if (!$user instanceof Employee) {
-            return $this->json((new ArrayException('Пользователь не найден', 202))->toArray());
+            return $this->json(new ArrayException('Пользователь не найден', 202));
         }
 
         try {
@@ -76,7 +76,7 @@ class OperationController extends AbstractController
     {
         $user = $this->getUser();
         if (!$user instanceof Employee) {
-            return $this->json((new ArrayException('Пользователь не найден', 202))->toArray());
+            return $this->json(new ArrayException('Пользователь не найден', 202));
         }
 
         return $this->json([
@@ -97,7 +97,7 @@ class OperationController extends AbstractController
         if ($validator->isValid($content)) {
             $user = $this->getUser();
             if (!$user instanceof Employee) {
-                return $this->json((new ArrayException('Пользователь не найден', 202))->toArray());
+                return $this->json(new ArrayException('Пользователь не найден', 202));
             }
 
             $data['operation'] = $content;
@@ -130,7 +130,7 @@ class OperationController extends AbstractController
         if ($validator->isValid($content)) {
             $user = $this->getUser();
             if (!$user instanceof Employee) {
-                return $this->json((new ArrayException('Пользователь не найден', 202))->toArray());
+                return $this->json(new ArrayException('Пользователь не найден', 202));
             }
 
             $data['operation'] = $content;

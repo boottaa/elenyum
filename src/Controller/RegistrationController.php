@@ -127,17 +127,21 @@ class RegistrationController extends AbstractController
      * @param Request $request
      * @param SecurityService $securityService
      * @return Response
-     * @throws ExpiredSignatureException
-     * @throws \JsonException
      */
     #[Route('/api/recoveryPassword', name: 'apiRecoveryPassword', methods: 'POST')]
     public function recoveryPassword(Request $request, SecurityService $securityService): Response
     {
-        $data = json_decode($request->getContent(), true, 512, JSON_THROW_ON_ERROR);
-        $token = $request->get('token');
-        $sign = $request->get('signature');
+        try {
+            $data = json_decode($request->getContent(), true, 512, JSON_THROW_ON_ERROR);
+            $token = $request->get('token');
+            $sign = $request->get('signature');
 
-        $securityService->recoveryPassword($data['password'], $token, $sign);
+            $securityService->recoveryPassword($data['password'], $token, $sign);
+        } catch (ExpiredSignatureException $e) {
+            return $this->json(new ArrayException('Ссылка не корректна, попробуйте ещё раз', $e->getCode()));
+        } catch (Exception $e) {
+            return $this->json(new ArrayException($e->getMessage(), $e->getCode()));
+        }
 
         return $this->json([
             'success' => true,

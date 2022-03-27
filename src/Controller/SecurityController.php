@@ -17,7 +17,7 @@ class SecurityController extends AbstractController
     public function login(SessionInterface $session): Response
     {
         if ($this->getUser() === null) {
-            return $this->json((new ArrayException('Авторизация не выполнена'))->toArray());
+            return $this->json(new ArrayException('Авторизация не выполнена'));
         }
 
         $employee = $this->getUser();

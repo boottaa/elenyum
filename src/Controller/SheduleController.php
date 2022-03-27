@@ -30,14 +30,14 @@ class SheduleController extends AbstractController
     public function list(Request $request, SheduleRepository $sheduleRepository): Response
     {
         if (! $this->isGranted(Role::ROLE_SHEDULE_ALL) && ! $this->isGranted(Role::ROLE_SHEDULE_ME)) {
-            return $this->json((new ArrayException('Нет прав', 202))->toArray());
+            return $this->json(new ArrayException('Нет прав', 202));
         }
 
         $start = $request->query->getInt('start');
         $end = $request->query->getInt('end');
         if (empty($start) || empty($end)) {
             return $this->json(
-                (new ArrayException('Не верно переданы параметры даты начала и окончания'))->toArray()
+                new ArrayException('Не верно переданы параметры даты начала и окончания')
             );
         }
 
@@ -73,12 +73,12 @@ class SheduleController extends AbstractController
         SheduleRepository $sheduleRepository
     ): Response {
         if (! $this->isGranted(Role::ROLE_SHEDULE_ALL) && ! $this->isGranted(Role::ROLE_SHEDULE_ME)) {
-            return $this->json((new ArrayException('Нет прав', 202))->toArray());
+            return $this->json(new ArrayException('Нет прав', 202));
         }
 
         $user = $this->getUser();
         if (!$user instanceof Employee) {
-            return $this->json((new ArrayException('Пользователь не найден', 202))->toArray());
+            return $this->json(new ArrayException('Пользователь не найден', 202));
         }
 
         $data = json_decode($request->getContent(), true, 512, JSON_THROW_ON_ERROR);
@@ -158,7 +158,7 @@ class SheduleController extends AbstractController
     public function remove(Shedule $shedule, EntityManagerInterface $em): Response
     {
         if (! $this->isGranted(Role::ROLE_SHEDULE_ALL) && ! $this->isGranted(Role::ROLE_SHEDULE_ME)) {
-            return $this->json((new ArrayException('Нет прав', 202))->toArray());
+            return $this->json(new ArrayException('Нет прав', 202));
         }
 
         foreach ($shedule->getSheduleOperations() as $sheduleOperation) {

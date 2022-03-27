@@ -25,12 +25,12 @@ class ClientController extends AbstractController
     public function query(ClientService $service, Request $request): Response
     {
         if (! $this->isGranted(Role::ROLE_SHEDULE_ALL) && ! $this->isGranted(Role::ROLE_SHEDULE_ME)) {
-            return $this->json((new ArrayException('Нет прав', 202))->toArray());
+            return $this->json(new ArrayException('Нет прав', 202));
         }
 
         $user = $this->getUser();
         if (!$user instanceof Employee) {
-            return $this->json((new ArrayException('Пользователь не найден', 202))->toArray());
+            return $this->json(new ArrayException('Пользователь не найден', 202));
         }
 
         $page = $request->get('page', 1);
@@ -59,7 +59,7 @@ class ClientController extends AbstractController
         $page = $request->get('page', 1);
         $user = $this->getUser();
         if (!$user instanceof Employee) {
-            return $this->json((new ArrayException('Пользователь не найден', 202))->toArray());
+            return $this->json(new ArrayException('Пользователь не найден', 202));
         }
         $list = $service->list(['company' => $user->getCompany()], $page);
 
@@ -78,7 +78,7 @@ class ClientController extends AbstractController
     {
         $user = $this->getUser();
         if (!$user instanceof Employee) {
-            return $this->json((new ArrayException('Пользователь не найден', 202))->toArray());
+            return $this->json(new ArrayException('Пользователь не найден', 202));
         }
 
         return $this->json([
@@ -98,7 +98,7 @@ class ClientController extends AbstractController
     {
         $user = $this->getUser();
         if (!$user instanceof Employee) {
-            return $this->json((new ArrayException('Пользователь не найден', 202))->toArray());
+            return $this->json(new ArrayException('Пользователь не найден', 202));
         }
 
         try {
@@ -130,7 +130,7 @@ class ClientController extends AbstractController
         if ($validator->isValid($content)) {
             $user = $this->getUser();
             if (!$user instanceof Employee) {
-                return $this->json((new ArrayException('Пользователь не найден', 202))->toArray());
+                return $this->json(new ArrayException('Пользователь не найден', 202));
             }
             $data['client'] = $content;
             $data['user'] = $user;
@@ -166,7 +166,7 @@ class ClientController extends AbstractController
         if ($validator->isValid($content)) {
             $user = $this->getUser();
             if (!$user instanceof Employee) {
-                return $this->json((new ArrayException('Пользователь не найден', 202))->toArray());
+                return $this->json(new ArrayException('Пользователь не найден', 202));
             }
             $data['client'] = $content;
 

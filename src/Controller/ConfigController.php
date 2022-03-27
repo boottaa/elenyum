@@ -16,7 +16,7 @@ class ConfigController extends AbstractController
     {
         $user = $this->getUser();
         if (! $user instanceof Employee) {
-            return $this->json((new ArrayException('Пользователь не найден', 202))->toArray());
+            return $this->json(new ArrayException('Пользователь не найден', 202));
         }
 
         return $this->json([

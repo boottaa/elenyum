@@ -9,7 +9,6 @@ use App\Repository\EmployeeRepository;
 use App\Repository\SignatureRepository;
 use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use SymfonyCasts\Bundle\VerifyEmail\Exception\ExpiredSignatureException;
 
@@ -74,6 +73,7 @@ class SecurityService extends BaseAbstractService
             $employee = $signature->getEmployee();
             $this->changePassword($password, $employee);
             $this->em->remove($signature);
+            $this->em->flush();
         } else {
             throw new ExpiredSignatureException();
         }
@@ -92,7 +92,6 @@ class SecurityService extends BaseAbstractService
                 $password
             )
         );
-        $this->em->flush();
 
         return $employee;
     }

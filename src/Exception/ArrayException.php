@@ -4,9 +4,10 @@ namespace App\Exception;
 
 use Exception;
 
+use JsonSerializable;
 use Symfony\Component\ErrorHandler\Exception\FlattenException;
 
-class ArrayException extends Exception
+class ArrayException extends Exception implements JsonSerializable
 {
     /**
      * @return array
@@ -22,6 +23,17 @@ class ArrayException extends Exception
 //            'file' => $e->getFile(),
 //            'line' => $e->getLine(),
 //            'trace' => $e->getTrace(),
+        ];
+    }
+
+    public function jsonSerialize(): array
+    {
+        $e = FlattenException::create($this);
+
+        return [
+            'success' => false,
+            'message' => $e->getMessage(),
+            'code' => $e->getCode(),
         ];
     }
 }
