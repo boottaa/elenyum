@@ -120,8 +120,6 @@ class EmailService extends BaseAbstractService
         if ($this->saveSignature($employee, $routeName, $signatureComponents)) {
             $this->mailer->send($template);
         }
-
-        dd($context['signedUrl']);
     }
 
     /**
