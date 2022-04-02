@@ -8,12 +8,13 @@ import DatePicker from 'vue2-datepicker';
 import {addErrorMessage, isValid} from "../validator/validator";
 import {menuItems, paymentTypes, sheduleStatus, sheduleObject} from "./objects";
 import {vueConfig} from "../src/vueConfig";
+import {vueAlert} from "../src/vueAlert";
 
 //https://vue-select.org/guide/values.html#getting-and-setting
 Vue.component('v-select', vSelect);
 
 export let modalVue = new Vue({
-    components: {DatePicker},
+    components: {DatePicker, vueAlert},
     el: '#modalEvent',
     data() {
         return {
@@ -22,7 +23,7 @@ export let modalVue = new Vue({
             paymentTypes: paymentTypes,
             object: Object.assign({}, sheduleObject),
             menuItems: menuItems,
-
+            todayResourceWork: undefined,
             branch: {
                 item: null,
                 start: null,
@@ -131,9 +132,16 @@ export let modalVue = new Vue({
                 return;
             }
             if (this.validation()) {
-                this.$emit('send', JSON.parse(JSON.stringify(this.object, (key, value) => {
-                    return value
-                })));
+                if (this.todayResourceWork === undefined) {
+                    this.$refs.alert.addAlert('Указано не верное время, в данный день специалист не работает', 'danger');
+                    return;
+                }
+
+                if (!(this.object.start >= new Date(this.todayResourceWork.start) && modalVue.object.end <= new Date(this.todayResourceWork.end))) {
+                    this.$refs.alert.addAlert('Указано не верное время, время начала или окончания записи не входит в рабочее время специалиста', 'danger');
+                    return;
+                }
+                this.$emit('send', this.object);
                 this.resetObject();
             }
         },

@@ -40,6 +40,9 @@ export let sheduleObject = Object.assign({}, {
         name: null,
         status: false,
     },
+    employee: {
+        workSchedules: []
+    },
     resourceId: null,
     start: null,
     end: null,

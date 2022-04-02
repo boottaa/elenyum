@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Shedule;
+use DateTime;
 use DateTimeInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\AbstractQuery;
@@ -24,13 +25,20 @@ class SheduleRepository extends ServiceEntityRepository
     public function findByRange(DateTimeInterface $start, DateTimeInterface $end): array
     {
         return $this->createQueryBuilder('s')
-            ->addSelect('sheduleOperations', 'operation', 'PARTIAL client.{id,name,phone,status}, PARTIAL employee.{id}')
+            ->addSelect('sheduleOperations',
+                'operation',
+                'PARTIAL client.{id,name,phone,status}, PARTIAL employee.{id}',
+                'ws'
+            )
             ->leftJoin('s.sheduleOperations', 'sheduleOperations')
             ->leftJoin('sheduleOperations.operation', 'operation')
             ->leftJoin('s.client', 'client')
             ->leftJoin('s.employee', 'employee')
+            ->innerJoin('employee.workSchedules', 'ws')
             ->andWhere('s.start >= :start')
             ->andWhere('s.end <= :end')
+            ->andWhere('ws.start >= :start')
+            ->andWhere('ws.end <= :end')
             ->setParameter('start', $start)
             ->setParameter('end', $end)
             ->orderBy('s.end', 'ASC')
@@ -44,7 +52,11 @@ class SheduleRepository extends ServiceEntityRepository
     public function findById(int $id): ?array
     {
         $result = $this->createQueryBuilder('s')
-            ->addSelect('sheduleOperations', 'operation', 'PARTIAL client.{id,name,phone,status}, PARTIAL employee.{id}')
+            ->addSelect(
+                'sheduleOperations',
+                'operation',
+                'PARTIAL client.{id,name,phone,status}, PARTIAL employee.{id}',
+            )
             ->leftJoin('s.sheduleOperations', 'sheduleOperations')
             ->leftJoin('sheduleOperations.operation', 'operation')
             ->leftJoin('s.client', 'client')

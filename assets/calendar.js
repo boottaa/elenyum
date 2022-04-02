@@ -51,6 +51,10 @@ $(function () {
     };
 
     vueConfig.$on('loaded', (data) => {
+        function getDate(date) {
+            return date.getDate().toString().padStart(2, '0') + '.' + String(date.getMonth() + 1).padStart(2, '0') + '.' + date.getFullYear().toString();
+        }
+
         let calendar = new Calendar(calendarEl, {
             plugins: [resourceTimeGridPlugin, bootstrapPlugin, scrollGridPlugin, dayGridPlugin, interactionPlugin],
             locale: 'ru',
@@ -121,14 +125,26 @@ $(function () {
             },
 
             eventClick: (eventClickEvent) => {
-                let event = eventClickEvent.event;
+                let event = eventClickEvent.event,
+                    currentDate = getDate(event.start);
+
+                // debugger;
+                //Тут нужно как-то получить workSchedules текущего ресурса
+                modalVue.todayResourceWork = event.extendedProps.employee.workSchedules.find(i => {
+                    return getDate(new Date(i.start)) === currentDate
+                });
+
+                if (typeof modalVue.todayResourceWork !== "object") {
+                    return;
+                }
+
                 modalVue.object = {
                     id: parseInt(event.id),
                     client: event.extendedProps.client,
                     resourceId: parseInt(event.getResources()[0].id),
                     start: event.start,
                     end: event.end,
-
+                    employee: event.extendedProps.employee,
                     operations: event.extendedProps.operations,
                     //Тип оплаты
                     paymentType: event.extendedProps.paymentType ?? null,
@@ -158,6 +174,20 @@ $(function () {
                 })
             },
             dateClick: function (eventClickEvent) {
+                let currentDate = getDate(eventClickEvent.date);
+
+                modalVue.todayResourceWork = eventClickEvent.resource.extendedProps.workSchedules.find(i => {
+                    return getDate(new Date(i.start)) === currentDate
+                });
+
+                if (typeof modalVue.todayResourceWork !== "object") {
+                    return;
+                }
+
+                if (!(eventClickEvent.date >= new Date(modalVue.todayResourceWork.start) && eventClickEvent.date < new Date(modalVue.todayResourceWork.end))) {
+                    return;
+                }
+
                 modalEvent.show();
                 modalVue.object.start = eventClickEvent.date;
                 modalVue.object.end = new Date(eventClickEvent.date.toString()).addMinutes(60);
@@ -174,8 +204,26 @@ $(function () {
                 if (!confirm("Вы уверены что хотите изменить запись?")) {
                     info.revert();
                 } else {
-                    console.log(info);
-                    // Тут нужно внести изменние в событие
+                    let event = info.event;
+                    modalVue.object = {
+                        id: parseInt(event.id),
+                        client: event.extendedProps.client,
+                        resourceId: parseInt(event.getResources()[0].id),
+                        start: event.start,
+                        end: event.end,
+                        employee: event.extendedProps.employee,
+                        operations: event.extendedProps.operations,
+                        //Тип оплаты
+                        paymentType: event.extendedProps.paymentType ?? null,
+                        //Сколько оплачено наличкой(сумма)
+                        paymentCash: event.extendedProps.paymentCash ?? null,
+                        //Оплачено картой (сумма)
+                        paymentCard: event.extendedProps.paymentCard ?? null,
+                        // Статус события
+                        status: event.extendedProps.status,
+                    };
+                    removeEvent(modalVue.object.id);
+                    postEvent(modalVue.object);
                 }
             },
             eventResize: function (info) {
@@ -328,6 +376,9 @@ $(function () {
                     phone: item.client.phone,
                     status: item.client.status
                 },
+                employee: {
+                    workSchedules: item.employee.workSchedules
+                },
                 resourceId: item.employee.id,
                 paymentType: item.paymentType,
                 paymentCash: item.paymentCash,
@@ -341,6 +392,10 @@ $(function () {
             $.get(`/api/shedule/list?start=${start}&end=${end}`, (data) => {
                 if (data.total > 0) {
                     data.items.forEach(function (item) {
+
+
+                        calendar.getEventById(item.id)?.remove();
+                        //Но можно не удалять а просто обновлять в нём данные
                         calendar.addEvent(prepareCalendarEvent(item));
                     })
                 }
@@ -410,7 +465,12 @@ $(function () {
                 dataType: 'json',
                 success: function (data) {
                     if (data.success === true) {
-                        calendar.addEvent(prepareCalendarEvent(data.item));
+                        //тут не нужно удалять все записи,
+                        //1 - Нужно найти запись в календаре и обновить её данные в loadEvents
+                        // calendar.removeAllEvents();
+                        let start = calendar.view.currentStart.getTime();
+                        let end = calendar.view.currentEnd.getTime();
+                        loadEvents(start, end);
                     }
                 }
             });

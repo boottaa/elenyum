@@ -3,7 +3,7 @@ import Vue from "vue";
 
 export let menu = Vue.component('v-operation', {
     components: {vSelect},
-    props: ['value', 'employee', 'disabled'],
+    props: ['value', 'employee', 'disabled', 'loadWithEmployee'],
     data() {
         return {
             select: null,
@@ -66,8 +66,15 @@ export let menu = Vue.component('v-operation', {
     },
     methods: {
         getData() {
-            if (this.employee === null) return;
-            $.get("/api/operation/list?page=" + this.page + "&employee=" + this.employee, (data) => {
+            //Тут надо учитывать при добавление должности
+            let resource = '';
+
+            if (this.loadWithEmployee === true && this.employee === null) return;
+
+            if (!!this.employee) {
+                resource = "&employee=" + this.employee;
+            }
+            $.get("/api/operation/list?page=" + this.page + resource, (data) => {
                 if (data.success === true) {
                     this.items = data.items;
                     this.total = data.total;

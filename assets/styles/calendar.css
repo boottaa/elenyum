@@ -64,3 +64,13 @@
     line-height: 34px;
     margin-bottom: 10px;
 }
+
+.totalPrice.bg-warning {
+    background-color: #d49800 !important;
+}
+.totalPrice.bg-success {
+    background-color: #127d57 !important;
+}
+.totalPrice.bg-info {
+    background-color: #258997 !important;
+}

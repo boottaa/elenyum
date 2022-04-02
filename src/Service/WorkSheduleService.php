@@ -49,7 +49,7 @@ class WorkSheduleService extends BaseAbstractService
             new DateTimeZone('Europe/Moscow')
         )->format('Y-m-d H:i:s');
 
-        $end =DateTimeImmutable::createFromFormat('U', strtotime($data['range']['end']))->setTimezone(
+        $end = DateTimeImmutable::createFromFormat('U', strtotime($data['range']['end']))->setTimezone(
             new DateTimeZone('Europe/Moscow')
         )->format('Y-m-d H:i:s');
         //Удаляем за текущей месяц и сохраняем новую колеккцию

@@ -34,6 +34,7 @@
                         {# Добавить запись #}
                         <template v-if="showId === 1">
                             <div class="col-lg-9 mb-3">
+                                <vue-alert ref="alert"></vue-alert>
                                 <div class="btn-group mb-3 col-lg-12" style="padding: 2px" role="group" aria-label="Basic radio toggle button group">
                                     <template v-for="eventStatus in sheduleStatus">
                                         <input type="radio" :disabled="object.paymentType !== null" @click="clickEventStatus(eventStatus.id)" class="btn-check" :disabled="object.client.phone === null || object.client.name === null" :value="eventStatus.id" v-model="object.status" name="userStatus" :id="'userStatus' + eventStatus.id" autocomplete="off">
@@ -51,7 +52,7 @@
                                 </div>
                                 <div class="mb-3">
                                     <label for="operations" class="form-label">Выберите услуги</label>
-                                    <v-operation :disabled="object.paymentType !== null" v-model="object.operations" :employee="object.resourceId" @input="changeOperation"></v-operation>
+                                    <v-operation :disabled="object.paymentType !== null" v-model="object.operations" :employee="object.resourceId" :load-with-employee="true" @input="changeOperation"></v-operation>
                                     <template v-if="object.operations.length > 0" v-for="operation in object.operations">
                                         <div class="input-group mt-1">
                                             <span style="width: 80%" class="input-group-text"

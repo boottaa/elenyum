@@ -141,7 +141,7 @@ class SheduleController extends AbstractController
 
             return $this->json([
                 'success' => true,
-                'item' => $sheduleRepository->findById($shedule->getId()),
+//                'item' => $sheduleRepository->findById($shedule->getId()),
             ]);
         }
 
