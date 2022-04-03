@@ -226,6 +226,12 @@ $(function () {
                         // Статус события
                         status: event.extendedProps.status,
                     };
+                    modalVue.calendarEvents = calendar.getEvents();
+                    if (modalVue.checkSheduleIntersections()) {
+                        info.revert();
+                        alert('Указано не верное время, запись перекрывает другие записи');
+                        return;
+                    }
                     postEvent(modalVue.object, info.el);
                 }
             },
@@ -251,6 +257,12 @@ $(function () {
                         // Статус события
                         status: event.extendedProps.status,
                     };
+                    modalVue.calendarEvents = calendar.getEvents();
+                    if (modalVue.checkSheduleIntersections()) {
+                        info.revert();
+                        alert('Указано не верное время, запись перекрывает другие записи');
+                        return;
+                    }
                     postEvent(modalVue.object, info.el);
                 }
             },

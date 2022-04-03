@@ -143,21 +143,23 @@ export let modalVue = new Vue({
                     return;
                 }
 
-                let checkSheduleIntersections = this.calendarEvents
-                    .filter((e) => {
-                        return e.extendedProps.employee.id === this.object.resourceId
-                    })
-                    .filter((e) => {
-                        return !(this.object.start >= e.end || this.object.end < e.start)
-                    });
-                if (checkSheduleIntersections.length > 0) {
-                    this.$refs.alert.addAlert('Указано не верное время, запись перекрывается другие записи', 'danger');
+                if (this.checkSheduleIntersections()) {
+                    this.$refs.alert.addAlert('Указано не верное время, запись перекрывает другие записи', 'danger');
                     return;
                 }
 
                 this.$emit('send', this.object);
                 this.resetObject();
             }
+        },
+
+        checkSheduleIntersections() {
+            return this.calendarEvents.filter((e) => {
+                return e.extendedProps.employee.id === this.object.resourceId
+            })
+            .filter((e) => {
+                return !(this.object.start >= e.end || this.object.end <= e.start) && this.object.id !== parseInt(e.id)
+            }).length > 0;
         },
 
         remove() {
