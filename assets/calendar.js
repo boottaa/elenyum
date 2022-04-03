@@ -161,12 +161,7 @@ $(function () {
 
                 modalVue.$once('send', (data) => {
                     if (data !== null) {
-                        postEvent(data);
-
-                        $(eventClickEvent.el).addClass('loadEvent');
-                        $(eventClickEvent.el).append(`<div class="loaderMask" id="loadEvent${data.id}">
-                            <div class="loader" style="margin: 0 auto; top: 5%">Loading...</div>
-                        </div>`);
+                        postEvent(data, eventClickEvent.el);
 
                         modalEvent.hide();
                     }
@@ -229,16 +224,32 @@ $(function () {
                         // Статус события
                         status: event.extendedProps.status,
                     };
-                    removeEvent(modalVue.object.id);
-                    postEvent(modalVue.object);
+                    postEvent(modalVue.object, info.el);
                 }
             },
             eventResize: function (info) {
                 if (!confirm("Вы уверены что хотите изменить время?")) {
                     info.revert();
                 } else {
-                    console.log(info);
-                    // Тут нужно внести изменние в событие
+                    let event = info.event;
+                    modalVue.object = {
+                        id: parseInt(event.id),
+                        client: event.extendedProps.client,
+                        resourceId: parseInt(event.getResources()[0].id),
+                        start: event.start,
+                        end: event.end,
+                        employee: event.extendedProps.employee,
+                        operations: event.extendedProps.operations,
+                        //Тип оплаты
+                        paymentType: event.extendedProps.paymentType ?? null,
+                        //Сколько оплачено наличкой(сумма)
+                        paymentCash: event.extendedProps.paymentCash ?? null,
+                        //Оплачено картой (сумма)
+                        paymentCard: event.extendedProps.paymentCard ?? null,
+                        // Статус события
+                        status: event.extendedProps.status,
+                    };
+                    postEvent(modalVue.object, info.el);
                 }
             },
             resourceLabelDidMount: function (info) {
@@ -457,8 +468,15 @@ $(function () {
 
         /**
          * @param event
+         * @param eventEl
          */
-        function postEvent(event) {
+        function postEvent(event, eventEl) {
+            if (eventEl) {
+                $(eventEl).addClass('loadEvent');
+                $(eventEl).append(`<div class="loaderMask" id="loadEvent${data.id}">
+                            <div class="loader" style="margin: 0 auto; top: 5%">Loading...</div>
+                        </div>`);
+            }
             $.ajax({
                 type: "POST",
                 url: '/api/shedule/post',
