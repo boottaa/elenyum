@@ -140,6 +140,7 @@ $(function () {
                     return;
                 }
 
+                modalVue.calendarEvents = calendar.getEvents();
                 modalVue.object = {
                     id: parseInt(event.id),
                     client: event.extendedProps.client,
@@ -194,6 +195,7 @@ $(function () {
                 modalVue.object.start = eventClickEvent.date;
                 modalVue.object.end = new Date(eventClickEvent.date.toString()).addMinutes(60);
                 modalVue.object.resourceId = parseInt(eventClickEvent.resource.id);
+                modalVue.calendarEvents = calendar.getEvents();
 
                 modalVue.$once('send', (data) => {
                     if (data !== null) {
@@ -395,6 +397,7 @@ $(function () {
                     status: item.client.status
                 },
                 employee: {
+                    id: item.employee.id,
                     workSchedules: item.employee.workSchedules
                 },
                 resourceId: item.employee.id,

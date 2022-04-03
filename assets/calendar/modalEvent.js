@@ -24,6 +24,7 @@ export let modalVue = new Vue({
             object: Object.assign({}, sheduleObject),
             menuItems: menuItems,
             todayResourceWork: undefined,
+            calendarEvents: null,
             branch: {
                 item: null,
                 start: null,
@@ -141,6 +142,19 @@ export let modalVue = new Vue({
                     this.$refs.alert.addAlert('Указано не верное время, время начала или окончания записи не входит в рабочее время специалиста', 'danger');
                     return;
                 }
+
+                let checkSheduleIntersections = this.calendarEvents
+                    .filter((e) => {
+                        return e.extendedProps.employee.id === this.object.resourceId
+                    })
+                    .filter((e) => {
+                        return !(this.object.start >= e.end || this.object.end < e.start)
+                    });
+                if (checkSheduleIntersections.length > 0) {
+                    this.$refs.alert.addAlert('Указано не верное время, запись перекрывается другие записи', 'danger');
+                    return;
+                }
+
                 this.$emit('send', this.object);
                 this.resetObject();
             }
