@@ -125,10 +125,12 @@ $(function () {
             },
 
             eventClick: (eventClickEvent) => {
+                if ($(eventClickEvent.el).hasClass('loadEvent')) {
+                    return;
+                }
                 let event = eventClickEvent.event,
                     currentDate = getDate(event.start);
 
-                // debugger;
                 //Тут нужно как-то получить workSchedules текущего ресурса
                 modalVue.todayResourceWork = event.extendedProps.employee.workSchedules.find(i => {
                     return getDate(new Date(i.start)) === currentDate
@@ -159,13 +161,18 @@ $(function () {
 
                 modalVue.$once('send', (data) => {
                     if (data !== null) {
-                        calendar.getEventById(data.id)?.remove();
                         postEvent(data);
+
+                        $(eventClickEvent.el).addClass('loadEvent');
+                        $(eventClickEvent.el).append(`<div class="loaderMask" id="loadEvent${data.id}">
+                            <div class="loader" style="margin: 0 auto; top: 5%">Loading...</div>
+                        </div>`);
 
                         modalEvent.hide();
                     }
                 });
 
+                //Если нажали кнопку удалить
                 modalVue.$once('remove', (data) => {
                     if (data !== null && data.id !== null) {
                         modalEvent.hide();
@@ -392,10 +399,7 @@ $(function () {
             $.get(`/api/shedule/list?start=${start}&end=${end}`, (data) => {
                 if (data.total > 0) {
                     data.items.forEach(function (item) {
-
-
                         calendar.getEventById(item.id)?.remove();
-                        //Но можно не удалять а просто обновлять в нём данные
                         calendar.addEvent(prepareCalendarEvent(item));
                     })
                 }
@@ -465,9 +469,6 @@ $(function () {
                 dataType: 'json',
                 success: function (data) {
                     if (data.success === true) {
-                        //тут не нужно удалять все записи,
-                        //1 - Нужно найти запись в календаре и обновить её данные в loadEvents
-                        // calendar.removeAllEvents();
                         let start = calendar.view.currentStart.getTime();
                         let end = calendar.view.currentEnd.getTime();
                         loadEvents(start, end);
