@@ -138,7 +138,7 @@ export let modalVue = new Vue({
                     return;
                 }
 
-                if (!(this.object.start >= new Date(this.todayResourceWork.start) && modalVue.object.end <= new Date(this.todayResourceWork.end))) {
+                if (this.checkResourceWork()) {
                     this.$refs.alert.addAlert('Указано не верное время, время начала или окончания записи не входит в рабочее время специалиста', 'danger');
                     return;
                 }
@@ -160,6 +160,16 @@ export let modalVue = new Vue({
             .filter((e) => {
                 return !(this.object.start >= e.end || this.object.end <= e.start) && this.object.id !== parseInt(e.id)
             }).length > 0;
+        },
+
+        /**
+         * @returns {boolean}
+         */
+        checkResourceWork() {
+            if (this.todayResourceWork === undefined) {
+                return true;
+            }
+            return !(this.object.start >= new Date(this.todayResourceWork.start) && this.object.end <= new Date(this.todayResourceWork.end));
         },
 
         remove() {
