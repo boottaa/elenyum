@@ -72,12 +72,12 @@
                                         <div class="col">
                                             <label for="eventStart" class="form-label">Дата начала</label><br>
                                             <date-picker :disabled="object.paymentType !== null" aria-required="true" id="eventStart" style="width: 100%"
-                                                         v-model="object.start" type="time" :time-picker-options="{start: startTimeStr, step: '00:15', end: endTimeStr}" format="HH:mm"></date-picker>
+                                                         v-model="object.start" :editable="false" type="time" :time-picker-options="{start: startTimeStr, step: '00:05', end: endTimeStr}" format="HH:mm"></date-picker>
                                         </div>
                                         <div class="col">
                                             <label for="eventEnd" class="form-label">Дата окончания</label><br>
                                             <date-picker :disabled="object.paymentType !== null" aria-required="true" id="eventEnd" style="width: 100%"
-                                                         v-model="object.end" type="time" :time-picker-options="{start: startTimeStr, step: '00:05', end: endTimeStr}" format="HH:mm"></date-picker>
+                                                         v-model="object.end" :editable="false" type="time" :time-picker-options="{start: startTimeStr, step: '00:05', end: endTimeStr}" format="HH:mm"></date-picker>
                                         </div>
                                     </div>
                                 </div>

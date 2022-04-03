@@ -208,7 +208,12 @@ $(function () {
                 if (!confirm("Вы уверены что хотите изменить запись?")) {
                     info.revert();
                 } else {
-                    let event = info.event;
+                    let event = info.event,
+                        currentDate = getDate(event.start);
+                    modalVue.todayResourceWork = event.extendedProps.employee.workSchedules.find(i => {
+                        return getDate(new Date(i.start)) === currentDate
+                    });
+
                     modalVue.object = {
                         id: parseInt(event.id),
                         client: event.extendedProps.client,
@@ -227,6 +232,11 @@ $(function () {
                         status: event.extendedProps.status,
                     };
                     modalVue.calendarEvents = calendar.getEvents();
+                    if (modalVue.checkResourceWork()) {
+                        info.revert();
+                        alert('Указано не верное время, время начала или окончания записи не входит в рабочее время специалиста');
+                        return;
+                    }
                     if (modalVue.checkSheduleIntersections()) {
                         info.revert();
                         alert('Указано не верное время, запись перекрывает другие записи');
@@ -239,7 +249,11 @@ $(function () {
                 if (!confirm("Вы уверены что хотите изменить время?")) {
                     info.revert();
                 } else {
-                    let event = info.event;
+                    let event = info.event,
+                        currentDate = getDate(event.start);
+                    modalVue.todayResourceWork = event.extendedProps.employee.workSchedules.find(i => {
+                        return getDate(new Date(i.start)) === currentDate
+                    });
                     modalVue.object = {
                         id: parseInt(event.id),
                         client: event.extendedProps.client,
@@ -258,6 +272,12 @@ $(function () {
                         status: event.extendedProps.status,
                     };
                     modalVue.calendarEvents = calendar.getEvents();
+                    if (modalVue.checkResourceWork()) {
+                        info.revert();
+                        alert('Указано не верное время, время начала или окончания записи не входит в рабочее время специалиста');
+                        return;
+                    }
+
                     if (modalVue.checkSheduleIntersections()) {
                         info.revert();
                         alert('Указано не верное время, запись перекрывает другие записи');
@@ -489,7 +509,7 @@ $(function () {
             if (eventEl) {
                 $(eventEl).addClass('loadEvent');
                 $(eventEl).append(`<div class="loaderMask" id="loadEvent${data.id}">
-                            <div class="loader" style="margin: 0 auto; top: 5%">Loading...</div>
+                            <div class="loader" style="margin: 0 auto; top: 30%; font-size: 0.2em; position: relative; display: block;">Loading...</div>
                         </div>`);
             }
             $.ajax({
