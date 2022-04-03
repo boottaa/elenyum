@@ -209,8 +209,19 @@ $(function () {
                     info.revert();
                 } else {
                     let event = info.event,
-                        currentDate = getDate(event.start);
-                    modalVue.todayResourceWork = event.extendedProps.employee.workSchedules.find(i => {
+                        currentDate = getDate(event.start),
+                        workSchedules = info.newResource === null ?
+                            event.extendedProps.employee.workSchedules : info.newResource.extendedProps.workSchedules;
+
+                    if (info.newResource !== null &&
+                        info.newResource.extendedProps.position.id !== info.oldResource.extendedProps.position.id)
+                    {
+                        info.revert();
+                        alert('Перенести запись невозможно, разные должности');
+                        return;
+                    }
+                    //Надо проверить что новый ресурс может выполнить те-же операции что и старый
+                    modalVue.todayResourceWork = workSchedules.find(i => {
                         return getDate(new Date(i.start)) === currentDate
                     });
 
@@ -507,6 +518,7 @@ $(function () {
          */
         function postEvent(event, eventEl) {
             if (eventEl) {
+                //Убираются после обновления всех событий
                 $(eventEl).addClass('loadEvent');
                 $(eventEl).append(`<div class="loaderMask" id="loadEvent${data.id}">
                             <div class="loader" style="margin: 0 auto; top: 30%; font-size: 0.2em; position: relative; display: block;">Loading...</div>

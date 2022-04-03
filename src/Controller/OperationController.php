@@ -26,15 +26,15 @@ class OperationController extends AbstractController
     #[Route('/api/operation/list', name: 'operation')]
     public function list(OperationService $service, Request $request): Response
     {
-        $page = $request->get('page', 1);
         $user = $this->getUser();
         if (!$user instanceof Employee) {
             return $this->json(new ArrayException('Пользователь не найден', 202));
         }
+
         $list = $service->list([
             'company' => $user->getCompany(),
             'employee' => $request->get('employee'),
-        ], $page);
+        ], $request->get('page', 1));
 
         return $this->json([
             'success' => true,
