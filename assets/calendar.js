@@ -140,6 +140,7 @@ $(function () {
                     return;
                 }
 
+                modalVue.calendarEvents = calendar.getEvents();
                 modalVue.object = {
                     id: parseInt(event.id),
                     client: event.extendedProps.client,
@@ -194,6 +195,7 @@ $(function () {
                 modalVue.object.start = eventClickEvent.date;
                 modalVue.object.end = new Date(eventClickEvent.date.toString()).addMinutes(60);
                 modalVue.object.resourceId = parseInt(eventClickEvent.resource.id);
+                modalVue.calendarEvents = calendar.getEvents();
 
                 modalVue.$once('send', (data) => {
                     if (data !== null) {
@@ -224,6 +226,12 @@ $(function () {
                         // Статус события
                         status: event.extendedProps.status,
                     };
+                    modalVue.calendarEvents = calendar.getEvents();
+                    if (modalVue.checkSheduleIntersections()) {
+                        info.revert();
+                        alert('Указано не верное время, запись перекрывает другие записи');
+                        return;
+                    }
                     postEvent(modalVue.object, info.el);
                 }
             },
@@ -249,6 +257,12 @@ $(function () {
                         // Статус события
                         status: event.extendedProps.status,
                     };
+                    modalVue.calendarEvents = calendar.getEvents();
+                    if (modalVue.checkSheduleIntersections()) {
+                        info.revert();
+                        alert('Указано не верное время, запись перекрывает другие записи');
+                        return;
+                    }
                     postEvent(modalVue.object, info.el);
                 }
             },
@@ -395,6 +409,7 @@ $(function () {
                     status: item.client.status
                 },
                 employee: {
+                    id: item.employee.id,
                     workSchedules: item.employee.workSchedules
                 },
                 resourceId: item.employee.id,
