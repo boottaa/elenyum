@@ -102,12 +102,18 @@ class Employee implements UserInterface, PasswordHasherAwareInterface, PasswordA
     /**
      * @ORM\OneToMany(targetEntity=WorkSchedule::class, mappedBy="employee")
      */
-    private $workSchedules;
+    private Collection $workSchedules;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Shedule::class, mappedBy="employee")
+     */
+    private Collection $schedules;
 
     public function __construct()
     {
         $this->setCreatedAt(new DateTimeImmutable());
         $this->workSchedules = new ArrayCollection();
+        $this->schedules = new ArrayCollection();
     }
 
     public function getId(): int
@@ -382,11 +388,37 @@ class Employee implements UserInterface, PasswordHasherAwareInterface, PasswordA
 
     public function removeWorkSchedule(WorkSchedule $workSchedule): self
     {
-        if ($this->workSchedules->removeElement($workSchedule)) {
-            // set the owning side to null (unless already changed)
-            if ($workSchedule->getEmployee() === $this) {
-                $workSchedule->setEmployee(null);
-            }
+        // set the owning side to null (unless already changed)
+        if ($this->workSchedules->removeElement($workSchedule) && $workSchedule->getEmployee() === $this) {
+            $workSchedule->setEmployee(null);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Shedule[]
+     */
+    public function getSchedules(): Collection
+    {
+        return $this->schedules;
+    }
+
+    public function addSchedule(Shedule $schedule): self
+    {
+        if (!$this->schedules->contains($schedule)) {
+            $this->schedules[] = $schedule;
+            $schedule->setEmployee($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSchedule(Shedule $schedule): self
+    {
+        // set the owning side to null (unless already changed)
+        if ($this->workSchedules->removeElement($schedule) && $schedule->getEmployee() === $this) {
+            $schedule->setEmployee(null);
         }
 
         return $this;
