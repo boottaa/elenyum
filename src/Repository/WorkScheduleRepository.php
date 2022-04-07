@@ -8,7 +8,6 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Exception;
 use Doctrine\ORM\Query\Expr;
-use function Doctrine\ORM\QueryBuilder;
 
 /**
  * @method WorkSchedule|null find($id, $lockMode = null, $lockVersion = null)

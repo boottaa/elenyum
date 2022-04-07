@@ -30,11 +30,15 @@ function lastday(y, m) {
 
 
 $(document).ready(function () {
-    workSchedulePost.$once('configLoaded', (data) => {
-        let elModalEvent = document.getElementById('modalEvent'),
-            modalEvent = new bootstrap.Modal(elModalEvent);
+    let elModalEvent = document.getElementById('modalEvent'),
+        modalEvent = new bootstrap.Modal(elModalEvent);
 
-        let calendarEl = document.getElementById('workScheduleCalendar');
+    let calendarEl = document.getElementById('workScheduleCalendar');
+
+    elModalEvent.addEventListener('hidden.bs.modal', function () {
+        workSchedulePost.$emit('editedEvent', null);
+    });
+    workSchedulePost.$once('configLoaded', (data) => {
 
         function getDate(date) {
             return date.getFullYear().toString() + '-' + String(date.getMonth() + 1).padStart(2, '0') + '-' + date.getDate().toString().padStart(2, '0');
@@ -78,11 +82,8 @@ $(document).ready(function () {
                         info.event.extendedProps.workSchedule.end
                     ];
 
-                    info.event.extendedProps.workSchedule.start = new Date();
-
                     workSchedulePost.$once('editedEvent', (data) => {
                         if (data !== null) {
-
                             info.event.extendedProps.workSchedule.start = data[0];
                             info.event.extendedProps.workSchedule.end = data[1];
                             modalEvent.hide();
@@ -95,6 +96,8 @@ $(document).ready(function () {
                 }
             },
             select: function (info) {
+                // Может быть выбрано сразу несколько дней, по этому разбиваем на дни и проходимся по каждому дню
+                let cantDelete = false;
                 let counter = (info.end.getTime() - info.start.getTime()) / 86400000;
                 for (let i = 0; i < counter; i++) {
                     let dateStart = addDay(new Date(info.start.getTime()), i);
@@ -104,20 +107,30 @@ $(document).ready(function () {
 
                     let isDelete = false;
 
+
                     calendar.getEvents().forEach((event) => {
+
                         if (event.extendedProps.workSchedule.startStr === getStartDate || event.extendedProps.workSchedule.endStr === getEndDate) {
+                            if (event.extendedProps.workSchedule.schedules && event.extendedProps.workSchedule.schedules.length > 0) {
+                                if (cantDelete === false) {
+                                    workSchedulePost.alertCantDeleteWorkShedule();
+                                }
+                                cantDelete = true;
+                                return;
+                            }
                             isDelete = true;
 
                             event.remove();
                         }
                     });
+                    if (cantDelete) {
+                        return;
+                    }
                     if (isDelete) {
                         workSchedulePost.object.workSchedules = workSchedulePost.object.workSchedules.filter((event) => {
-                            return !(event.startStr === getStartDate || event.endStr === getEndDate);
+                            return !(event.startStr === getStartDate && event.endStr === getEndDate);
                         });
-                    }
-
-                    if (isDelete === false) {
+                    } else {
                         let start = workSchedulePost.branch.start;
                         let end = workSchedulePost.branch.end;
                         let timeBranchWorkStart = (new Date(dateStart.getTime()));
@@ -174,9 +187,8 @@ $(document).ready(function () {
                 display: 'block',
             });
         }
-        //Если выбран шаблон то выводим календарь
-        // workSchedulePost.$once('selectedTemplate', (data) => {
 
+        //Если выбран шаблон то выводим календарь
         workSchedulePost.$on('workSchedulesLoaded', (data) => {
             calendar.removeAllEvents();
             workSchedulePost.object.workSchedules = [];
@@ -190,6 +202,7 @@ $(document).ready(function () {
                     endStr: endStr,
                     start: start,
                     end: end,
+                    schedules: i.employee.schedules,
                 };
 
                 addWorkSchedule(calendar, workSchedule);
@@ -313,6 +326,10 @@ let workSchedulePost = new Vue({
         onSelected() {
             this.$emit('selectedTemplate', this.object.template);
         },
+
+        alertCantDeleteWorkShedule() {
+            this.$refs.alert.addAlert('Невозможно удалить рабочий день так-как на этот день есть записи, удалите или перенесите записи клиентов', 'danger');
+        }
     },
     delimiters: ['${', '}$'],
 });
