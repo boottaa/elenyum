@@ -34,17 +34,7 @@ class WorkScheduleRepository extends ServiceEntityRepository implements ListRepo
         $start = $params['start'];
         $end = $params['end'];
 
-        $qb = $this->createQueryBuilder('ws')
-            ->addSelect(['PARTIAL e.{id}', 'PARTIAL s.{id, start, end}']) //,, MIN(s.start) as startShedule, MAX(s.end) as endShedule
-            ->leftJoin('ws.employee', 'e');
-
-        $qb->leftJoin('e.schedules', 's', Expr\Join::WITH,
-            $qb->expr()->andX(
-                $qb->expr()->eq('s.employee', 'e.id'),
-                $qb->expr()->gte('s.start', 'ws.start'),
-                $qb->expr()->lte('s.end', 'ws.end'),
-            )
-        );
+        $qb = $this->createQueryBuilder('ws');
 
         $qb->where('ws.employee=:userId')
             ->andWhere('ws.start >= :start')
@@ -52,7 +42,6 @@ class WorkScheduleRepository extends ServiceEntityRepository implements ListRepo
             ->setParameter('userId', $userId)
             ->setParameter('start', $start)
             ->setParameter('end', $end)
-            ->orderBy('s.id', 'DESC')
             ->orderBy('ws.id', 'DESC');
 
         return (new Paginator($qb))->paginate($page);

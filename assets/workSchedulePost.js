@@ -97,7 +97,6 @@ $(document).ready(function () {
             },
             select: function (info) {
                 // Может быть выбрано сразу несколько дней, по этому разбиваем на дни и проходимся по каждому дню
-                let cantDelete = false;
                 let counter = (info.end.getTime() - info.start.getTime()) / 86400000;
                 for (let i = 0; i < counter; i++) {
                     let dateStart = addDay(new Date(info.start.getTime()), i);
@@ -107,25 +106,11 @@ $(document).ready(function () {
 
                     let isDelete = false;
 
-
                     calendar.getEvents().forEach((event) => {
-
                         if (event.extendedProps.workSchedule.startStr === getStartDate || event.extendedProps.workSchedule.endStr === getEndDate) {
-                            if (event.extendedProps.workSchedule.schedules && event.extendedProps.workSchedule.schedules.length > 0) {
-                                if (cantDelete === false) {
-                                    workSchedulePost.alertCantDeleteWorkShedule();
-                                }
-                                cantDelete = true;
-                                return;
-                            }
                             isDelete = true;
-
-                            event.remove();
                         }
                     });
-                    if (cantDelete) {
-                        return;
-                    }
                     if (isDelete) {
                         workSchedulePost.object.workSchedules = workSchedulePost.object.workSchedules.filter((event) => {
                             return !(event.startStr === getStartDate && event.endStr === getEndDate);
@@ -202,7 +187,6 @@ $(document).ready(function () {
                     endStr: endStr,
                     start: start,
                     end: end,
-                    schedules: i.employee.schedules,
                 };
 
                 addWorkSchedule(calendar, workSchedule);
@@ -326,10 +310,6 @@ let workSchedulePost = new Vue({
         onSelected() {
             this.$emit('selectedTemplate', this.object.template);
         },
-
-        alertCantDeleteWorkShedule() {
-            this.$refs.alert.addAlert('Невозможно удалить рабочий день так-как на этот день есть записи, удалите или перенесите записи клиентов', 'danger');
-        }
     },
     delimiters: ['${', '}$'],
 });
