@@ -107,7 +107,7 @@ $(document).ready(function () {
                     let isDelete = false;
 
                     calendar.getEvents().forEach((event) => {
-                        if (event.extendedProps.workSchedule.startStr === getStartDate || event.extendedProps.workSchedule.endStr === getEndDate) {
+                        if (event.extendedProps.workSchedule.startStr === getStartDate && event.extendedProps.workSchedule.endStr === getEndDate) {
                             isDelete = true;
                         }
                     });

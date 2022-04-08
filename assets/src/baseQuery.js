@@ -15,7 +15,7 @@ export function removeToken() {
     $.removeCookie('token');
 }
 
-export function post(url = '', data = {}, successFunc = (result) => {}) {
+export function post(url = '', data = {}, successFunc = (result) => {}, errorFunc = (result) => {}) {
     let loaderId = 'id_' + parseInt(Math.random() * 10000);
     let params = {
         type: "POST",
@@ -26,6 +26,7 @@ export function post(url = '', data = {}, successFunc = (result) => {}) {
         contentType: "application/json",
         dataType: 'json',
         success: (result) => successFunc(result),
+        error: (result) => errorFunc(result),
         beforeSend: () => {
             $('body').append(`<div class="loaderMask" id="${loaderId}"><div class="loader">Loading...</div></div>`);
         },

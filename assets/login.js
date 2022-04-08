@@ -1,7 +1,7 @@
 import './bootstrap';
 import Vue from 'vue';
-import { isValid } from "./validator/validator";
-import { post, setToken } from "./src/baseQuery";
+import {isValid} from "./validator/validator";
+import {post, setToken} from "./src/baseQuery";
 import {vueAlert} from "./src/vueAlert";
 
 let object = {
@@ -11,7 +11,7 @@ let object = {
 
 new Vue({
     el: '#login',
-    components: { vueAlert },
+    components: {vueAlert},
     data() {
         return {
             object: {
@@ -50,6 +50,12 @@ new Vue({
                         setToken(result.token);
 
                         window.location.href = '/';
+                    }
+                }, (result) => {
+                    if (result.status === 401) {
+                        this.$refs.alert.addAlert('Не верный логин или пароль', 'danger');
+                    } else {
+                        this.$refs.alert.addAlert(result.responseJSON.error, 'danger');
                     }
                 });
             }
