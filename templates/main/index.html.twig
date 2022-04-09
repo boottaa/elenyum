@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title>Landing Page - Start Bootstrap Theme</title>
+
+        {% block style %}
+            {{ encore_entry_link_tags('index') }}
+        {% endblock %}
+
+        {% block js %}
+            {{ encore_entry_script_tags('index') }}
+        {% endblock %}
+    </head>
+    <body>
+        <!-- Navigation-->
+        <nav class="navbar navbar-light bg-light static-top">
+            <div class="container">
+                <a class="navbar-brand" href="/">ELENYUM</a>
+                <ul class="nav nav-pills">
+                {% if not is_granted('IS_AUTHENTICATED_FULLY') %}
+                    <li class="nav-item"><a class="nav-link" href="{{ path('registration') }}">Регистрация</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ path('login') }}">Войти</a></li>
+                {% else %}
+                    <li class="nav-item"><a class="nav-link" href="{{ path('appCalendar') }}">Календарь</a></li>
+                {% endif %}
+                </ul>
+            </div>
+        </nav>
+        <!-- Masthead-->
+        <header class="masthead" style="background: url('/img/main/bg-masthead.jpg') no-repeat center center;">
+            <div class="container position-relative">
+                <div class="row justify-content-center">
+                    <div class="col-xl-10">
+                        <div class="text-center text-white">
+
+                            <h1 class="mb-5">Автоматизация записи клиентов и учёт работы сотрудников</h1>
+                            <form class="form-subscribe" id="contactForm" data-sb-form-api-token="API_TOKEN">
+                                <!-- Email address input-->
+                                <div class="row">
+                                    <div class="col">
+                                        <input class="form-control form-control-lg" v-model="object.phone" id="phone" type="text" placeholder="Номер телефона" />
+                                    </div>
+                                    <div class="col-auto"><button class="btn btn-primary btn-lg disabled" v-on:click="send" id="submitButton" type="button">Отправить</button></div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <!-- Icons Grid-->
+        <section class="features-icons bg-light text-center">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-4">
+                        <div class="features-icons-item mx-auto mb-5 mb-lg-0 mb-lg-3">
+                            <div class="features-icons-icon d-flex"><i class="bi-window m-auto text-primary"></i></div>
+                            <h3>Умный календарь для записи</h3>
+                            <p class="lead mb-0">Позволяет удобно и наглядно записывать клиента, отслеживать его статус и оплату</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="features-icons-item mx-auto mb-5 mb-lg-0 mb-lg-3">
+                            <div class="features-icons-icon d-flex"><i class="bi-layers m-auto text-primary"></i></div>
+                            <h3>Настройка должностей</h3>
+                            <p class="lead mb-0">Настройте права индивидуально для каждой должности</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="features-icons-item mx-auto mb-0 mb-lg-3">
+                            <div class="features-icons-icon d-flex"><i class="bi-terminal m-auto text-primary"></i></div>
+                            <h3>Настройка графика работы сотрудников</h3>
+                            <p class="lead mb-0">Настройка индивидуально для каждого сотрудника время работы и выходные</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Image Showcases-->
+        <section class="showcase">
+            <div class="container-fluid p-0">
+                <div class="row g-0">
+                    <div class="col-lg-6 order-lg-2 text-white showcase-img" style="background-image: url('/img/main/bg-showcase-1.jpg')"></div>
+                    <div class="col-lg-6 order-lg-1 my-auto showcase-text">
+                        <h2>Доступность с любого устройства</h2>
+                        <p class="lead mb-0">Elenyum - доступен с любого устройства. Вы можете управлять записями и отслеживать не только на рабочем месте с компьютера но и с телефона. Сотрудники могут посмотреть записи на завтра и свой график работы в любое время</p>
+                    </div>
+                </div>
+                <div class="row g-0">
+                    <div class="col-lg-6 text-white showcase-img" style="background-image: url('/img/main/bg-showcase-2.jpg')"></div>
+                    <div class="col-lg-6 my-auto showcase-text">
+                        <h2>Возможность интегрироваться с вашей CRM</h2>
+                        <p class="lead mb-0">Вы можете интегрировать Elenyum с любой CRM системой. Для интеграции и получения доступа к API необходимо оставить заявку</p>
+                    </div>
+                </div>
+                <div class="row g-0">
+                    <div class="col-lg-6 order-lg-2 text-white showcase-img" style="background-image: url('/img/main/bg-showcase-3.jpg')"></div>
+                    <div class="col-lg-6 order-lg-1 my-auto showcase-text">
+                        <h2>Ведите учёт удалено</h2>
+                        <p class="lead mb-0">Вы можете вести учёт сотрудников и их записей находясь в любой точки мира</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Testimonials-->
+        <section class="testimonials text-center bg-light">
+            <div class="container">
+                <h2 class="mb-5">Отзывы</h2>
+                <div class="row">
+                    <div class="col-lg-4">
+                        <div class="testimonial-item mx-auto mb-5 mb-lg-0">
+                            <img class="img-fluid rounded-circle mb-3" src="/img/main/testimonials-1.jpg" alt="..." />
+                            <h5>Анастасия М.</h5>
+                            <p class="font-weight-light mb-0">"Это удивительно, раньше я платила огромные деньги и использовала глюченные и не полноценные системы, Elenyum просто спасение какое-то. Спасибо огромное"</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="testimonial-item mx-auto mb-5 mb-lg-0">
+                            <img class="img-fluid rounded-circle mb-3" src="/img/main/testimonials-2.jpg" alt="..." />
+                            <h5>Фёдор Е.</h5>
+                            <p class="font-weight-light mb-0">"В наше время очень важно не терять контроль над бизнесам находясь заграницей, Elenyum это прекрасная система для решения моих задач."</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="testimonial-item mx-auto mb-5 mb-lg-0">
+                            <img class="img-fluid rounded-circle mb-3" src="/img/main/testimonials-3.jpg" alt="..." />
+                            <h5>Александра Ф.</h5>
+                            <p class="font-weight-light mb-0">Спасибо огромное, на долго искала систему для учета записей для своего салона красоты. Спасибо огромное за бесплатное, а главное прекрасно работающее приложение</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Call to Action-->
+        <section class="call-to-action text-white text-center" id="signup">
+            <div class="container position-relative">
+                <div class="row justify-content-center">
+                    <div class="col-xl-10">
+                        <h2 class="mb-4">В целях рекламной акции проект распространяется бесплатно, первые 100 клиентов оставивших заявку смогут использовать систему совершенно бесплатно!</h2>
+                        <form class="form-subscribe" id="contactFormFooter" data-sb-form-api-token="API_TOKEN">
+                            <!-- Email address input-->
+                            <div class="row">
+                                <div class="col">
+                                    <input class="form-control form-control-lg" v-model="object.phone" id="phoneFooter" type="text" placeholder="Номер телефона" />
+                                </div>
+                                <div class="col-auto"><button class="btn btn-primary btn-lg disabled" v-on:click="send" id="submitButtonFooter" type="button">Отправить</button></div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Footer-->
+        <footer class="footer bg-light">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-6 h-100 text-center text-lg-start my-auto">
+{#                        <ul class="list-inline mb-2">#}
+{#                            <li class="list-inline-item"><a href="#!">О нас</a></li>#}
+{#                            <li class="list-inline-item">⋅</li>#}
+{#                            <li class="list-inline-item"><a href="#!">Контакты</a></li>#}
+{#                            <li class="list-inline-item">⋅</li>#}
+{#                            <li class="list-inline-item"><a href="#!">Политика конфиденциальности</a></li>#}
+{#                        </ul>#}
+                        <p class="text-muted small mb-4 mb-lg-0">&copy; Elenyum 2022. Все права защищены.</p>
+                    </div>
+                    <div class="col-lg-6 h-100 text-center text-lg-end my-auto">
+                        <ul class="list-inline mb-0">
+                            <li class="list-inline-item me-4">
+                                <a href="#!"><i class="bi-facebook fs-3"></i></a>
+                            </li>
+                            <li class="list-inline-item me-4">
+                                <a href="#!"><i class="bi-twitter fs-3"></i></a>
+                            </li>
+                            <li class="list-inline-item">
+                                <a href="#!"><i class="bi-instagram fs-3"></i></a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </footer>
+
+
+{#     START_MODAL    #}
+        <div class="modal fade" id="modalAlertAddPhone" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1">
+            <div class="modal-dialog modal-xl">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                Ваша заявка отправлена, менеджер свяжется с вами в ближайшее время
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-success" data-bs-target="#modalAlertAddPhone" data-bs-toggle="modal">Ок</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+{#     END_MODAL    #}
+    </body>
+</html>

@@ -49,7 +49,7 @@ new Vue({
                     if (result.success === true) {
                         setToken(result.token);
 
-                        window.location.href = '/';
+                        window.location.href = '/calendar';
                     }
                 }, (result) => {
                     if (result.status === 401) {
