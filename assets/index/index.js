@@ -28,7 +28,7 @@ new Vue({
             let items = {
                 '#phone': {
                     value: this.object.phone,
-                    validators: ['phone'],
+                    validators: ['phone', 'notEmpty'],
                 },
             };
             return isValid(items);
@@ -76,7 +76,7 @@ new Vue({
             let items = {
                 '#phoneFooter': {
                     value: this.object.phone,
-                    validators: ['phone'],
+                    validators: ['phone', 'notEmpty'],
                 },
             };
             return isValid(items);
@@ -84,7 +84,6 @@ new Vue({
 
         send() {
             if (this.validation()) {
-
                 post(this.url, this.object, (result) => {
                     if (result.success === true) {
                         let elModal = document.getElementById('modalAlertAddPhone');
