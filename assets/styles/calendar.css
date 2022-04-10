@@ -74,3 +74,9 @@
 .totalPrice.bg-info {
     background-color: #258997 !important;
 }
+
+@media only screen and (max-width: 600px) {
+    .fc .fc-toolbar {
+        display: block;
+    }
+}

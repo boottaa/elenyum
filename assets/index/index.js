@@ -41,6 +41,7 @@ new Vue({
                         let elModal = document.getElementById('modalAlertAddPhone');
                         let modal = new bootstrap.Modal(elModal);
                         modal.show();
+                        this.object.phone = null;
                     }
                 }, (result) => {
                     console.log(result);
@@ -55,7 +56,7 @@ new Vue({
     el: '#contactFormFooter',
     data() {
         return {
-            url: '/api/employee/list',
+            url: '/api/system/newClient',
             object: {
                 phone: null,
             }
@@ -89,6 +90,7 @@ new Vue({
                         let elModal = document.getElementById('modalAlertAddPhone');
                         let modal = new bootstrap.Modal(elModal);
                         modal.show();
+                        this.object.phone = null;
                     }
                 }, (result) => {
                     console.log(result);

@@ -11,7 +11,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class SystemController extends AbstractController
 {
-    #[Route('/api/system/newClient', name: 'apiEmployeeList')]
+    #[Route('/api/system/newClient', name: 'systemNewClient')]
     public function index(Request $request, EntityManagerInterface $em): Response
     {
         $content = json_decode($request->getContent(), true, 512, JSON_THROW_ON_ERROR);

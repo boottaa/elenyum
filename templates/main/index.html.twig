@@ -19,7 +19,13 @@
         <!-- Navigation-->
         <nav class="navbar navbar-light bg-light static-top">
             <div class="container">
-                <a class="navbar-brand" href="/">ELENYUM</a>
+                <a class="sidebar-brand d-flex align-items-center justify-content-center navbar-brand" href="{{ path('appCalendar') }}">
+                    <div class="main-brand-icon rotate-270">
+                        <i class="fas fa-dice-d20"></i>
+                    </div>
+{#                    <a class="navbar-brand" href="/">ELENYUM</a>#}
+                    <div class="main-title sidebar-brand-text mx-3">ELENYUM</div>
+                </a>
                 <ul class="nav nav-pills">
                 {% if not is_granted('IS_AUTHENTICATED_FULLY') %}
                     <li class="nav-item"><a class="nav-link" href="{{ path('registration') }}">Регистрация</a></li>
@@ -37,7 +43,7 @@
                     <div class="col-xl-10">
                         <div class="text-center text-white">
 
-                            <h1 class="mb-5">ELENYUM <br >-<br> Позволит автоматизировать запись клиентов и учёт работы сотрудников</h1>
+                            <h1 class="mb-5">ELENYUM <br >-<br>Автоматизируй работу в сфере услуг</h1>
                             <form class="form-subscribe" id="contactForm" data-sb-form-api-token="API_TOKEN">
                                 <!-- Email address input-->
                                 <div class="row">
@@ -58,21 +64,27 @@
                 <div class="row">
                     <div class="col-lg-4">
                         <div class="features-icons-item mx-auto mb-5 mb-lg-0 mb-lg-3">
-                            <div class="features-icons-icon d-flex"><i class="bi-window m-auto text-primary"></i></div>
+                            <div class="features-icons-icon d-flex">
+                                <i class="far fa-calendar-check m-auto text-primary"></i>
+                            </div>
                             <h3>Умный календарь для записи</h3>
                             <p class="lead mb-0">Позволяет удобно и наглядно записывать клиента, отслеживать его статус и оплату</p>
                         </div>
                     </div>
                     <div class="col-lg-4">
                         <div class="features-icons-item mx-auto mb-5 mb-lg-0 mb-lg-3">
-                            <div class="features-icons-icon d-flex"><i class="bi-layers m-auto text-primary"></i></div>
+                            <div class="features-icons-icon d-flex">
+                                <i class="fas fa-user-plus m-auto text-primary"></i>
+                            </div>
                             <h3>Настройка должностей</h3>
                             <p class="lead mb-0">Настройте права индивидуально для каждой должности</p>
                         </div>
                     </div>
                     <div class="col-lg-4">
                         <div class="features-icons-item mx-auto mb-0 mb-lg-3">
-                            <div class="features-icons-icon d-flex"><i class="bi-terminal m-auto text-primary"></i></div>
+                            <div class="features-icons-icon d-flex">
+                                <i class="far fa-calendar-alt m-auto text-primary"></i>
+                            </div>
                             <h3>Настройка графика работы сотрудников</h3>
                             <p class="lead mb-0">Настройка индивидуально для каждого сотрудника время работы и выходные</p>
                         </div>
@@ -87,7 +99,7 @@
                     <div class="col-lg-6 order-lg-2 text-white showcase-img" style="background-image: url('/img/main/bg-showcase-1.jpg')"></div>
                     <div class="col-lg-6 order-lg-1 my-auto showcase-text">
                         <h2>Доступность с любого устройства</h2>
-                        <p class="lead mb-0">Elenyum - доступен с любого устройства. Вы можете управлять записями и отслеживать не только на рабочем месте с компьютера но и с телефона. Сотрудники могут посмотреть записи на завтра и свой график работы в любое время</p>
+                        <p class="lead mb-0">Elenyum - доступен с любого устройства. Вы можете управлять записями и отслеживать не только на рабочем месте с компьютера, но и с телефона. Сотрудники могут посмотреть записи на завтра и свой график работы в любое время</p>
                     </div>
                 </div>
                 <div class="row g-0">
@@ -115,21 +127,21 @@
                         <div class="testimonial-item mx-auto mb-5 mb-lg-0">
                             <img class="img-fluid rounded-circle mb-3" src="/img/main/testimonials-1.jpg" alt="..." />
                             <h5>Анастасия М.</h5>
-                            <p class="font-weight-light mb-0">"Это удивительно, раньше я платила огромные деньги и использовала глюченные и не полноценные системы, Elenyum просто спасение какое-то. Спасибо огромное"</p>
+                            <p class="font-weight-light mb-0">Это удивительно, раньше я платила огромные деньги и использовала глюченные и не полноценные системы, Elenyum просто спасение какое-то. Спасибо огромное</p>
                         </div>
                     </div>
                     <div class="col-lg-4">
                         <div class="testimonial-item mx-auto mb-5 mb-lg-0">
                             <img class="img-fluid rounded-circle mb-3" src="/img/main/testimonials-2.jpg" alt="..." />
                             <h5>Фёдор Е.</h5>
-                            <p class="font-weight-light mb-0">"В наше время очень важно не терять контроль над бизнесам находясь заграницей, Elenyum это прекрасная система для решения моих задач."</p>
+                            <p class="font-weight-light mb-0">В наше время очень важно не терять контроль над бизнесом, находясь заграницей, Elenyum это прекрасная система для решения моих задач</p>
                         </div>
                     </div>
                     <div class="col-lg-4">
                         <div class="testimonial-item mx-auto mb-5 mb-lg-0">
                             <img class="img-fluid rounded-circle mb-3" src="/img/main/testimonials-3.jpg" alt="..." />
                             <h5>Александра Ф.</h5>
-                            <p class="font-weight-light mb-0">Спасибо огромное, на долго искала систему для учета записей для своего салона красоты. Спасибо огромное за бесплатное, а главное прекрасно работающее приложение</p>
+                            <p class="font-weight-light mb-0">Спасибо огромное, долго искала систему для учета записей для своего салона красоты. Спасибо огромное за бесплатное, а главное прекрасно работающее приложение</p>
                         </div>
                     </div>
                 </div>
