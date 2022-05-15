@@ -290,8 +290,12 @@
                     <li class="nav-item dropdown no-arrow">
                         <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <span class="mr-2 d-none d-lg-inline text-gray-600">{{ app.user.name }}</span><br>
-                            <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{ app.user.position.title }}</span>
+                            <img style="position: relative; bottom: 8px;" class="img-profile rounded-circle" alt="{{ app.user.position.title }}" src="/img/defaultEmployee.png">
+                            <span class="mr-2 d-none d-lg-inline">
+                                <span class="text-gray-600" title="{{ app.user.name }} {{ app.user.position.title }}">{{ app.user.name }}</span><br>
+                                <span style="position: relative; bottom: 50px; left: 35px;" class="text-gray-600 small">{{ app.user.position.title }}</span>
+                            </span>
+
                         </a>
                         <!-- Dropdown - User Information -->
                         <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"

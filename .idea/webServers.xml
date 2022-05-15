@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="6c6a8586-c436-408a-a168-eb70ecdcd1dd" name="elenyum.ru" url="http://elenyum.ru">
+        <fileTransfer rootFolder="/var/www/u1626783/data/www/elenyum.ru" accessType="SFTP" host="31.31.196.31" port="22" sshConfigId="62f61292-8e24-412e-910f-00ec39b8cd6f" sshConfig="u1626783@31.31.196.31:22 password">
+          <advancedOptions>
+            <advancedOptions controlEncoding="utf-8" dataProtectionLevel="Private" keepAliveTimeout="0" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>

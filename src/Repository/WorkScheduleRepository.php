@@ -7,6 +7,7 @@ use App\Utils\Paginator;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Exception;
+use Doctrine\ORM\Query\Expr;
 
 /**
  * @method WorkSchedule|null find($id, $lockMode = null, $lockVersion = null)
@@ -32,15 +33,16 @@ class WorkScheduleRepository extends ServiceEntityRepository implements ListRepo
         $userId = $params['userId'];
         $start = $params['start'];
         $end = $params['end'];
-        $qb = $this->createQueryBuilder('ws')
-            ->orderBy('ws.id', 'DESC');
+
+        $qb = $this->createQueryBuilder('ws');
 
         $qb->where('ws.employee=:userId')
             ->andWhere('ws.start >= :start')
             ->andWhere('ws.end <= :end')
             ->setParameter('userId', $userId)
             ->setParameter('start', $start)
-            ->setParameter('end', $end);
+            ->setParameter('end', $end)
+            ->orderBy('ws.id', 'DESC');
 
         return (new Paginator($qb))->paginate($page);
     }

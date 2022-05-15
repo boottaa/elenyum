@@ -12,11 +12,7 @@ class IndexController extends AbstractController
     #[Route('/', name: 'appIndex')]
     public function index(): Response
     {
-        if (!$this->isGranted('IS_AUTHENTICATED_FULLY')) {
-            return $this->redirectToRoute('login');
-        }
-
-        return $this->render('index/calendar.html.twig', []);
+        return $this->render('main/index.html.twig', []);
     }
 
     #[Route('/calendar', name: 'appCalendar')]
@@ -112,12 +108,20 @@ class IndexController extends AbstractController
     #[Route('/registration', name: 'registration')]
     public function registration(): Response
     {
+        if ($this->isGranted('IS_AUTHENTICATED_FULLY')) {
+            return $this->redirectToRoute('appCalendar');
+        }
+
         return $this->render('index/registration.html.twig', []);
     }
 
     #[Route('/login', name: 'login')]
     public function login(): Response
     {
+        if ($this->isGranted('IS_AUTHENTICATED_FULLY')) {
+            return $this->redirectToRoute('appCalendar');
+        }
+
         return $this->render('index/login.html.twig', []);
     }
 

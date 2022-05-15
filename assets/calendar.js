@@ -253,7 +253,10 @@ $(function () {
                         alert('Указано не верное время, запись перекрывает другие записи');
                         return;
                     }
-                    postEvent(modalVue.object, info.el);
+
+                    let object = JSON.parse(JSON.stringify(modalVue.object));
+                    modalVue.resetObject();
+                    postEvent(object, info.el);
                 }
             },
             eventResize: function (info) {
@@ -294,7 +297,10 @@ $(function () {
                         alert('Указано не верное время, запись перекрывает другие записи');
                         return;
                     }
-                    postEvent(modalVue.object, info.el);
+
+                    let object = JSON.parse(JSON.stringify(modalVue.object));
+                    modalVue.resetObject();
+                    postEvent(object, info.el);
                 }
             },
             resourceLabelDidMount: function (info) {

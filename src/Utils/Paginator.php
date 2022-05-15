@@ -13,7 +13,7 @@ use Traversable;
 
 class Paginator
 {
-    private const PAGE_SIZE = 50;
+    private const PAGE_SIZE = 100;
     private DoctrineQueryBuilder $queryBuilder;
     private int $currentPage;
     private int $pageSize;
