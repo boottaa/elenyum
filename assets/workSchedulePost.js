@@ -108,6 +108,7 @@ $(document).ready(function () {
 
                     calendar.getEvents().forEach((event) => {
                         if (event.extendedProps.workSchedule.startStr === getStartDate && event.extendedProps.workSchedule.endStr === getEndDate) {
+                            event.remove();
                             isDelete = true;
                         }
                     });
